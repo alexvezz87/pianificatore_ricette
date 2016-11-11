@@ -6,6 +6,7 @@
 /********************* CREATE TABLES *******************/
 
 function install_pianificatore(){
+    global $DB_TABLE_INGREDIENTI, $DB_TABLE_PREPARAZIONI, $DB_TABLE_RICETTE, $DB_TABLE_TIPOLOGIE;
     try{
         //INGREDIENTI
         $args = array(
@@ -15,7 +16,7 @@ function install_pianificatore(){
                 'null' => 'NOT NULL'
             )
         );        
-        creaTabella('ingredienti', $args);
+        creaTabella($DB_TABLE_INGREDIENTI, $args);
         
         //PREPARAZIONI
         $args = array(
@@ -41,7 +42,7 @@ function install_pianificatore(){
                 'tabella' => 'ingredienti',                
             )
         );
-        creaTabella('preparazioni', $args, $fks);
+        creaTabella($DB_TABLE_PREPARAZIONI, $args, $fks);
         
         //TIPLOGIA RICETTA
         $args = array(           
@@ -51,7 +52,7 @@ function install_pianificatore(){
                 'null' => 'NOT NULL'
             )
         );
-        creaTabella('tipologie', $args);
+        creaTabella($DB_TABLE_TIPOLOGIE, $args);
         
         
         //RICETTE
@@ -80,6 +81,16 @@ function install_pianificatore(){
                 'nome' => 'id_tipologia',
                 'tipo' => 'INT',
                 'null' => null
+            ),
+            array(
+                'nome' => 'id_utente',
+                'tipo' => 'INT',
+                'null' => null
+            ),
+            array(
+                'nome' => 'data',
+                'tipo' => 'TIMESTAMP',
+                'null' => 'NOT NULL'
             )
         );
         $fks = array(
@@ -88,7 +99,7 @@ function install_pianificatore(){
                 'tabella' => 'tipologie'                
             )
         );        
-        creaTabella('ricette', $args, $fks);
+        creaTabella($DB_TABLE_RICETTE, $args, $fks);
         
         //INGREDIENTI RICETTE
         $args = array(

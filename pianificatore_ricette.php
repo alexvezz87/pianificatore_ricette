@@ -19,12 +19,31 @@ License: GPLv2 or later
 //includo le librerie
 require_once 'librerie/variabili_globali.php';
 require_once 'librerie/install_db.php';
+require_once 'classi/classes.php';
 
 
 //creo il db al momento dell'attivazione
 register_activation_hook(__FILE__, 'install_DB_pianificatore');
 function install_DB_pianificatore(){
     install_pianificatore();
+    
+    /*
+    //prova di creazione ingrediente
+    $i = new Ingrediente();
+    $i->setNome('Zucchina');
+    
+    $iDAO = new IngredienteDAO();
+    $idIngrediente = $iDAO->saveIngrediente($i);
+    
+    $p = new Preparazione();
+    $p->setIdIngrediente($idIngrediente);
+    $p->setGiorniAnticipo(4);
+    $p->setDescrizione('Agitare con moderazione');
+    
+    $pDAO = new PreparazioneDAO();
+    $pDAO->savePreparazione($p);
+    */
+    
 }
 
 
