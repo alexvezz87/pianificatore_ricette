@@ -18,8 +18,9 @@ License: GPLv2 or later
 
 //includo le librerie
 require_once 'librerie/variabili_globali.php';
-require_once 'librerie/install_db.php';
+require_once 'librerie/api_db.php';
 require_once 'classi/classes.php';
+require_once 'librerie/functions.php';
 
 
 //creo il db al momento dell'attivazione

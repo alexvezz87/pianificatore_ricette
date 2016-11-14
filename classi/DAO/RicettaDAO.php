@@ -41,7 +41,7 @@ class RicettaDAO extends ObjectDAO {
      * @param string $order
      * @return array
      */
-    public function getRicette($where, $order = null){
+    public function getRicette($where = null, $order = null){
         $result = null;
         if($order == null){
             $order = array(
@@ -92,9 +92,8 @@ class RicettaDAO extends ObjectDAO {
      * @param type $ID
      * @return type
      */
-    public function deleteRicetta($ID){
-        $array = array('ID' => $ID);
-        return parent::deleteObject($array);
+    public function deleteRicettaByID($ID){
+        return parent::deleteObjectByID($ID);
     }
 
 }

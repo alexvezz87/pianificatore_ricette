@@ -8,6 +8,7 @@
 class Tipologia {
     private $ID;
     private $nome;
+    private $descrizione;
     
     function __construct() {
         
@@ -28,6 +29,15 @@ class Tipologia {
     function setNome($nome) {
         $this->nome = $nome;
     }
+    
+    function getDescrizione() {
+        return $this->descrizione;
+    }
+
+    function setDescrizione($descrizione) {
+        $this->descrizione = $descrizione;
+    }
+
 
 
 }

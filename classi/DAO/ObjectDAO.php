@@ -49,9 +49,9 @@ class ObjectDAO {
     protected function getObjects($select = null, $where = null, $order = null){        
         
         //Vengono indicati i campi di select
-        $query = "SELECT ";
+        $query = "SELECT";
         if($select == null){
-            $query.= "*";
+            $query.= " *";
         }
         else{
             $counter = 0;
@@ -127,6 +127,16 @@ class ObjectDAO {
             _e($ex);
             return false;
         }        
+    }
+    
+    /**
+     * Funzione che elimina un oggetto dal database per ID passato
+     * @param type $ID
+     * @return type
+     */
+    protected function deleteObjectByID($ID){
+        $array = array('ID' => $ID);
+        return $this->deleteObject($array);
     }
     
     /**

@@ -15,6 +15,9 @@ class Ricetta {
     private $id_utente;
     private $data;
     
+    //attributo aggiunto 
+    private $ingredienti; //array di ingredienti
+    
     function __construct() {
         
     }
@@ -82,6 +85,15 @@ class Ricetta {
     function setData($data) {
         $this->data = $data;
     }
+    
+    function getIngredienti() {
+        return $this->ingredienti;
+    }
+
+    function setIngredienti($ingredienti) {
+        $this->ingredienti = $ingredienti;
+    }
+
 
 
 

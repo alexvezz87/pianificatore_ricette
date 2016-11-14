@@ -10,6 +10,9 @@ class Ingrediente {
     private $ID;
     private $nome;
     
+    //elemento esterno --> array di oggetti preparazione
+    private $preparazioni;
+    
     function __construct() {
         
     }
@@ -30,6 +33,16 @@ class Ingrediente {
     function setNome($nome) {
         $this->nome = $nome;
     }
+    
+    function getPreparazioni() {
+        return $this->preparazioni;
+    }
+
+    function setPreparazioni($preparazioni) {
+        $this->preparazioni = $preparazioni;
+    }
+
+
 
 
     

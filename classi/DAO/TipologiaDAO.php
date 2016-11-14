@@ -20,9 +20,10 @@ class TipologiaDAO extends ObjectDAO {
      */
     public function saveTipologia(Tipologia $t){
         $campi = array(
-            'nome' => $t->getNome()
+            'nome'          => $t->getNome(),
+            'descrizione'   => $t->getDescrizione()
         );
-        $formato = array('%s');
+        $formato = array('%s', '%s');
         return parent::saveObject($campi, $formato);
     }
     
@@ -30,15 +31,16 @@ class TipologiaDAO extends ObjectDAO {
      * La funzione restituisce un array di oggetti tipologia 
      * @return array
      */
-    public function getTipologie(){
+    public function getTipologie($where = null){
         $result = null;
-        $temp = parent::getObjects();
+        $temp = parent::getObjects(null, $where);
         if(count($temp) > 0){
             $result = array();
             foreach($temp as $item){
                 $t = new Tipologia();
                 $t->setID($item->ID);
                 $t->setNome($item->nome);
+                $t->setDescrizione($item->descrizione);
                 array_push($result, $t);
             }
         }
@@ -52,9 +54,10 @@ class TipologiaDAO extends ObjectDAO {
      */
     public function updateTipologia(Tipologia $t){
         $update = array(
-            'nome' => $t->getNome()
+            'nome'          => $t->getNome(),
+            'descrizione'   => $t->getDescrizione()
         );
-        $formatUpdate = array('%s');
+        $formatUpdate = array('%s', '%s');
         $where = array('ID' => $t->getID());
         $formatWhere = array('%d');
         return parent::updateObject($update, $formatUpdate, $where, $formatWhere);
@@ -65,9 +68,8 @@ class TipologiaDAO extends ObjectDAO {
      * @param type $ID
      * @return type
      */
-    public function deleteTipologia($ID){
-        $array = array('ID' => $ID);
-        return parent::deleteObject($array);
+    public function deleteTipologiaByID($ID){
+        return parent::deleteObjectByID($ID);
     }
 
 }

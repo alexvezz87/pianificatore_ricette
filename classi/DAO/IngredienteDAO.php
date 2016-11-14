@@ -32,10 +32,10 @@ class IngredienteDAO extends ObjectDAO {
      * La funzione restituisce un array di tutti gli ingredienti
      * @return array
      */
-    public function getIngredienti(){        
+    public function getIngredienti($where = null){        
         $result = null;
         //omettendo i tre array alla funzione, ottengo una select * from tabella       
-        $temp = parent::getObjects();
+        $temp = parent::getObjects(null, $where);
         
         if(count($temp) > 0){
             $result = array();
@@ -69,9 +69,8 @@ class IngredienteDAO extends ObjectDAO {
      * @param type $ID
      * @return type
      */
-    public function deleteIngrediente($ID){
-        $array = array('ID' => $ID);
-        return parent::deleteObject($array);
+    public function deleteIngredienteByID($ID){       
+        return parent::deleteObjectByID($ID);
     }
 
 }
