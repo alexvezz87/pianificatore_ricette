@@ -6,8 +6,8 @@
 
 //CREA DATABASE
 function install_pianificatore(){
-    global $DB_TABLE_INGREDIENTI, $DB_TABLE_PREPARAZIONI, $DB_TABLE_RICETTE, $DB_TABLE_TIPOLOGIE, $DB_TABLE_INGREDIENTI_RICETTE;
-    global $DB_TABLE_AGENDE, $DB_TABLE_GIORNI ;
+    global $DB_TABLE_INGREDIENTI, $DB_TABLE_PREPARAZIONI, $DB_TABLE_RICETTE, $DB_TABLE_TIPOLOGIA_RICETTE, $DB_TABLE_INGREDIENTI_RICETTE;
+    global $DB_TABLE_AGENDE, $DB_TABLE_GIORNI, $DB_TABLE_TIPOLOGIA_PASTI, $DB_TABLE_PASTI, $DB_TABLE_GIORNI_PASTI, $DB_TABLE_PASTI_RICETTE;
     try{
         //INGREDIENTI
         $args = array(
@@ -40,7 +40,7 @@ function install_pianificatore(){
         $fks = array(
             array(
                 'key1'    => 'id_ingrediente',
-                'tabella' => 'ingredienti',                
+                'tabella' => $DB_TABLE_INGREDIENTI,                
             )
         );
         creaTabella($DB_TABLE_PREPARAZIONI, $args, $fks);
@@ -58,7 +58,7 @@ function install_pianificatore(){
                 'null' => null
             )
         );
-        creaTabella($DB_TABLE_TIPOLOGIE, $args);
+        creaTabella($DB_TABLE_TIPOLOGIA_RICETTE, $args);
         
         
         //RICETTE
@@ -102,7 +102,7 @@ function install_pianificatore(){
         $fks = array(
             array(
                 'key1'    => 'id_tipologia',
-                'tabella' => 'tipologie'                
+                'tabella' => $DB_TABLE_TIPOLOGIA_RICETTE               
             )
         );        
         creaTabella($DB_TABLE_RICETTE, $args, $fks);
@@ -133,11 +133,11 @@ function install_pianificatore(){
         $fks = array(
             array(
                 'key1'    => 'id_ingrediente',
-                'tabella' => 'ingredienti'                
+                'tabella' => $DB_TABLE_INGREDIENTI                
             ),
             array(
                 'key1'    => 'id_ricetta',
-                'tabella' => 'ricette'                
+                'tabella' => $DB_TABLE_RICETTE               
             )
         );
         creaTabella($DB_TABLE_INGREDIENTI_RICETTE, $args, $fks);
@@ -146,7 +146,7 @@ function install_pianificatore(){
         $args = array(
             array(
                 'nome' => 'settimana',
-                'tipo' => 'VARCHAR(100)',
+                'tipo' => 'INT',
                 'null' => 'NOT NULL'
             ),
             array(
@@ -178,12 +178,12 @@ function install_pianificatore(){
         $fks = array(
             array(
                 'key1'    => 'id_agenda',
-                'tabella' => 'agende'                
+                'tabella' => $DB_TABLE_AGENDE                
             )
         );  
         creaTabella($DB_TABLE_GIORNI , $args, $fks);
         
-        //PASTI
+        //TIPOLOGIA PASTI
         $args = array(
             array(
                 'nome' => 'nome',
@@ -191,18 +191,55 @@ function install_pianificatore(){
                 'null' => 'NOT NULL'
             ),
             array(
+                'nome' => 'descrizione',
+                'tipo' => 'TEXT',
+                'null' => null
+            )
+        );
+        creaTabella($DB_TABLE_TIPOLOGIA_PASTI, $args);
+        
+        //PASTI
+        $args = array(
+            array(
+                'nome' => 'id_tipologia',
+                'tipo' => 'INT',
+                'null' => 'NOT NULL'
+            )
+        );
+        $fks = array(
+            array(
+                'key1' => 'id_tipologia',
+                'tabella' => $DB_TABLE_TIPOLOGIA_PASTI
+            )
+        );        
+        creaTabella($DB_TABLE_PASTI, $args, $fks);
+        
+        
+        
+        //GIORNI PASTI
+        $args = array(
+            array(
+                'nome' => 'id_pasto',
+                'tipo' => 'INT',
+                'null' => 'NOT NULL'
+            ),
+            array(
                 'nome' => 'id_giorno',
                 'tipo' => 'INT',
                 'null' => 'NOT NULL'
             )
-        );   
+        );
         $fks = array(
             array(
-                'key1'    => 'id_giorno',
-                'tabella' => 'giorni'                
+                'key1' => 'id_pasto',
+                'tabella' => $DB_TABLE_PASTI
+            ),
+            array(
+                'key1' => 'id_giorno',
+                'tabella' => $DB_TABLE_GIORNI
             )
         );
-        creaTabella('pasti', $args, $fks);        
+        creaTabella($DB_TABLE_GIORNI_PASTI, $args, $fks);
         
         //PASTI RICETTE
         $args = array(
@@ -220,14 +257,14 @@ function install_pianificatore(){
         $fks = array(
             array(
                 'key1'    => 'id_ricetta',
-                'tabella' => 'ricette'                
+                'tabella' => $DB_TABLE_RICETTE                
             ),
             array(
                 'key1'    => 'id_pasto',
-                'tabella' => 'pasti'                
+                'tabella' => $DB_TABLE_PASTI                
             ),
         );
-        creaTabella('pasti_ricette', $args, $fks);
+        creaTabella($DB_TABLE_PASTI_RICETTE, $args, $fks);
                 
         
         
@@ -239,26 +276,31 @@ function install_pianificatore(){
 
 //ELIMINA DATABASE
 function dropPianificatore(){
+    global $DB_TABLE_INGREDIENTI, $DB_TABLE_PREPARAZIONI, $DB_TABLE_RICETTE, $DB_TABLE_TIPOLOGIA_RICETTE, $DB_TABLE_INGREDIENTI_RICETTE;
+    global $DB_TABLE_AGENDE, $DB_TABLE_GIORNI, $DB_TABLE_TIPOLOGIA_PASTI, $DB_TABLE_PASTI, $DB_TABLE_GIORNI_PASTI, $DB_TABLE_PASTI_RICETTE;
     
     try{
         
         //drop di ingredienti_ricette
-        dropTabella('ingredienti_ricette');
+        dropTabella($DB_TABLE_INGREDIENTI_RICETTE);
         
         //drop di preparazioni e ingredienti
-        if(dropTabella('preparazioni') == true ){
-            dropTabella('ingredienti');
+        if(dropTabella($DB_TABLE_PREPARAZIONI) == true ){
+            dropTabella($DB_TABLE_INGREDIENTI);
         }
         
         //drop table di ciò che riguarda ricette
-        if(dropTabella('pasti_ricette')==true){
-            if(dropTabella('ricette')==true){
-                dropTabella('tipologie');
+        if(dropTabella($DB_TABLE_PASTI_RICETTE)==true){
+            if(dropTabella($DB_TABLE_RICETTE)==true){
+                dropTabella($DB_TABLE_TIPOLOGIA_RICETTE);
             }
             
-            if(dropTabella('pasti')== true){
-                if(dropTabella('giorni') == true){
-                    dropTabella('agende');
+            if(dropTabella($DB_TABLE_GIORNI_PASTI)==true){
+                if(dropTabella($DB_TABLE_PASTI)== true){
+                    if(dropTabella($DB_TABLE_GIORNI) == true){
+                        dropTabella($DB_TABLE_AGENDE);
+                        dropTabella($DB_TABLE_TIPOLOGIA_PASTI);
+                    }
                 }
             }
         }

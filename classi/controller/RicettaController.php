@@ -103,7 +103,10 @@ class RicettaController {
         );
         
         $temp = $this->getRicette($query);
-        return $temp[0];
+        if($temp != null){
+            return $temp[0];
+        }
+        return null;
     }
     
     /**
