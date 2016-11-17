@@ -35,5 +35,8 @@ require_once 'controller/RicettaController.php';
 require_once 'controller/AgendaController.php';
 
 //CLASSI VIEW
+require_once 'view/PrinterView.php';
+require_once 'view/IngredienteView.php';
+
 
 ?>

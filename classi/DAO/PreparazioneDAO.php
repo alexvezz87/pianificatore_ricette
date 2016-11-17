@@ -47,6 +47,7 @@ class PreparazioneDAO extends ObjectDAO {
             $result = array();
             foreach($temp as $item){
                 $p = new Preparazione();
+                $p->setID($item->ID);
                 $p->setIdIngrediente($item->id_ingrediente);
                 $p->setGiorniAnticipo($item->giorni_anticipo);
                 $p->setDescrizione($item->descrizione);
