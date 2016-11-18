@@ -43,6 +43,26 @@ class RicettaController {
     }
     
     /**
+     * La funzione restituisce una tipologia ricetta per id passato
+     * @param type $ID
+     * @return type
+     */
+    public function getTipologiaByID($ID){
+        $query = array(
+            array(
+                'campo'     => 'ID',
+                'valore'    => $ID,
+                'formato'   => 'INT'
+            )
+        );
+        $temp = $this->tDAO->getTipologie($query);
+        if($temp != null){
+            return $temp[0];
+        }
+        return null;
+    }
+    
+    /**
      * La funzione aggiorna una determinata tipologia
      * @param Tipologia $t
      * @return type
@@ -57,9 +77,31 @@ class RicettaController {
      * @return type
      */
     public function deleteTipologia($ID){
-        return $this->tDAO->deleteTipologiaByID($ID);
+        if($this->isTipologiaRicettaInRicetta($ID) == false){
+            if($this->tDAO->deleteTipologiaByID($ID)==true){
+                return true;
+            }
+        }
+        else{
+            return -1;
+        }
+        return false;
     }
 
+    
+    public function isTipologiaRicettaInRicetta($ID){
+        $query = array(
+            array(
+                'campo'     => 'id_tipologia',
+                'valore'    => $ID,
+                'formato'   => 'INT'
+            )
+        );
+        if($this->rDAO->getRicette($query) == null){
+            return false;
+        }
+        return true;
+    }
     
     //METODI INERENTI A RICETTA
     

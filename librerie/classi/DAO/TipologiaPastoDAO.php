@@ -40,8 +40,8 @@ class TipologiaPastoDAO extends ObjectDAO{
             foreach($temp as $item){
                 $p = new TipologiaPasto();
                 $p->setID($item->ID);
-                $p->setNome($item->nome);
-                $p->setDescrizione($item->descrizione);
+                $p->setNome(stripslashes($item->nome));
+                $p->setDescrizione(stripslashes($item->descrizione));
                 array_push($result, $p);
             }
         }

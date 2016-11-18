@@ -9,8 +9,8 @@ class TipologiaDAO extends ObjectDAO {
     
     //costruttore
     function __construct() {
-        global $DB_TABLE_TIPOLOGIE;
-        parent::__construct($DB_TABLE_TIPOLOGIE);
+        global $DB_TABLE_TIPOLOGIA_RICETTE;
+        parent::__construct($DB_TABLE_TIPOLOGIA_RICETTE);
     }
     
     /**
@@ -39,8 +39,8 @@ class TipologiaDAO extends ObjectDAO {
             foreach($temp as $item){
                 $t = new Tipologia();
                 $t->setID($item->ID);
-                $t->setNome($item->nome);
-                $t->setDescrizione($item->descrizione);
+                $t->setNome(stripslashes($item->nome));
+                $t->setDescrizione(stripslashes($item->descrizione));
                 array_push($result, $t);
             }
         }

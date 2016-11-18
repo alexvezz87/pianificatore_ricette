@@ -42,7 +42,7 @@ class GiornoDAO extends ObjectDAO{
                 $g = new Giorno();
                 $g->setID($item->ID);
                 $g->setIdAgenda($item->id_agenda);
-                $g->setNome($item->nome);
+                $g->setNome(stripcslashes($item->nome));
                 $g->setData($item->data);
                 array_push($result,$g);
             }

@@ -50,7 +50,7 @@ class PreparazioneDAO extends ObjectDAO {
                 $p->setID($item->ID);
                 $p->setIdIngrediente($item->id_ingrediente);
                 $p->setGiorniAnticipo($item->giorni_anticipo);
-                $p->setDescrizione($item->descrizione);
+                $p->setDescrizione(stripslashes($item->descrizione));
                 array_push($result, $p);
             }
         }

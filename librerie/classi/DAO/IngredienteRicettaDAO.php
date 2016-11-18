@@ -45,7 +45,7 @@ class IngredienteRicettaDAO extends ObjectDAO {
                 $ir->setIdIngrediente($item->id_ingrediente);
                 $ir->setIdRicetta($item->id_ricetta);
                 $ir->setQuantita($item->quantita);
-                $ir->setUnitaMisura($item->unita_misura);
+                $ir->setUnitaMisura(stripslashes($item->unita_misura));
                 array_push($result, $ir);
             }
         }

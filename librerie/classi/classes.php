@@ -28,15 +28,17 @@ require_once 'DAO/PastoDAO.php';
 require_once 'DAO/GiornoPastoDAO.php';
 require_once 'DAO/PastoRicettaDAO.php';
 
-
 //CLASSI CONTROLLER
 require_once 'controller/IngredienteController.php';
 require_once 'controller/RicettaController.php';
 require_once 'controller/AgendaController.php';
+require_once 'controller/TipologiaPastoController.php';
 
 //CLASSI VIEW
 require_once 'view/PrinterView.php';
 require_once 'view/IngredienteView.php';
+require_once 'view/TipologiaPastoView.php';
+require_once 'view/RicettaView.php';
 
 
 ?>

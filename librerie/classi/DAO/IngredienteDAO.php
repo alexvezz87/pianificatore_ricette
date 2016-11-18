@@ -43,7 +43,7 @@ class IngredienteDAO extends ObjectDAO {
             foreach($temp as $item){
                 $i = new Ingrediente();
                 $i->setID($item->ID);
-                $i->setNome($item->nome);
+                $i->setNome(stripslashes($item->nome));
                 array_push($result, $i);
             }
         }        

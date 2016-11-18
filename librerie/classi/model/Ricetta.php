@@ -11,8 +11,8 @@ class Ricetta {
     private $preparazione;
     private $durata;
     private $foto;
-    private $id_tipologia;
-    private $id_utente;
+    private $idTipologia;
+    private $idUtente;
     private $data;
     
     //attributo aggiunto 
@@ -42,8 +42,8 @@ class Ricetta {
         return $this->foto;
     }
 
-    function getId_tipologia() {
-        return $this->id_tipologia;
+    function getIdTipologia() {
+        return $this->idTipologia;
     }
 
     function setID($ID) {
@@ -66,20 +66,20 @@ class Ricetta {
         $this->foto = $foto;
     }
 
-    function setId_tipologia($id_tipologia) {
-        $this->id_tipologia = $id_tipologia;
+    function setIdTipologia($idTipologia) {
+        $this->idTipologia = $idTipologia;
     }
 
-    function getId_utente() {
-        return $this->id_utente;
+    function getIdUtente() {
+        return $this->idUtente;
     }
 
     function getData() {
         return $this->data;
     }
 
-    function setId_utente($id_utente) {
-        $this->id_utente = $id_utente;
+    function setIdUtente($idUtente) {
+        $this->idUtente = $idUtente;
     }
 
     function setData($data) {

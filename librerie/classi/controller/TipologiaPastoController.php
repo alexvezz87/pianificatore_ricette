@@ -16,11 +16,11 @@ class TipologiaPastoController {
     
     /**
      * La funzione salva un pasto 
-     * @param TipologiaPasto $p
+     * @param TipologiaPasto $tp
      * @return type
      */
-    public function saveTipologiaPasto(TipologiaPasto $p){
-        return $this->tpDAO->savePasto($p);
+    public function saveTipologiaPasto(TipologiaPasto $tp){
+        return $this->tpDAO->saveTipologiaPasto($tp);
     }
     
     /**
@@ -28,7 +28,7 @@ class TipologiaPastoController {
      * @return type
      */
     public function getTipologiaPasti(){
-        return $this->tpDAO->getPasti();
+        return $this->tpDAO->getTipologiaPasti();
     }
     
     /**
@@ -45,7 +45,7 @@ class TipologiaPastoController {
             )
         );
         
-        $temp = $this->tpDAO->getPasti($query);
+        $temp = $this->tpDAO->getTipologiaPasti($query);
         if($temp != null){
             return $temp[0];
         }
@@ -54,11 +54,11 @@ class TipologiaPastoController {
     
     /**
      * La funzione aggiorna un pasto
-     * @param TipologiaPasto $p
+     * @param TipologiaPasto $tp
      * @return type
      */
-    public function updateTipologiaPasto(TipologiaPasto $p){
-        return $this->tpDAO->updateTipologiaPasto($p);
+    public function updateTipologiaPasto(TipologiaPasto $tp){
+        return $this->tpDAO->updateTipologiaPasto($tp);
     }
     
     /**
@@ -86,11 +86,15 @@ class TipologiaPastoController {
      * @param type $ID
      * @return boolean
      */
-    public function deletePasto($ID){
+    public function deleteTipologiaPasto($ID){
         if($this->isTipologiaPastoInAgenda($ID) == false){
-            if($this->tpDAO->deleteTipologiaPastoByID($ID == true)){
+            
+            if($this->tpDAO->deleteTipologiaPastoByID($ID)==true){
                 return true;
             }
+        }
+        else{
+            return -1;
         }
         return false;
     }

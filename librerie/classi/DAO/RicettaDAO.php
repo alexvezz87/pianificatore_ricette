@@ -27,8 +27,8 @@ class RicettaDAO extends ObjectDAO {
             'preparazione'  => $r->getPreparazione(),
             'durata'        => $r->getDurata(),
             'foto'          => $r->getFoto(),
-            'id_tipologia'  => $r->getId_tipologia(),
-            'id_utente'     => $r->getId_utente(),
+            'id_tipologia'  => $r->getIdTipologia(),
+            'id_utente'     => $r->getIdUtente(),
             'data'          => $timestamp
         );
         $formato = array('%s', '%s', '%d', '%s', '%d', '%d', '%s');
@@ -45,8 +45,10 @@ class RicettaDAO extends ObjectDAO {
         $result = null;
         if($order == null){
             $order = array(
-                'campo'  => 'data',
-                'ordine' => 'DESC'
+                array(
+                    'campo'  => 'data',
+                    'ordine' => 'DESC'
+                )
             );
         }
         $temp = parent::getObjects(null, $where, $order);
@@ -58,10 +60,10 @@ class RicettaDAO extends ObjectDAO {
                 $r->setDurata($item->durata);
                 $r->setFoto($item->foto);
                 $r->setID($item->ID);
-                $r->setId_tipologia($item->id_tipologia);
-                $r->setId_utente($item->id_utente);
+                $r->setIdTipologia($item->id_tipologia);
+                $r->setIdUtente($item->id_utente);
                 $r->setNome($item->nome);
-                $r->setPreparazione($item->preparazione);
+                $r->setPreparazione(stripslashes($item->preparazione));
                 array_push($result, $r);
             }
         }
@@ -79,7 +81,7 @@ class RicettaDAO extends ObjectDAO {
             'preparazione'  => $r->getPreparazione(),
             'durata'        => $r->getDurata(),
             'foto'          => $r->getFoto(),
-            'id_tipologia'  => $r->getId_tipologia()
+            'id_tipologia'  => $r->getIdTipologia()
         );
         $formatUpdate = array('%s', '%s', '%d', '%s', '%d');
         $where = array('ID' => $r->getID());
