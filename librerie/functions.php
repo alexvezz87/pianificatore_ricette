@@ -65,12 +65,12 @@ function install_pianificatore(){
         $args = array(
             array(
                 'nome' => 'nome',
-                'tipo' => 'VARCHAR(100)',
+                'tipo' => 'TEXT',
                 'null' => 'NOT NULL'
             ),
             array(
                 'nome' => 'preparazione',
-                'tipo' => 'VARCHAR(100)',
+                'tipo' => 'TEXT',
                 'null' => 'NOT NULL'
             ),
             array(
@@ -97,6 +97,11 @@ function install_pianificatore(){
                 'nome' => 'data',
                 'tipo' => 'TIMESTAMP',
                 'null' => 'NOT NULL'
+            ),
+            array(
+                'nome' => 'dose',
+                'tipo' => 'INT',
+                'null' => 'NOT NULL'
             )
         );
         $fks = array(
@@ -122,12 +127,12 @@ function install_pianificatore(){
             array(
                 'nome' => 'quantita',
                 'tipo' => 'DECIMAL(8,2)',
-                'null' => 'NOT NULL'
+                'null' => null
             ),
             array(
                 'nome' => 'unita_misura',
                 'tipo' => 'VARCHAR(20)',
-                'null' => 'NOT NULL'
+                'null' => null
             ),
         );      
         $fks = array(

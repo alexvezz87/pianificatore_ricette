@@ -84,6 +84,28 @@ class IngredienteController {
     }
     
     /**
+     * La funzione restituisce l'id di un ingrediente conoscendone il nome, null in caso di insuccesso
+     * @param type $nome
+     * @return type
+     */
+    public function getIngredienteByNome($nome){
+        $query = array(
+            array(
+                'campo'     => 'nome',
+                'valore'    => addslashes(trim($nome)),
+                'formato'   => null
+            )                        
+        );
+        $temp = $this->getIngredienti($query);
+        if($temp != null){
+            $i = new Ingrediente();
+            $i = $temp[0];
+            return $i->getID();
+        }
+        return null;
+    }
+    
+    /**
      * Funzione generica che fa una query sul db e restituisce un array di ingredienti
      * @param type $where
      * @return array

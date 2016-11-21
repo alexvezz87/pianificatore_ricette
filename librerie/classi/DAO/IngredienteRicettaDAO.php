@@ -24,8 +24,8 @@ class IngredienteRicettaDAO extends ObjectDAO {
             'id_ricetta'        => $ir->getIdRicetta(),
             'quantita'          => $ir->getQuantita(),
             'unita_misura'      => $ir->getUnitaMisura()
-        );
-        $formato = array('%d', '%d'. '%d', '%s');
+        );        
+        $formato = array('%d', '%d', '%f', '%s');
         return parent::saveObject($campi, $formato);
     }
     

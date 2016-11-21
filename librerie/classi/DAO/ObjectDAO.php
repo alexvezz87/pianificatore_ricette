@@ -23,7 +23,7 @@ class ObjectDAO {
      * @param type $formato
      * @return boolean
      */
-    protected function saveObject($campi, $formato){
+    protected function saveObject($campi, $formato){   
         //salvo un oggetto generico
         try{
             $this->wpdb->insert(

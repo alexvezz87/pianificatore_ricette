@@ -8,3 +8,58 @@ and open the template in the editor.
     Author     : Alex
 */
 
+form#search-form{
+  position: relative;
+}
+ 
+form#search-form ul{
+	  position: absolute;
+	  top: 0;
+	  left: 0; 
+	  width: 100%;
+	  max-height: 200px;
+	  overflow: auto;	  
+	  z-index: 1;	  
+	  border:1px solid #DDDDDD;
+	  border-radius: 6px;	  
+  }
+ 
+span.ui-helper-hidden-accessible{
+  display: none !important;
+}
+ 
+.ui-state-focus {
+	 color: #ffffff;
+	 background-color: #428bca;
+}
+
+.ui-autocomplete>li{
+    cursor: pointer;
+    padding:5px;
+}
+
+.ui-autocomplete>li:hover{
+    background:#DDDDDD;
+}
+
+.ingrediente{
+    margin-left:6%;
+}
+
+.ingrediente > div{
+    float:left;
+}
+
+.ingrediente .form-group > div{
+    display:block;
+    float:none;
+}
+
+.ingrediente .um label{
+    width: 100%;
+    text-align: left;
+} 
+
+.ingrediente .nome-ingrediente{
+    width:47%;
+}

@@ -20,6 +20,11 @@ global $LABEL_TP_NOME, $LABEL_TP_DESCRIZIONE;
 global $FORM_TR_NOME, $FORM_TR_DESCRIZIONE, $FORM_TR_SUBMIT;
 global $LABEL_TR_NOME, $LABEL_TR_DESCRIZIONE;
 
+//RICETTA
+global $FORM_R_NOME, $FORM_R_TIPOLOGIA, $FORM_R_INGREDIENTE, $FORM_R_QT_INGREDIENTE, $FORM_R_UM_INGREDIENTE, $FORM_R_PREPARAZIONE, $FORM_R_DURATA, $FORM_R_SUBMIT, $FORM_R_DOSE, $FORM_R_FOTO;
+global $LABEL_R_NOME, $LABEL_R_TIPOLOGIA, $LABEL_R_INGREDIENTE, $LABEL_R_QT_INGREDIENTE, $LABEL_R_UM_INGREDIENTE, $LABEL_R_PREPARAZIONE, $LABEL_R_DURATA, $LABEL_R_DOSE, $LABEL_R_FOTO;
+
+
 global $LABEL_SUBMIT;
 
 //DATABASE
@@ -66,6 +71,30 @@ $FORM_TR_SUBMIT = 'tr-salva';
 
 $LABEL_TR_NOME = 'Nome';
 $LABEL_TR_DESCRIZIONE = 'Descrizione';
+
+
+//ricetta
+$FORM_R_NOME = 'r-nome';
+$FORM_R_TIPOLOGIA = 'r-tipologia';
+$FORM_R_INGREDIENTE = 'r-ingrediente-nome';
+$FORM_R_QT_INGREDIENTE = 'r-ingrediente-qt';
+$FORM_R_UM_INGREDIENTE = 'r-ingrediente-um';
+$FORM_R_PREPARAZIONE = 'r-preparazione';
+$FORM_R_DURATA = 'r-durata';
+$FORM_R_DOSE = 'r-dose';
+$FORM_R_FOTO = 'r-foto';
+$FORM_R_SUBMIT = 'r-salva';
+
+$LABEL_R_NOME = 'Nome ricetta';
+$LABEL_R_TIPOLOGIA = 'Tipologia';
+$LABEL_R_INGREDIENTE = 'Ingrediente';
+$LABEL_R_QT_INGREDIENTE = 'Quantità';
+$LABEL_R_UM_INGREDIENTE = 'Unità di misura';
+$LABEL_R_PREPARAZIONE = 'Preparazione';
+$LABEL_R_DURATA = 'Durata (min)';
+$LABEL_R_DOSE = 'Dose (per persona)';
+$LABEL_R_FOTO = 'Foto';
+
 
 $LABEL_SUBMIT = 'Salva';
 

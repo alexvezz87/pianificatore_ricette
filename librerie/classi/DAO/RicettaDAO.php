@@ -19,6 +19,8 @@ class RicettaDAO extends ObjectDAO {
      * @return type
      */
     public function saveRicetta(Ricetta $r){
+        
+        
         //imposto il timezone
         date_default_timezone_set('Europe/Rome');
         $timestamp = date('Y-m-d H:i:s', strtotime("now")); 
@@ -29,9 +31,10 @@ class RicettaDAO extends ObjectDAO {
             'foto'          => $r->getFoto(),
             'id_tipologia'  => $r->getIdTipologia(),
             'id_utente'     => $r->getIdUtente(),
-            'data'          => $timestamp
-        );
-        $formato = array('%s', '%s', '%d', '%s', '%d', '%d', '%s');
+            'data'          => $timestamp,
+            'dose'          => $r->getDose()
+        );        
+        $formato = array('%s', '%s', '%d', '%s', '%d', '%d', '%s', '%d');
         return parent::saveObject($campi, $formato);
     }
     
@@ -64,6 +67,7 @@ class RicettaDAO extends ObjectDAO {
                 $r->setIdUtente($item->id_utente);
                 $r->setNome($item->nome);
                 $r->setPreparazione(stripslashes($item->preparazione));
+                $r->getDose($item->dose);
                 array_push($result, $r);
             }
         }
@@ -81,9 +85,10 @@ class RicettaDAO extends ObjectDAO {
             'preparazione'  => $r->getPreparazione(),
             'durata'        => $r->getDurata(),
             'foto'          => $r->getFoto(),
-            'id_tipologia'  => $r->getIdTipologia()
+            'id_tipologia'  => $r->getIdTipologia(), 
+            'dose'          => $r->getDose()
         );
-        $formatUpdate = array('%s', '%s', '%d', '%s', '%d');
+        $formatUpdate = array('%s', '%s', '%d', '%s', '%d', '%d');
         $where = array('ID' => $r->getID());
         $formatWhere = array('%d');
         return parent::updateObject($update, $formatUpdate, $where, $formatWhere);

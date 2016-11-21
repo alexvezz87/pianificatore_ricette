@@ -14,6 +14,7 @@ class Ricetta {
     private $idTipologia;
     private $idUtente;
     private $data;
+    private $dose;
     
     //attributo aggiunto 
     private $ingredienti; //array di ingredienti
@@ -93,6 +94,15 @@ class Ricetta {
     function setIngredienti($ingredienti) {
         $this->ingredienti = $ingredienti;
     }
+
+    function getDose() {
+        return $this->dose;
+    }
+
+    function setDose($dose) {
+        $this->dose = $dose;
+    }
+
 
 
 

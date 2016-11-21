@@ -88,11 +88,30 @@ add_action( 'admin_enqueue_scripts', 'register_pr_admin_style' );
 function register_pr_admin_style() {
     wp_register_style('pr_admin-style', plugins_url('css/admin-style.css', __FILE__) );
     wp_register_style('pr_admin-bootstrap-style', plugins_url('css/bootstrap.min.css', __FILE__) );
+    wp_register_style('pr_file-input', plugins_url('css/fileinput.min.css', __FILE__) );
+    
     //wp_register_style('pr_file-input-style', plugins_url('css/fileinput.min.css', __FILE__) );
     
     wp_enqueue_style('pr_admin-style');
     wp_enqueue_style('pr_admin-bootstrap-style');
+    wp_enqueue_style('pr_file-input');
     //wp_enqueue_style('pr_file-input-style');
 }
+
+//aggiungo gli script lato amministratore
+function register_pr_admin_js_script(){
+    wp_register_script('autocomplete-js', plugins_url('pianificatore_ricette/js/jquery.autocomplete-min.js'), array('jquery'), '1.0', false);   
+    wp_register_script('ui-widget-js', plugins_url('pianificatore_ricette/js/jquery-ui.min.js'), array('jquery'), '1.0', false);       
+    wp_register_script('file-input', plugins_url('pianificatore_ricette/js/fileinput.min.js'), array('jquery'), '1.0', false);       
+    wp_register_script('admin-js', plugins_url('pianificatore_ricette/js/admin-script.js'), array('jquery'), '1.0', false);   
+    
+    
+    wp_enqueue_script('autocomplete-js');  
+    wp_enqueue_script('ui-widget-js'); 
+    wp_enqueue_script('file-input'); 
+    wp_enqueue_script('admin-js');  
+}
+
+add_action( 'admin_enqueue_scripts', 'register_pr_admin_js_script' );
 
 ?>

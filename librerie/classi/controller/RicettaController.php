@@ -115,13 +115,17 @@ class RicettaController {
         //arrayIR deve essere un array di oggetti IngredienteRicetta        
         //1. Salvo la ricetta
         $idRicetta = $this->rDAO->saveRicetta($r);
+        
         if($idRicetta != false){
-            //associo gli ingredienti alla ricetta
+            //associo gli ingredienti alla ricetta      
+            //print_r($arrayIR);
             foreach($arrayIR as $item){
                 $ir = new IngredienteRicetta();
                 $ir = $item;
-                $ir->setIdRicetta($idRicetta);
+                $ir->setIdRicetta($idRicetta);                
                 if($this->irDAO->saveIngredienteRicetta($ir) == false){
+                    //cancello la ricetta salvata precedentemente
+                    $this->rDAO->deleteRicettaByID($idRicetta);
                     return false;
                 }
             }
