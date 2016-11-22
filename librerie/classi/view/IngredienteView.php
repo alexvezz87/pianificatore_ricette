@@ -63,15 +63,21 @@ class IngredienteView extends PrinterView{
             }
             
             //salvo l'ingrediente
-            if($this->iC->saveIngrediente($ingrediente) == false){
+            $save = $this->iC->saveIngrediente($ingrediente);
+            if($save === false){
                 parent::printErrorBoxMessage('Ingrediente non salvato nel Sistema!');
                 return;
             }
-            parent::printOkBoxMessage('Ingrediente salvato con successo!');
-            //Pulisco la variabile $_POST
-            unset($_POST);
-            return;
-            
+            else if($save === -1){
+               parent::printErrorBoxMessage('Ingrediente non salvato nel Sistema! L\'ingrediente è già presente nel DB');
+                return; 
+            }
+            else if($save === true){
+                parent::printOkBoxMessage('Ingrediente salvato con successo!');
+                //Pulisco la variabile $_POST
+                unset($_POST);
+                return;
+            }
         }
     }
     
@@ -202,11 +208,17 @@ class IngredienteView extends PrinterView{
         
         //2. Cancellazione
         if(isset($_POST['delete-ingrediente'])){
-            if($this->iC->deleteIngrediente($_POST['id-ingrediente']) == false){
+            $delete = $this->iC->deleteIngrediente($_POST['id-ingrediente']);
+            
+            if( $delete === false){
                 parent::printErrorBoxMessage('Errore nella cancellazione');
                 return;
             }
-            else{
+            else if($delete === -1){
+                parent::printErrorBoxMessage('Errore nella cancellazione. L\'ingrediente è presente in almeno una ricetta');
+                return;
+            }
+            else if($delete === true){
                 parent::printOkBoxMessage('Ingrediente eliminato con successo!');
                 unset($_POST);
                 return;

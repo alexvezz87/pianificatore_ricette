@@ -23,24 +23,27 @@ class IngredienteController {
      */
     public function saveIngrediente(Ingrediente $i){
         //salvare l'ingrediente, vuol dire salvare l'ingrediente e successivamente, salvare le preparazioni associate
-        //1. Salvo l'ingrediente
-        $idIngrediente = $this->iDAO->saveIngrediente($i);
-        //2. Salvo le preparazioni
-        if($idIngrediente != false){      
-            if($i->getPreparazioni() != null){
-                //ciclo se l'ingrediente ha preparazioni, altrimenti non ha senso farlo
-                foreach($i->getPreparazioni() as $preparazione){
-                    $p = new Preparazione();
-                    $p = $preparazione;
-                    $p->setIdIngrediente($idIngrediente);
-                    if($this->pDAO->savePreparazione($p) == false){
-                        return false;
-                    }
-                }   
+        if($this->isIngredienteinDB($i->getNome())==false){
+            //1. Salvo l'ingrediente
+            $idIngrediente = $this->iDAO->saveIngrediente($i);
+            //2. Salvo le preparazioni
+            if($idIngrediente != false){      
+                if($i->getPreparazioni() != null){
+                    //ciclo se l'ingrediente ha preparazioni, altrimenti non ha senso farlo
+                    foreach($i->getPreparazioni() as $preparazione){
+                        $p = new Preparazione();
+                        $p = $preparazione;
+                        $p->setIdIngrediente($idIngrediente);
+                        if($this->pDAO->savePreparazione($p) == false){
+                            return false;
+                        }
+                    }   
+                }
+                return true;
             }
-            return true;
+            return false;
         }
-        return false;
+        return -1;
     }
     
     /**
@@ -177,7 +180,7 @@ class IngredienteController {
                 }
             }
         }
-        return false;
+        return -1;
     }
     
     /**
@@ -210,6 +213,27 @@ class IngredienteController {
             return false;
         }
         return true;        
+    }
+    
+    /**
+     * La funzione controlla se il nome di un ingrediente non esista già nel database
+     * @param type $nome
+     * @return boolean
+     */
+    public function isIngredienteinDB($nome){
+        //devo fare un confronto se un ingrediente è già presente nel database
+        $query = array(
+            array(
+                'campo'     => 'nome',
+                'valore'    => addslashes(strtolower(trim($nome))),
+                'formato'   => null
+            )
+        );
+        
+        if($this->iDAO->getIngredienti($query) == null){
+            return false;
+        }
+        return true;
     }
     
     /**

@@ -17,6 +17,9 @@ else if($type == 'TP'){
 else if($type == 'TR'){
     $url = 'tipologia_ricetta';
 }
+else if($type = 'R'){
+    $url = 'pianificatore_ricette';
+}
 
 ?>
 <div class="back" style="margin-top:20px">
@@ -34,7 +37,7 @@ if($type == 'ING'){
 <?php 
     $view->listenerDettaglioIngrediente();
     $view->printDettaglioIngrediente($id);  
-    
+    die();
 } 
 else if($type == 'TP'){
     $view = new TipologiaPastoView();
@@ -44,6 +47,7 @@ else if($type == 'TP'){
 <?php 
     $view->listenerDettaglioTipologiaPasto();
     $view->printDettaglioTipologiaPasto($id);
+    die();
 } 
 else if($type == 'TR'){
     $view = new RicettaView();
@@ -53,9 +57,19 @@ else if($type == 'TR'){
 <?php 
     $view->listenerDettaglioTipologiaRicetta();
     $view->printDettaglioTipologiaRicetta($id);
+    die();
    
 }
-
+else if($type == 'R'){
+    $viewR = new RicettaView();
+    $nome = 'Ricetta';
+}
+?>
+    <h1>Pagina dettaglio <?php echo $nome ?></h1>
+<?php 
+    $viewR->listenerDettaglioRicetta();
+    $viewR->printDettaglioRicetta($id);
+    die();
 ?>
 
 

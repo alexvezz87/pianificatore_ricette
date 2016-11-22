@@ -6,7 +6,7 @@
 
 
 jQuery(document).ready(function($){   
-    var countIng = 1;
+    var countIng = $('.ingrediente').size();
     
     $('.add-ingrediente a').click(function(){
         var $element = $('.lista-ingredienti .ingrediente:first-child').clone();
@@ -37,6 +37,13 @@ jQuery(document).ready(function($){
         $element.find('.nome-ingrediente input').val('');
         
         $element.appendTo('.lista-ingredienti');
+    });
+    
+    //controllo l'elemento rimuovi ingrediente
+    
+    
+    $(document.body).on('click', '.rimuovi-ingrediente a', function(){
+        $(this).parent('.rimuovi-ingrediente').parent('.ingrediente').remove();
     });
     
 

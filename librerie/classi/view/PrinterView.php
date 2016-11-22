@@ -138,7 +138,7 @@ class PrinterView {
         <div class="form-group">
             <label class="control-label col-sm-2" for="<?php echo $nameField ?>" ><?php echo $label ?></label>
             <div class="col-sm-10">            
-                <input class="form-control" type="number" id="<?php echo $nameField ?>" name="<?php echo $nameField ?>" value="<?php echo $value ?>" <?php echo $optRequired ?> />
+                <input class="form-control" type="number" step="any" id="<?php echo $nameField ?>" name="<?php echo $nameField ?>" value="<?php echo $value ?>" <?php echo $optRequired ?> />
             </div>
         </div>
     <?php     
@@ -222,6 +222,17 @@ class PrinterView {
     <?php
     }
     
+    
+    protected function printImage($label, $url){
+    ?>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="<?php echo $nameField ?>" ><?php echo $label ?></label>
+            <div class="col-sm-10"> 
+                <img id="<?php echo $label ?>" src="<?php echo $url ?>" alt="<?php echo $label ?>" class="img-responsive" />
+            </div>
+        </div>
+    <?php
+    }
     
     /**
      * Funzione che stampa a video una input hidden

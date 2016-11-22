@@ -21,7 +21,7 @@ class IngredienteDAO extends ObjectDAO {
     public function saveIngrediente(Ingrediente $i){
         //devo creare i due array
         $campi = array(
-            'nome' => $i->getNome()
+            'nome' => strtolower($i->getNome())
         );
         $formato = array('%s');
         

@@ -217,10 +217,37 @@ class RicettaView extends PrinterView {
     }
     
     //RICETTE
-    public function printAddRicettaForm(){
-        //ottengo i nomi degli ingredienti
+    public function printAddRicettaForm(){        
+    ?>        
+        <form class="form-horizontal" role="form" action="<?php echo curPageURL() ?>" name="form-ricetta" method="POST" enctype="multipart/form-data">
+            <?php parent::printHiddenFormField('user-id', get_current_user_id()) ?>
+            <div class="col-sm-10">
+                <div class="col-sm-8">
+                    <?php parent::printTextFormField($this->form['r-nome'], $this->label['r-nome'], true) ?>
+                    <?php parent::printSelectFormField($this->form['r-tipologia'], $this->label['r-tipologia'], $this->getArraySelectTipologieRicetta(), true) ?>
+                </div>
+                <div class="clear"></div>
+                
+                <?php $this->printFormListaIngredienti() ?>
+                
+                <div class="clear" style="height: 50px"></div>
+                <div class="col-sm-8">
+                    <?php parent::printTextAreaFormField($this->form['r-preparazione'], $this->label['r-preparazione'], true) ?>
+                    <?php parent::printNumberFormField($this->form['r-durata'], $this->label['r-durata'], true) ?>
+                    <?php parent::printNumberFormField($this->form['r-dose'], $this->label['r-dose'], true) ?>
+                    <?php parent::printInputFileFormField($this->form['r-foto'], $this->label['r-foto']) ?>
+                </div>
+                <div class="clear"></div>
+                <?php parent::printSubmitFormField($this->form['r-submit'], $this->label['submit']) ?>
+            </div>
+        </form>
+    <?php
+    }
+    
+    
+    protected function printFormListaIngredienti($arrayIR = null){
+        //ottengo l'array con i nomi degli ingredienti
         $ingredienti = $this->getNomeIngredienti();
-        //print_r($ingredienti);
     ?>
         <script>
             jQuery( function($) {
@@ -246,42 +273,37 @@ class RicettaView extends PrinterView {
                 });
           } );
         </script>
-
-        <form class="form-horizontal" role="form" action="<?php echo curPageURL() ?>" name="form-ingrediente" method="POST" enctype="multipart/form-data">
-            <?php parent::printHiddenFormField('user-id', get_current_user_id()) ?>
-            <div class="col-sm-10">
-                <div class="col-sm-8">
-                    <?php parent::printTextFormField($this->form['r-nome'], $this->label['r-nome'], true) ?>
-                    <?php parent::printSelectFormField($this->form['r-tipologia'], $this->label['r-tipologia'], $this->getArraySelectTipologieRicetta(), true) ?>
-                </div>
-                <div class="clear"></div>
-                <h4>Ingredienti</h4>
-                <div class="lista-ingredienti">
-                <?php
-                    $countRicette = $this->getNumIngredienti();                   
-                    for($i=1; $i <= $countRicette; $i++){
-                        $this->printFormIngrediente($i);
-                    } 
-                ?>
-                </div>
-                <div class="add-ingrediente clear">
-                    <a>+ Aggiungi ingrediente</a>
-                </div>
-                <div class="clear" style="height: 50px"></div>
-                <div class="col-sm-8">
-                    <?php parent::printTextAreaFormField($this->form['r-preparazione'], $this->label['r-preparazione'], true) ?>
-                    <?php parent::printNumberFormField($this->form['r-durata'], $this->label['r-durata'], true) ?>
-                    <?php parent::printNumberFormField($this->form['r-dose'], $this->label['r-dose'], true) ?>
-                    <?php parent::printInputFileFormField($this->form['r-foto'], $this->label['r-foto']) ?>
-                </div>
-                <div class="clear"></div>
-                <?php parent::printSubmitFormField($this->form['r-submit'], $this->label['submit']) ?>
-            </div>
-        </form>
+        
+        <h4>Ingredienti</h4>
+        <div class="lista-ingredienti">
+        <?php            
+            if($arrayIR == null){
+                $countRicette = $this->getNumIngredienti();                   
+                for($i=1; $i <= $countRicette; $i++){                
+                    $this->printFormIngrediente($i);                
+                } 
+            }
+            else{
+                $counter = 1;
+                foreach($arrayIR as $item){
+                    $ir = new IngredienteRicetta();
+                    $ir = $item;
+                    $this->printFormDettaglioIngrediente($ir, $counter);                    
+                    $counter++;
+                }
+            }
+        ?>
+        </div>
+        <div class="add-ingrediente clear">
+            <a>+ Aggiungi ingrediente</a>
+        </div>
     <?php
     }
     
-    
+    /**
+     * La funzione stampa i campi di un singolo ingrediente
+     * @param type $counter
+     */
     protected function printFormIngrediente($counter){
     ?>
         <div class="ingrediente" data-num="<?php echo $counter ?>">                        
@@ -294,12 +316,38 @@ class RicettaView extends PrinterView {
             <div class="nome-ingrediente ui-widget">
                 <?php parent::printTextFormField($this->form['r-ingrediente'].'-'.$counter, $this->label['r-ingrediente'], true) ?>               
             </div>
+            <div class="rimuovi-ingrediente">
+                <a>- Rimuovi ingrediente</a>
+            </div>
             <div class="clear"></div>
         </div> 
     <?php    
     }
     
-    
+    protected function printFormDettaglioIngrediente(IngredienteRicetta $ir, $counter){ 
+        //ottengo il nome dell'ingrediente
+        $i = new Ingrediente();
+        $i = $this->iC->getIngredienteByID($ir->getIdIngrediente());
+        
+    ?>
+        <div class="ingrediente">            
+            <div class="qt">
+                <?php parent::printNumberFormField($this->form['r-qt-ingrediente'].'-'.$counter, $this->label['r-qt-ingrediente'], false, $ir->getQuantita()) ?>
+            </div>
+            <div class="um">
+                <?php parent::printTextFormField($this->form['r-um-ingrediente'].'-'.$counter, $this->label['r-um-ingrediente'], false, $ir->getUnitaMisura()) ?>
+            </div>
+            <div class="nome-ingrediente ui-widget">
+                <?php parent::printTextFormField($this->form['r-ingrediente'].'-'.$counter, $this->label['r-ingrediente'], true, $i->getNome()) ?>
+            </div>
+            <div class="rimuovi-ingrediente">
+                <a>- Rimuovi ingrediente</a>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <?php
+    }
+   
     public function listenerAddRicettaForm(){
         if(isset($_POST[$this->form['r-submit']])){
                         
@@ -343,7 +391,10 @@ class RicettaView extends PrinterView {
             if (strpos($key, 'r-ingrediente') !== false) {
                 
                 if (strpos($key, 'qt') !== false) {
-                    $ir = new IngredienteRicetta();                    
+                    $ir = new IngredienteRicetta();
+                    if(isset($_POST['id-r'])){
+                        $ir->setIdRicetta($_POST['id-r']);
+                    }
                     $ir->setQuantita(number_format((float) $value, 2));                                       
                 }
                 if (strpos($key, 'um') !== false) {
@@ -395,9 +446,11 @@ class RicettaView extends PrinterView {
                     $r->setFoto($upload['url']);
                 }
             }
+            else if(isset($_POST['url-foto'])){
+                $r->setFoto($_POST['url-foto']);
+            }
         }
-        
-        
+                
         if(isset($_POST['id-r'])){
             //il campo esiste se siamo nella pagina dettaglio
             $r->setID($_POST['id-r']);
@@ -506,9 +559,11 @@ class RicettaView extends PrinterView {
     
     public function printTableRicette($ricette){
         $header = array(
+            $this->label['r-foto'],
             $this->label['r-nome'],            
             $this->label['r-tipologia'],
             'Utente',
+            'Caricata',
             'Azioni'
         );
         
@@ -525,6 +580,9 @@ class RicettaView extends PrinterView {
             
             $html.='<tr>';
             
+            //foto ricetta
+            $html.='<td><div class="image-preview" style="background:url(\''.$r->getFoto().'\'"></div></td>';
+            
             //nome ricetta
             $html.='<td>'.parent::printTextField(null, $r->getNome()).'</td>';
             
@@ -540,6 +598,9 @@ class RicettaView extends PrinterView {
             $utente = get_userdata($r->getIdUtente());
             $html.='<td>'.$utente->user_nicename.'</td>';
             
+            //caricamento
+            $html.='<td>'. getTime($r->getData()).'</td>';
+            
             //Azioni
             $html.='<td><a href="'. get_admin_url().'admin.php?page=pagina_dettaglio&type=R&id='.$r->getID().'">Vedi dettagli</a></td>';
             
@@ -548,6 +609,104 @@ class RicettaView extends PrinterView {
         
         return $html;
         
+    }
+    
+    
+    public function printDettaglioRicetta($ID){
+        $r = new Ricetta();
+        $r = $this->rC->getRicettaByID($ID);
+        //print_r($r);
+        if($r != null){
+    ?>
+            <form class="form-horizontal" role="form" action="<?php echo curPageURL() ?>" name="form-ricetta" method="POST" enctype="multipart/form-data">
+                <?php parent::printHiddenFormField('id-r', $r->getID()) ?>     
+                <?php parent::printHiddenFormField('user-id', $r->getIdUtente()) ?>
+                <div class="col-sm-10">
+                    <div class="col-sm-8">
+                        <?php parent::printTextFormField($this->form['r-nome'], $this->label['r-nome'], true, $r->getNome()) ?>
+                        <?php parent::printSelectFormField($this->form['r-tipologia'], $this->label['r-tipologia'], $this->getArraySelectTipologieRicetta(), true, $r->getIdTipologia()) ?>
+                    </div>
+                    <div class="clear"></div>
+                    
+                    <?php $this->printFormListaIngredienti($r->getIngredienti()) ?>
+                    
+                    <div class="clear" style="height: 50px"></div>
+                    <div class="col-sm-8">
+                        <?php parent::printTextAreaFormField($this->form['r-preparazione'], $this->label['r-preparazione'], true, $r->getPreparazione()) ?>
+                        <?php parent::printNumberFormField($this->form['r-durata'], $this->label['r-durata'], true, $r->getDurata()) ?>
+                        <?php parent::printNumberFormField($this->form['r-dose'], $this->label['r-dose'], true, $r->getDose()) ?>
+                        
+                        <?php 
+                            if($r->getFoto() != null){
+                                parent::printImage($this->label['r-foto'], $r->getFoto());
+                                parent::printHiddenFormField('url-foto', $r->getFoto());
+                            }                                    
+                        ?> 
+                        <?php parent::printInputFileFormField($this->form['r-foto'], $this->label['r-foto']) ?>
+                    </div>
+                    <div class="clear"></div>
+                    <?php echo parent::printUpdateDettaglio('r') ?>
+                    <?php echo parent::printDeleteDettaglio('r') ?>
+                </div>
+            </form>
+    <?php
+        }
+        else{
+            echo '<p>Ricetta non presente nel sistema.</p>';
+        }
+    }
+    
+    public function listenerDettaglioRicetta(){
+        
+        //1. Aggiornamento
+        if(isset($_POST['update-r'])){
+            //faccio un check della ricetta salvata
+            $r = $this->checkRicettaFormFields();            
+            if($r == null){
+                parent::printErrorBoxMessage('Ricetta non aggiornata!');
+                return;
+            }
+            //faccio un check sugli ingredienti da assegnare alla ricetta
+            $irs = $this->checkIngredientiRicettaFormFields();
+            if($irs == null){
+                parent::printErrorBoxMessage('Ricetta non aggiornata! Errore negli ingredienti');
+                return;
+            }
+            
+            $update = $this->rC->updateRicetta($r, $irs);
+            
+            if($update === -1){
+                parent::printErrorBoxMessage('Ricetta non aggiornata! Errore nell\'aggiornamento della ricetta!');
+                return;
+            }
+            else if($update === -2){
+                parent::printErrorBoxMessage('Ricetta non aggiornata! Errore nella cancellazione dei vecchi ingredienti.');
+                return;
+            }
+            else if($update === -3){
+                parent::printErrorBoxMessage('Ricetta non aggiornata! Errore nel salvare un ingrediente nel database.');
+                return;
+            }
+            else if($update === true){
+                parent::printOkBoxMessage('Ricetta aggiornata con successo!');
+                unset($_POST);
+                return;
+            }
+            
+        }
+        //2. Cancellazione
+        if(isset($_POST['delete-r'])){
+            if($this->rC->deleteRicetta($_POST['id-r'])==false){
+                parent::printErrorBoxMessage('Errore nella cancellazione');
+                return;
+            }
+            else{
+                parent::printOkBoxMessage('Ricetta eliminata con successo!');
+                unset($_POST);
+                return;
+            }
+            
+        }
     }
     
 

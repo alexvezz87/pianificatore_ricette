@@ -218,32 +218,40 @@ class RicettaController {
         $ricette = $this->rDAO->getRicette($where);
         
         //ho le ricette, per ogni ricetta devo associare gli ingredienti
-        foreach($ricette as $item){
-            $r = new Ricetta();
-            $r = $item;
-            $query = array(
-                array(
-                    'campo'     => 'id_ricetta',
-                    'valore'    => $r->getID(),
-                    'formato'   => 'INT'
-                )
-            );
-            $temp = $this->irDAO->getIngredientiRicette($query);
-            
-            //creo un array che accolga gli ingredienti
-            $arrayIngredienti = array();
-            foreach($temp as $t){
-                $ir = new IngredienteRicetta();
-                $ir = $t;
-                //ottengo un ingrediente
-                $i = $this->iC->getIngredienteByID($ir->getIdIngrediente());
-                array_push($arrayIngredienti, $i);
-            }
-            //salvo gli ingredienti nella ricetta
-            $r->setIngredienti($arrayIngredienti);
-            //salvo la ricetta aggiornata con gli ingredienti, nell'array result
-            array_push($result, $r);
-        }        
+        if($ricette != null){
+            foreach($ricette as $item){
+                $r = new Ricetta();
+                $r = $item;
+                $query = array(
+                    array(
+                        'campo'     => 'id_ricetta',
+                        'valore'    => $r->getID(),
+                        'formato'   => 'INT'
+                    )
+                );
+                $temp = $this->irDAO->getIngredientiRicette($query);
+
+                if($temp != null){
+                    //salvo gli ingredienti Ricetta nella ricettta
+                    $r->setIngredienti($temp);
+                }
+
+                /*
+                foreach($temp as $t){
+                    $ir = new IngredienteRicetta();
+                    $ir = $t;
+                    //ottengo un ingrediente
+                    $i = $this->iC->getIngredienteByID($ir->getIdIngrediente());
+                    array_push($arrayIngredienti, $i);
+                }
+                //salvo gli ingredienti nella ricetta
+                $r->setIngredienti($arrayIngredienti);
+                */
+
+                //salvo la ricetta aggiornata con gli ingredienti, nell'array result
+                array_push($result, $r);
+            }        
+        }
         return $result;
     }
     
@@ -271,7 +279,8 @@ class RicettaController {
             if($this->irDAO->deleteIngredientiRicette($query) == true){
                 foreach($arrayIR as $item){                   
                     $ir = new IngredienteRicetta();
-                    $ir = $item;                    
+                    $ir = $item;
+                    $ir->setIdRicetta($r->getID());
                     if($this->irDAO->saveIngredienteRicetta($ir) == false){
                         //errore nel salvare un ingrediente nella ricetta
                         return -3;

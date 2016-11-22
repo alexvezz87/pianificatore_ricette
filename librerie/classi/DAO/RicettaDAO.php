@@ -65,9 +65,9 @@ class RicettaDAO extends ObjectDAO {
                 $r->setID($item->ID);
                 $r->setIdTipologia($item->id_tipologia);
                 $r->setIdUtente($item->id_utente);
-                $r->setNome($item->nome);
+                $r->setNome(stripslashes($item->nome));
                 $r->setPreparazione(stripslashes($item->preparazione));
-                $r->getDose($item->dose);
+                $r->setDose($item->dose);
                 array_push($result, $r);
             }
         }

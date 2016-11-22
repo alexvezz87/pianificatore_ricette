@@ -63,3 +63,19 @@ span.ui-helper-hidden-accessible{
 .ingrediente .nome-ingrediente{
     width:47%;
 }
+
+.ingrediente:first-child .rimuovi-ingrediente{
+    display:none;
+}
+
+.image-preview{
+    width:100px;
+    height: 65px;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+}
+
+.table>tbody>tr>td{
+    vertical-align: middle !important;
+}
