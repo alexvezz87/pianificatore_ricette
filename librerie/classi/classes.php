@@ -39,6 +39,7 @@ require_once 'view/PrinterView.php';
 require_once 'view/IngredienteView.php';
 require_once 'view/TipologiaPastoView.php';
 require_once 'view/RicettaView.php';
+require_once 'view/AgendaView.php';
 
 
 ?>

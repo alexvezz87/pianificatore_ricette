@@ -19,13 +19,11 @@ class AgendaDAO extends ObjectDAO {
      * @return type
      */
     public function saveAgenda(Agenda $a){
-        $campi = array(
-            array(
-                'settimana' => $a->getSettimana(),
-                'id_utente' => $a->getId_utente()
-            )
-        );
-        $formato = array('%s', '%d');
+        $campi = array(           
+            'settimana' => $a->getSettimana(),
+            'id_utente' => $a->getIdUtente()            
+        );       
+        $formato = array('%d', '%d');
         return parent::saveObject($campi, $formato);
     }
     

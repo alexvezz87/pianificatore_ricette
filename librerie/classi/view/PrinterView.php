@@ -9,6 +9,7 @@
 class PrinterView {
     //put your code here
     private $mesi;
+    private $giorni;
     private $annoCorrente;
     private $meseCorrente;
     private $giornoCorrente;
@@ -28,6 +29,16 @@ class PrinterView {
             '10' => 'Ottobre',
             '11' => 'Novembre',
             '12' => 'Dicembre'
+        );
+        
+        $this->giorni = array(
+            '1'  => 'Lunedì',
+            '2'  => 'Martedì',
+            '3'  => 'Mercoledì',
+            '4'  => 'Giovedì',
+            '5'  => 'Venerdì',
+            '6'  => 'Sabato',
+            '7'  => 'Domenica'
         );
         
         date_default_timezone_set('Europe/Rome');
@@ -667,6 +678,15 @@ class PrinterView {
             return trim($_POST[$nameField]);
         }
         return false;
+    }
+    
+    protected function translateDate($date){
+        //la data si suddivide in nome del giorno, numero e mese        
+        $temp = explode('-', $date);
+        $giorno = $this->giorni[$temp[0]];
+        $mese = $this->mesi[$temp[2]];
+        
+        return $giorno.' '.$temp[1].' '.$mese;
     }
     
 }

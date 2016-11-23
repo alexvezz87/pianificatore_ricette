@@ -163,6 +163,26 @@ class RicettaController {
         return $this->getRicette();
     }
     
+    
+    public function getIdRicettaByNome($nome){
+        $query = array(
+            array(
+                'campo'     => 'nome',
+                'valore'    => addslashes(trim($nome)),
+                'formato'   => null
+            )
+        );
+        
+        $temp = $this->getRicette($query);
+        if($temp != null){
+            $r = new Ricetta();
+            $r = $temp[0];
+            return $r->getID();
+        }
+        return null;
+    }
+    
+    
     /**
      * La funzione restituisce tutte le ricette di un determinato utente
      * @param type $idUtente

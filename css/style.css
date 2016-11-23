@@ -8,3 +8,43 @@ and open the template in the editor.
     Author     : Alex
 */
 
+.agenda-container {
+    width:100%;
+}
+
+.agenda-container .suggerimenti{
+    position: absolute;
+    z-index: 9999;
+    background:#fff;
+    border:1px solid #999;
+   
+}
+
+.agenda-container .suggerimenti ul{
+    list-style: none;
+    margin: 0;
+    width: 100% !important;
+    left:0 !important;
+}
+
+.agenda-container .suggerimenti ul > li{
+    margin:0;
+    padding:4px;
+}
+
+.agenda-container .suggerimenti ul > li:hover{
+    background:#ccc;    
+}
+
+.ui-helper-hidden-accessible{
+    display: none !important;
+}
+
+@media (min-width: 768px) {
+
+    .agenda-container .giorno-agenda{
+        float:left;
+        
+    }
+
+}

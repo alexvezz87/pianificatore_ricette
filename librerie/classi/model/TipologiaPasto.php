@@ -9,7 +9,7 @@
 class TipologiaPasto {
     private $ID;
     private $nome;
-    private $descrizione;
+    private $descrizione;    
     
     function __construct() {
         
@@ -39,8 +39,4 @@ class TipologiaPasto {
         $this->descrizione = $descrizione;
     }
 
-
-
-
-    
 }

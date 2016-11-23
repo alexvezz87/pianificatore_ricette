@@ -112,9 +112,9 @@ class AgendaController {
      * @param Ricetta $r
      * @return boolean
      */
-    private function saveRicettaPasto($idPasto, Ricetta $r){
+    private function saveRicettaPasto($idPasto, $idRicetta){
         //salvo l'associazione pasto ricetta        
-        if($this->prDAO->savePastoRicetta($idPasto, $r->getID())==false){
+        if($this->prDAO->savePastoRicetta($idPasto, $idRicetta)==false){
             return -5;
         }
         return true;
