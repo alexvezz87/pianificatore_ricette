@@ -9,6 +9,8 @@ class Agenda {
     private $ID;
     private $settimana;
     private $idUtente;
+    private $data;
+    private $pdf;
     
     //attributo esterno
     private $giorni;
@@ -47,6 +49,22 @@ class Agenda {
 
     function setIdUtente($idUtente) {
         $this->idUtente = $idUtente;
+    }
+
+    function getData() {
+        return $this->data;
+    }
+
+    function setData($data) {
+        $this->data = $data;
+    }
+
+    function getPdf() {
+        return $this->pdf;
+    }
+
+    function setPdf($pdf) {
+        $this->pdf = $pdf;
     }
 
 

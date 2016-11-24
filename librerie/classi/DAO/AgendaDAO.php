@@ -19,11 +19,16 @@ class AgendaDAO extends ObjectDAO {
      * @return type
      */
     public function saveAgenda(Agenda $a){
+        //imposto il timezone
+        date_default_timezone_set('Europe/Rome');
+        $timestamp = date('Y-m-d H:i:s', strtotime("now")); 
+        
         $campi = array(           
             'settimana' => $a->getSettimana(),
-            'id_utente' => $a->getIdUtente()            
+            'id_utente' => $a->getIdUtente(),
+            'data'      => $timestamp            
         );       
-        $formato = array('%d', '%d');
+        $formato = array('%d', '%d', '%s');
         return parent::saveObject($campi, $formato);
     }
     
@@ -42,6 +47,8 @@ class AgendaDAO extends ObjectDAO {
                 $a->setID($item->ID);
                 $a->setSettimana($item->settimana);
                 $a->setIdUtente($item->id_utente);
+                $a->setData($item->data);
+                $a->setPdf($item->pdf);
                 array_push($result, $a);
             }
         }
@@ -59,6 +66,21 @@ class AgendaDAO extends ObjectDAO {
             'id_utente' => $a->getIdUtente()
         );
         $formatUpdate = array('%s', '%d');
+        $where = array('ID' => $a->getID());
+        $formatWhere = array('%d');
+        return parent::updateObject($update, $formatUpdate, $where, $formatWhere);
+    }
+    
+    /**
+     * La funzione aggiorna solamente il campo PDF di un'agenda
+     * @param Agenda $a
+     * @return type
+     */
+    public function updatePDF(Agenda $a){
+        $update = array(
+            'pdf' => $a->getPdf()
+        );
+        $formatUpdate = array('%s');
         $where = array('ID' => $a->getID());
         $formatWhere = array('%d');
         return parent::updateObject($update, $formatUpdate, $where, $formatWhere);

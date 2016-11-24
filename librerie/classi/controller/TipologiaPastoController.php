@@ -52,6 +52,16 @@ class TipologiaPastoController {
         return null;
     }
     
+    public function getNomeTipologiaPasto($idTipologiaPasto){
+        $result = $this->getTipologiaPastoByID($idTipologiaPasto);
+        if($result != null){
+            $tp = new TipologiaPasto();
+            $tp = $result;
+            return $tp->getNome();
+        }
+        return null;
+    }
+    
     /**
      * La funzione aggiorna un pasto
      * @param TipologiaPasto $tp

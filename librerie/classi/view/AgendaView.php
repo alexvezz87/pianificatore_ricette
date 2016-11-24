@@ -232,35 +232,54 @@ class AgendaView extends PrinterView {
                 return;
             }
             
+           
             //salvo l'agenda
-            $save = $this->aC->saveAgenda($a);
-            if($save === -1){
+            $idAgenda = $this->aC->saveAgenda($a);
+            //var_dump($idAgenda);
+            if($idAgenda === -1){
                 parent::printErrorBoxMessage('Agenda non salvata correttamente!');
                 return;
             }
-            else if($save === -2){
+            else if($idAgenda === -2){
                 parent::printErrorBoxMessage('Agenda non salvata correttamente! Errore nel salvare il giorno.');
                 return;
             }
-            else if($save === -3){
+            else if($idAgenda === -3){
                 parent::printErrorBoxMessage('Agenda non salvata correttamente! Errore nel salvare il pasto.');
                 return;
             }
-            else if($save === -4){
+            else if($idAgenda === -4){
                 parent::printErrorBoxMessage('Agenda non salvata correttamente! Errore nel salvare l\'associazione giorno pasto.');
                 return;
             }
-            else if($save === -5){
+            else if($idAgenda === -5){
                 parent::printErrorBoxMessage('Agenda non salvata correttamente! Errore nel salvare l\'associazione pasto ricetta');
                 return;
             }
-            else if($save === true){
+            else if($idAgenda > 0){
                 parent::printOkBoxMessage('Agenda salvata correttamente!');
-                unset($_POST);
-                return;
+                unset($_POST);                
             }
             
+            //riprendo l'agenda
+            $ag = new Agenda();
+            $ag = $this->aC->getAgendaById($idAgenda);
+            
+            $calendario = $this->aC->createAgenda($ag);
+            print_r($calendario);
+            
+            
         }
+    }
+    
+    public function printTableAgende($agende){
+        $header = array(
+            'ID',
+            'Caricata',
+            'Utente',
+            'PDF',
+            'Azioni'
+        );
     }
    
 }

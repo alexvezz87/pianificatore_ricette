@@ -19,8 +19,6 @@ class RicettaDAO extends ObjectDAO {
      * @return type
      */
     public function saveRicetta(Ricetta $r){
-        
-        
         //imposto il timezone
         date_default_timezone_set('Europe/Rome');
         $timestamp = date('Y-m-d H:i:s', strtotime("now")); 

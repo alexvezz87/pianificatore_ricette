@@ -13,6 +13,7 @@ require_once 'model/Agenda.php';
 require_once 'model/Giorno.php';
 require_once 'model/TipologiaPasto.php';
 require_once 'model/Pasto.php';
+require_once 'model/GiornoAgenda.php';
 
 //CLASSI DAO
 require_once 'DAO/ObjectDAO.php';
@@ -33,6 +34,7 @@ require_once 'controller/IngredienteController.php';
 require_once 'controller/RicettaController.php';
 require_once 'controller/AgendaController.php';
 require_once 'controller/TipologiaPastoController.php';
+require_once 'controller/PdfController.php';
 
 //CLASSI VIEW
 require_once 'view/PrinterView.php';

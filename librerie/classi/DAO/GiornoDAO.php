@@ -75,4 +75,8 @@ class GiornoDAO extends ObjectDAO{
     public function deleteGiornoByID($ID){
         return parent::deleteObjectByID($ID);
     }
+    
+    public function deleteGiorno($where){
+        return parent::deleteObject($wehere);
+    }
 }

@@ -12,8 +12,11 @@ class AgendaController {
     private $prDAO; //pasto ricette DAO
     private $pDAO; //pasto DAO
     private $rC; //ricette controller
+    private $tpC; //tipologia pasto controller
+    private $iC;
+    private $pV; //classe printerView
     
-    function __construct() {
+    function __construct() {        
         //DAO
         $this->aDAO = new AgendaDAO();
         $this->gDAO = new GiornoDAO();        
@@ -21,7 +24,11 @@ class AgendaController {
         $this->prDAO = new PastoRicettaDAO();
         $this->pDAO = new PastoDAO();
         //controller
-        $this->rC = new RicettaController();        
+        $this->rC = new RicettaController();  
+        $this->tpC = new TipologiaPastoController();
+        $this->iC = new IngredienteController();
+        //view
+        $this->pV = new PrinterView();
     }
     
     /**
@@ -55,7 +62,7 @@ class AgendaController {
                 return $flag;
             }
         }
-        return true;
+        return $idAgenda;
     }
     
     /**
@@ -163,6 +170,44 @@ class AgendaController {
     }
     
     /**
+     * La funzione restituisce tutte le agende associate ad un determinato utente
+     * @param type $idUtente
+     * @return type
+     */
+    public function getAgendaByUtente($idUtente){
+        $query = array(
+            array(
+                'campo'     => 'id_utente',
+                'valore'    => $idUtente,
+                'formato'   => 'INT'
+            )
+        );
+        
+        return $this->getAgende($query);
+    }
+    
+    /**
+     * La funzione restituisce un agenda conoscendone il suo id, null in caso di errore
+     * @param type $idAgenda
+     * @return type
+     */
+    public function getAgendaById($idAgenda){
+        $query = array(
+            array(
+                'campo'     => 'ID',
+                'valore'    => $idAgenda,
+                'formato'   => 'INT'
+            )
+        );
+        
+        $temp = $this->getAgende($query);
+        if($temp != null){
+            return $temp[0];
+        }
+        return null;
+    }
+    
+    /**
      * Funzione che resituisce un array di agende, con annessi i giorni correlati
      * @param type $where
      * @return array
@@ -254,9 +299,11 @@ class AgendaController {
         $result = null;
         //devo ottenere la lista delle ricetta conoscendo l'id del pasto
         $where = array(
-            'campo'     => 'id_pasto',
-            'valore'    => $idPasto,
-            'formato'   => 'INT'
+            array(
+                'campo'     => 'id_pasto',
+                'valore'    => $idPasto,
+                'formato'   => 'INT'
+            )
         );
         $temp = $this->prDAO->getPastiRicette($where);
         if($temp != null){
@@ -293,7 +340,11 @@ class AgendaController {
         return null;
     }
     
-    
+    /**
+     * La funzione cancella un agenda e tutti gli elementi associati nel database
+     * @param type $ID
+     * @return boolean
+     */
     public function deleteAgenda($ID){
         //per eliminare l'agenda devo eliminare in successione
         //1. pasti-ricette
@@ -301,7 +352,216 @@ class AgendaController {
         //3. pasto
         //4. giorno
         //5. agenda
+        
+        //RETURN 
+        // -1 errore nel cancellare pasti ricette
+        // -2 errore nel cancellare giorni pasto
+        // -3 errore nel cancellare i pasti
+        // -4 errore nel cancellare i giorni
+        // -5 errore nel cancellare l'agenda
+        // true successo
+        
+        //da idAgenda ottengo gli ID dei giorni
+        $query1 = array(
+            array(
+                'campo'     => 'id_agenda',
+                'valore'    => $ID,
+                'formato'   => 'INT'
+            )
+        );
+        $giorni = $this->gDAO->getGiorni($query1);
+        foreach($giorni as $giorno){
+            //dai giorni ottengo gli id dei pasti
+            $g = new Giorno();
+            $g = $giorno;
+            $query2 = array(
+                array(
+                    'campo'     => 'id_giorno',
+                    'valore'    => $g->getID(),
+                    'formato'   => 'INT'
+                )
+            );
+            $giorniPasti = $this->gpDAO->getGiorniPasti($query);
+            
+            //al momento ho id dei pasti relativi al giorno
+            foreach($giorniPasti as $giornoPasto){                
+                //cancello pasti ricette
+                $delete1 = array('id_pasto' => $giornoPasto['idPasto']);
+                if($this->prDAO->deletePastiRicette($delete1)==true){
+                    //cancello i giorni pasto
+                    $delete2 = array('id_giorno' => $g->getID());
+                    if($this->gpDAO->deleteGiorniPasti($delete2) == true){
+                        //cancello i pasti
+                        if($this->pDAO->deletePastoByID($giornoPasto['idPasto']) == true){
+                            //non faccio nulla                           
+                        }
+                        else{
+                            return -3;
+                        }
+                    }
+                    else{
+                        return -2;
+                    }                    
+                }
+                else{
+                    return -1;
+                }
+            }
+        }        
+        
+        //cancello i giorni associati all'agenda
+        $delete4 = array('id_agenda' => $ID);
+        if($this->gDAO->deleteGiorno($delete4) == true){
+            //cancello l'agenda
+            if($this->aDAO->deleteAgendaByID($ID)==true){
+                return true;
+            }
+            return -5;
+        }
+        return -4;
+        
     }
+    
+    
+    /**
+     * La funzione aggiorna il campo pdf di un'agenda
+     * @param Agenda $a
+     * @return boolean
+     */
+    public function updatePDF(Agenda $a){
+        if($a != null){
+            return $this->aDAO->updatePDF($a);
+        }        
+        return false;
+    }
+    
+    /**
+     * La funzione genera un array di giorniAgenda composti in modo da agevolare la stampa su pdf
+     * @param Agenda $a
+     * @return array
+     */
+    public function createAgenda(Agenda $a){
+        $result = array();
+        //ciclo nei giorni
+        foreach($a->getGiorni() as $giorno){
+            $g = new Giorno();
+            $g = $giorno;            
+            $oggi = $g->getData();
+            
+            //ciclo nei pasti
+            foreach($g->getPasti() as $pasto){
+                $p = new Pasto();
+                $p = $pasto;
+                //ciclo nelle ricette se ci sono
+                if(count($p->getRicette())>0){
+                    //se trovo ricette, allora posso creare l'oggetto
+                    $ga = new GiornoAgenda();
+                    $ga->setData($oggi);
+                    $ga->setNomeGiorno($g->getNome());                    
+                    $ga->setTipo($this->tpC->getNomeTipologiaPasto($p->getIdTipologiaPasto()));
+                    $html="";
+                    foreach($p->getRicette() as $ricetta){
+                        $r = new Ricetta();
+                        $r = $ricetta;
+                        $html.=$r->getNome().';';
+                        
+                        //ciclo gli ingredienti ricetta
+                        foreach($r->getIngredienti() as $ingRic){
+                            $ir = new IngredienteRicetta();
+                            $ir = $ingRic;
+                            
+                            //trovo l'ingrediente dall'idIngrediente
+                            $i = new Ingrediente();
+                            $i = $this->iC->getIngredienteByID($ir->getIdIngrediente());
+                            
+                            if(count($i->getPreparazioni()) > 0){
+                                //creo un ulteriore giorno che compare prima degli altri
+                                foreach($i->getPreparazioni() as $preparazione){
+                                    $pr = new Preparazione();
+                                    $pr = $preparazione;
+                                    $gap = new GiornoAgenda();
+                                    $day = date('Y-m-d H:i:s', strtotime($oggi.' - '.$pr->getGiorniAnticipo().' day' ));
+                                    $dayNome = date('N-j-m', strtotime($day)); 
+                                    $nomeDay = $this->pV->translateDate($dayNome);
+                                    $gap->setData($day);
+                                    $gap->setTipo('Preparazione');
+                                    $gap->setNomeGiorno($nomeDay);
+                                    $gap->setDescrizione($i->getNome().': '.$pr->getDescrizione());
+                                    //aggiungo il giorno ai result
+                                    array_push($result, $gap);
+                                }
+                            }
+                        }
+                        
+                    }                    
+                    $ga->setDescrizione($html);
+                    //aggiungo il giorno ai result
+                    array_push($result, $ga);
+                }
+            }            
+        }
+        
+        usort($result, array($this, "cmp"));
+        
+        $result = array_unique($result);
+        
+        $result2 = array();
+        
+        
+        foreach($result as $giorno){
+            $g = new GiornoAgenda();
+            $g = $giorno;
+            if(isset($result2[$g->getNomeGiorno()])){               
+                array_push($result2[$g->getNomeGiorno()], $g);
+            }
+            else{               
+                $result2[$g->getNomeGiorno()] = array();
+                array_push($result2[$g->getNomeGiorno()], $g);
+            }
+        }
+        
+        foreach($result2 as $key => $value){
+            $count = 0;
+            foreach($result2[$key] as $item){
+                $g = new GiornoAgenda();
+                $g = $item;
+                
+                $descrizione = array();
+                $temp = explode(';', $g->getDescrizione());
+                if( count($temp) > 0){
+                    foreach($temp as $item){
+                        if(trim($item) != ''){
+                            array_push($descrizione, $item);
+                        }
+                    }                     
+                }
+                else{
+                    array_push($descrizione, $g->getDescrizione());
+                }
+                
+                $descrizione = array_unique($descrizione);
+                
+                if(isset($result2[$key][$g->getTipo()])){
+                    array_push($result2[$key][$g->getTipo()], $descrizione);
+                }
+                else{
+                    $result2[$key][$g->getTipo()] = array();
+                    array_push($result2[$key][$g->getTipo()], $descrizione);
+                }
+                unset($result2[$key][$count]);
+                $count++;                
+            }            
+        }
+
+        
+        return $result2;
+    }
+    
+    private function cmp(GiornoAgenda $a, GiornoAgenda $b){
+        return strcmp($a->getData(), $b->getData());
+    }
+    
+        
     
 
 }

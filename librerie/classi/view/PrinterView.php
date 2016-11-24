@@ -680,7 +680,7 @@ class PrinterView {
         return false;
     }
     
-    protected function translateDate($date){
+    public function translateDate($date){       
         //la data si suddivide in nome del giorno, numero e mese        
         $temp = explode('-', $date);
         $giorno = $this->giorni[$temp[0]];

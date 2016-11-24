@@ -39,7 +39,7 @@ class PastoDAO extends ObjectDAO {
             foreach($temp as $item){
                 $p = new Pasto();
                 $p->setID($item->ID);
-                $p->setIdTipologiaPasto($item->tipologia_pasto);
+                $p->setIdTipologiaPasto($item->id_tipologia);
                 array_push($result, $p);                
             }
         }

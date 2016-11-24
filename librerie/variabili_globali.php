@@ -31,8 +31,13 @@ global $FORM_A_SETTIMANA, $FORM_A_SUBMIT;
 global $FORM_G_NOME, $FORM_G_DATA;
 global $LABEL_G_NOME;
 
-
 global $LABEL_SUBMIT;
+
+
+//URL E PATH
+global $DIR_PDF;
+global $URL_PDF;
+
 
 //DATABASE
 $DB_PREFIX = 'pr_';
@@ -112,4 +117,10 @@ $FORM_G_DATA = 'g-data';
 
 $LABEL_SUBMIT = 'Salva';
 
+
+//URL E PATH
+//NB. bisogna cambiare il senso degli slash quando si passa da locale a web server
+$DIR_PDF = plugin_dir_path(__FILE__).'\pdf\\';
+
+$URL_PDF = plugins_url().'/pianificatore_ricette/pdf/';
 ?>

@@ -42,9 +42,10 @@ function remove_DB_pianificatore(){
 function add_pr_admin_menu(){
     add_menu_page('Pianificatore Ricette', 'Pianificatore Ricette', 'edit_plugins', 'pianificatore_ricette', 'add_pr_page_1', plugins_url('images/ico_pr.png', __FILE__), 10);
     add_submenu_page('pianificatore_ricette', 'Ingredienti', 'Ingredienti', 'edit_plugins', 'ingredienti', 'add_gestione_ingredienti');
+    add_submenu_page('pianificatore_ricette', 'Visualizza Agende', 'Visualizza Agende', 'edit_plugins', 'visualizza_agende', 'add_agende');    
     add_submenu_page('pianificatore_ricette', 'Tipologia Ricetta', 'Tipologia Ricetta', 'edit_plugins', 'tipologia_ricetta', 'add_gestione_tr');    
     add_submenu_page('pianificatore_ricette', 'Tipologia Pasto', 'Tipologia Pasto', 'edit_plugins', 'tipologia_pasto', 'add_gestione_tp');
-    
+        
     add_submenu_page('', 'Pagina dettaglio',  'Pagina dettaglio', 'edit_plugins', 'pagina_dettaglio', 'add_pagina_dettaglio');
 }
 
@@ -64,6 +65,9 @@ function add_gestione_tp(){
     include 'pages/admin/gestione_tipologia_pasto.php';
 }
 
+function add_agende(){
+    include 'pages/admin/gestione_agende.php';
+}
 
 function add_pagina_dettaglio(){
     include 'pages/admin/pagina_dettaglio.php';

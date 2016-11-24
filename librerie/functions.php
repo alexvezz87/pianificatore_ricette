@@ -158,7 +158,18 @@ function install_pianificatore(){
                 'nome' => 'id_utente',
                 'tipo' => 'INT',
                 'null' => 'NOT NULL'
+            ),
+            array(
+                'nome' => 'data',
+                'tipo' => 'TIMESTAMP',
+                'null' => 'NOT NULL'
+            ),
+            array(
+                'nome' => 'pdf',
+                'tipo' => 'TEXT',
+                'null' => null
             )
+            
         );        
         creaTabella($DB_TABLE_AGENDE, $args);
         
