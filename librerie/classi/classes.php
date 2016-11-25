@@ -14,6 +14,7 @@ require_once 'model/Giorno.php';
 require_once 'model/TipologiaPasto.php';
 require_once 'model/Pasto.php';
 require_once 'model/GiornoAgenda.php';
+require_once 'model/IngredienteAgenda.php';
 
 //CLASSI DAO
 require_once 'DAO/ObjectDAO.php';

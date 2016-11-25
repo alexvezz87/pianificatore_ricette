@@ -82,6 +82,10 @@ class AgendaView extends PrinterView {
         <form class="form-horizontal agenda-container" role="form" action="<?php echo curPageURL() ?>" name="form-agenda" method="POST">
             <?php parent::printHiddenFormField('user-id', get_current_user_id()) ?>
             <?php parent::printHiddenFormField('id-week', $week) ?>
+            <?php 
+                  $dose = array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10);
+                  parent::printSelectFormField('dose-persone', 'Indica per quante persone', $dose, true, 1);
+            ?>
     <?php
         for($i=0; $i < 7; $i++){
            $this->printFormGiorno($now, $i);
@@ -147,8 +151,6 @@ class AgendaView extends PrinterView {
     public function listenerFormAgenda(){
         if(isset($_POST[$this->form['a-submit']])){
             
-            //print_r($_POST);
-            
             $errors = 0;
             
             //faccio un controllo sui nomi ricetta passati (almeno uno deve essere compilato)
@@ -167,72 +169,16 @@ class AgendaView extends PrinterView {
             }
                         
             //devo comporre un'agenda nuova
-            $a = new Agenda();
-            $a->setIdUtente($_POST['user-id']);
-            $a->setSettimana($_POST['id-week']);
-            
-            //devo comporre i giorni
-            $giorni = array();
-            $countGiorno = 0;
-            foreach($_POST as $key => $value){
-                if (strpos($key, 'g-nome') !== false) {
-                    $g = new Giorno();
-                    $g->setNome($value);                    
-                }
-                if (strpos($key, 'g-data') !== false) {
-                    $g->setData($value);
-                    
-                    //devo comporre il pasto per il giorno
-                    $pasti = array();
-                    foreach($_POST as $key2 => $value2){
-                        
-                        if(strpos($key2, 'id-tp') !== false) {
-                            //cerco di capire se il pasto è quello del giorno corrispondente
-                            $temp = explode('-', $key2);                            
-                            //il terzo elemento rappresenta il giorno
-                            if($temp[2] == $countGiorno){
-                                $p = new Pasto();
-                                $p->setIdTipologiaPasto($value2);
-                                
-                                //devo comporre le ricette per pasto
-                                $ricette = array();                                
-                                foreach($_POST as $key3 => $value3){
-                                    if(strpos($key3, 'nome-ricetta-'.$countGiorno.'-'.$value2) !== false) {
-                                        //devo ottenere l'id della ricetta dal nome
-                                        if(trim($value3 != '')){
-                                            $idRicetta = $this->rC->getIdRicettaByNome($value3);
-                                            if($idRicetta != null){
-                                                array_push($ricette, $idRicetta);
-                                            }
-                                            else{
-                                                parent::printErrorBoxMessage('Ricetta "'.$value3.'" non riconosciuta');
-                                                $errors++;
-                                            }
-                                        }
-                                    }
-                                }                                
-                                $p->setRicette($ricette);
-                                array_push($pasti, $p);
-                                unset($p);
-                            }                            
-                        }
-                    }
-                    $g->setPasti($pasti);
-                    array_push($giorni, $g);
-                    $countGiorno++;
-                    unset($g);
-                }
-            }
-            
-            $a->setGiorni($giorni);
-            
-            //print_r($a); 
+            $temp = $this->composeAgenda($_POST, $errors);  
+            $errors = $temp['errors'];            
             
             if($errors > 0){
                 return;
             }
             
-           
+            $a = $temp['agenda'];
+            
+            /*
             //salvo l'agenda
             $idAgenda = $this->aC->saveAgenda($a);
             //var_dump($idAgenda);
@@ -260,16 +206,94 @@ class AgendaView extends PrinterView {
                 parent::printOkBoxMessage('Agenda salvata correttamente!');
                 unset($_POST);                
             }
+            */
             
             //riprendo l'agenda
             $ag = new Agenda();
-            $ag = $this->aC->getAgendaById($idAgenda);
-            
-            $calendario = $this->aC->createAgenda($ag);
-            print_r($calendario);
+            $ag = $this->aC->getAgendaById(4);
             
             
+            //creo il pdf
+            $urlPDF = $this->aC->createPDF($ag, $_POST['dose-persone']);
+            
+           if($urlPDF != false){
+               echo '<a target="_blank" href="'.$urlPDF.'">Apri il PDF</a>';
+           }
         }
+    }
+    
+    /**
+     * La funzione compone un agenda dall'array POST ricevuto
+     * @param type $array
+     * @param type $errors
+     * @return type
+     */
+    protected function composeAgenda($array, $errors){
+        $a = new Agenda();
+        $a->setIdUtente($_POST['user-id']);
+        $a->setSettimana($_POST['id-week']);
+
+        //devo comporre i giorni
+        $giorni = array();
+        $countGiorno = 0;
+        foreach($array as $key => $value){
+            if (strpos($key, 'g-nome') !== false) {
+                $g = new Giorno();
+                $g->setNome($value);                    
+            }
+            if (strpos($key, 'g-data') !== false) {
+                $g->setData($value);
+
+                //devo comporre il pasto per il giorno
+                $pasti = array();
+                foreach($array as $key2 => $value2){
+
+                    if(strpos($key2, 'id-tp') !== false) {
+                        //cerco di capire se il pasto è quello del giorno corrispondente
+                        $temp = explode('-', $key2);                            
+                        //il terzo elemento rappresenta il giorno
+                        if($temp[2] == $countGiorno){
+                            $p = new Pasto();
+                            $p->setIdTipologiaPasto($value2);
+
+                            //devo comporre le ricette per pasto
+                            $ricette = array();                                
+                            foreach($array as $key3 => $value3){
+                                if(strpos($key3, 'nome-ricetta-'.$countGiorno.'-'.$value2) !== false) {
+                                    //devo ottenere l'id della ricetta dal nome
+                                    if(trim($value3 != '')){
+                                        $idRicetta = $this->rC->getIdRicettaByNome($value3);
+                                        if($idRicetta != null){
+                                            array_push($ricette, $idRicetta);
+                                        }
+                                        else{
+                                            parent::printErrorBoxMessage('Ricetta "'.$value3.'" non riconosciuta');
+                                            $errors++;
+                                        }
+                                    }
+                                }
+                            }                                
+                            $p->setRicette($ricette);
+                            array_push($pasti, $p);
+                            unset($p);
+                        }                            
+                    }
+                }
+                $g->setPasti($pasti);
+                array_push($giorni, $g);
+                $countGiorno++;
+                unset($g);
+            }
+        }
+
+        $a->setGiorni($giorni);
+
+        //elimino i pasti duplicati
+        $a = $this->aC->deletePastiDuplicati($a);
+        $result['agenda'] = $a;
+        $result['errors'] = $errors;
+        
+        return $result;
     }
     
     public function printTableAgende($agende){

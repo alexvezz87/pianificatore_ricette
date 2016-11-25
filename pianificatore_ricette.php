@@ -22,6 +22,9 @@ require_once 'librerie/api_db.php';
 require_once 'librerie/classi/classes.php';
 require_once 'librerie/functions.php';
 
+global $DIR_PDF;
+$DIR_PDF = plugin_dir_path(__FILE__).'\pdf\\';
+
 //indico la cartella dove è contenuto il plugin
 require_once (dirname(__FILE__) . '/pianificatore_ricette.php');
 
@@ -78,7 +81,14 @@ function add_pagina_dettaglio(){
 add_shortcode('paginaAgenda', 'add_agenda');
 
 function add_agenda(){
-    include 'pages/public/componi_agenda.php';
+    
+    //solo per gli utenti loggati al sito
+    if(is_user_logged_in()){    
+        include 'pages/public/componi_agenda.php';
+    }
+    else{
+        echo '<p>Funzionalità riservata solo agli utenti registrati al sito</p>';
+    }
 }
 
 //registro il menu

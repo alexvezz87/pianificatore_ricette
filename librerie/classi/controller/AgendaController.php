@@ -13,8 +13,10 @@ class AgendaController {
     private $pDAO; //pasto DAO
     private $rC; //ricette controller
     private $tpC; //tipologia pasto controller
-    private $iC;
+    private $iC; //ingrediente controller
     private $pV; //classe printerView
+    private $pdfWriter; 
+    
     
     function __construct() {        
         //DAO
@@ -29,6 +31,8 @@ class AgendaController {
         $this->iC = new IngredienteController();
         //view
         $this->pV = new PrinterView();
+        
+        $this->pdfWriter = new PdfController();
     }
     
     /**
@@ -103,12 +107,14 @@ class AgendaController {
             return -4;
         }
         //salvo le ricette pasto
-        foreach($p->getRicette() as $ricetta){
-            $flag = $this->saveRicettaPasto($idPasto, $ricetta);
-            if($flag != true){
-                return $flag;
+        if($p->getRicette() != null){
+            foreach($p->getRicette() as $ricetta){
+                $flag = $this->saveRicettaPasto($idPasto, $ricetta);
+                if($flag != true){
+                    return $flag;
+                }
+
             }
-        
         }
         return true; 
     }
@@ -435,6 +441,34 @@ class AgendaController {
         return false;
     }
     
+    
+    
+    
+    /**
+     * La funzione elimina le ricette duplicati nei singoli pasti
+     * @param Agenda $a
+     * @return \Agenda
+     */
+    public function deletePastiDuplicati(Agenda $a){        
+        foreach($a->getGiorni() as $giorno){
+            $g = new Giorno();
+            $g = $giorno;
+            
+            foreach($g->getPasti() as $pasto){
+                $p = new Pasto();
+                $p = $pasto;
+                if(count($p->getRicette()) > 0){
+                    $p->setRicette(array_unique($p->getRicette()));
+                }
+                else{
+                    $p->setRicette(null);
+                }
+            }
+        }        
+        return $a;
+    }
+    
+    
     /**
      * La funzione genera un array di giorniAgenda composti in modo da agevolare la stampa su pdf
      * @param Agenda $a
@@ -557,11 +591,127 @@ class AgendaController {
         return $result2;
     }
     
+    /**
+     * La funzione controlla all'interno dell'agenda passata, gli ingredienti e li somma tra di loro, 
+     * restituendo un array di riepilogo delle quantità necessarie
+     * @param Agenda $a
+     * @return type
+     */
+    public function createListaIngredienti(Agenda $a, $dose){
+        $ingredienti = array();
+        
+        //scrollo tutto l'agenda e salvo gli ingredienti uno per uno
+        foreach($a->getGiorni() as $giorno){
+            $g = new Giorno();
+            $g = $giorno;
+            foreach($g->getPasti() as $pasto){
+                $p = new Pasto();
+                $p = $pasto;
+                if($p->getRicette() != null){
+                    foreach($p->getRicette() as $ricetta){
+                        $r = new Ricetta();
+                        $r = $ricetta;
+                        //print_r($ricetta);
+                        foreach($r->getIngredienti() as $ingRic){
+
+                            $ir = new IngredienteRicetta();
+                            $ir = $ingRic;
+
+                            $ia = new IngredienteAgenda();
+                            $ia->setQt($ir->getQuantita());
+                            $ia->setUm($ir->getUnitaMisura());
+                            $ia->setDose($r->getDose());
+                            //ottengo il nome dell'ingrediente
+                            $i = new Ingrediente();
+                            $i = $this->iC->getIngredienteByID($ir->getIdIngrediente());
+                            $ia->setNome($i->getNome());
+
+                            array_push($ingredienti, $ia);
+                        }
+                    }
+                }
+            }
+        }
+        
+        //faccio le somme dividendo l'ingrediente per la dose indicata dalla ricetta e moltiplicando per la dose indicata dall'utente
+        $result = array();
+        
+        foreach($ingredienti as $ing){
+            $ia = new IngredienteAgenda();
+            $ia = $ing;
+            if(isset($result[$ia->getNome()])){
+                $result[$ia->getNome()]['qt']+= ((float) $ia->getQt() / (float) $ia->getDose()) * (float) $dose ;                
+            }
+            else{
+                $result[$ia->getNome()] = array();
+                $result[$ia->getNome()]['qt'] = ((float) $ia->getQt() / (float) $ia->getDose()) * (float) $dose ;
+                $result[$ia->getNome()]['um'] = $ia->getUm();
+            }
+        }
+        
+        //vado ad arrontodare
+        foreach($result as $key => $value){
+            foreach($result[$key] as $key2 => $value2){
+                if($key2 == 'qt'){                    
+                    $result[$key][$key2] = round($value2, 0);                    
+                }
+            }
+        }        
+        return $result;        
+    }
+    
+    
     private function cmp(GiornoAgenda $a, GiornoAgenda $b){
         return strcmp($a->getData(), $b->getData());
     }
     
         
-    
+    public function createPDF(Agenda $a, $dose){
+        global $DIR_PDF;
+        global $URL_PDF;
+        
+        //ottengo informazioni sull'utente
+        $user_info = get_userdata($a->getIdUtente());
+        
+        $name = 'agenda-'.$a->getID().'.pdf';
+                
+        //ottengo il calendario
+        $calendario = $this->createAgenda($a);        
+        //ottengo la lista degli ingredienti
+        $listaIng = $this->createListaIngredienti($a, $dose);
+        
+        try{
+            
+            //LISTA INGREDIENTI
+            //creo la pagina
+            $this->pdfWriter->setPage();
+            //intestazione
+            $this->pdfWriter->createListaHeader();
+            
+            
+            //CALENDARIO            
+            //creo la pagina
+            $this->pdfWriter->setPage();            
+            //intestazione calendario
+            $this->pdfWriter->createCalendarioHeader($user_info->user_nicename);            
+           //stampo il calendario
+            $this->pdfWriter->printCalendario($calendario);
+            
+            
+            //salvo il pdf
+            $this->pdfWriter->savePDF($DIR_PDF.$name);
+
+            //$result['url'] = $URL_PDF.$name;
+            //$result['dir'] = $DIR_PDF.$name;
+        
+        return $URL_PDF.$name;
+        
+        }
+        catch(Exception $ex){
+            return false;
+        }
+        
+        
+    }
 
 }

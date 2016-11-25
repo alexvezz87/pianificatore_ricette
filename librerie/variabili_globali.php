@@ -35,7 +35,6 @@ global $LABEL_SUBMIT;
 
 
 //URL E PATH
-global $DIR_PDF;
 global $URL_PDF;
 
 
@@ -120,7 +119,7 @@ $LABEL_SUBMIT = 'Salva';
 
 //URL E PATH
 //NB. bisogna cambiare il senso degli slash quando si passa da locale a web server
-$DIR_PDF = plugin_dir_path(__FILE__).'\pdf\\';
+
 
 $URL_PDF = plugins_url().'/pianificatore_ricette/pdf/';
 ?>
