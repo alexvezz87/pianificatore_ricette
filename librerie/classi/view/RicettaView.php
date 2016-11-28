@@ -7,14 +7,14 @@
  */
 class RicettaView extends PrinterView {    
     private $rC;
-    private $iC;
+    private $iC;    
     private $form;
     private $label;
     
     function __construct() {
         parent::__construct();
         $this->rC = new RicettaController();
-        $this->iC = new IngredienteController();
+        $this->iC = new IngredienteController();        
         
         //tipologia ricetta
         global $FORM_TR_NOME, $FORM_TR_DESCRIZIONE, $FORM_TR_SUBMIT;
@@ -707,6 +707,127 @@ class RicettaView extends PrinterView {
             }
             
         }
+    }    
+    
+    /**
+     * La funzione stampa a video 6 ricette random create da un utente admin
+     * @global type $ADMIN_ID
+     * @global type $URL_IMG
+     */
+    public function printShowPublicRicette(){
+        //mostro le ricette pubblicate dall'amministratore
+        global $ADMIN_ID, $URL_IMG;
+       
+        $query = array(
+            array(
+                'campo'     => 'id_utente',
+                'valore'    => $ADMIN_ID,
+                'formato'   => 'INT'
+            )
+        );
+        
+        $ricette = $this->rC->getRicetteByParameters($query, true, 6);
+        foreach($ricette as $ricetta){
+            $r = new Ricetta();
+            $r = $ricetta;
+            $t = new Tipologia();
+            $t = $this->rC->getTipologiaByID($r->getIdTipologia());
+            
+            $urlFoto = $URL_IMG.'no-image-found.gif';
+            if($r->getFoto() != null && $r->getFoto() != ''){
+                $urlFoto = $r->getFoto();
+            }
+    ?>
+        <div class="ricetta col-xs-12 col-sm-4" >
+            <div class="col-xs-6"><?php echo $t->getNome() ?></div>
+            <div clasS="col-xs-6"><?php echo $r->getDurata() ?> minuti</div>
+            <div class="clear"></div>
+            <a href="<?php echo home_url() ?>/ricetta?id=<?php echo $r->getID() ?>">
+                <div class="foto" style="background: url('<?php echo $urlFoto ?>')"></div>
+                <div class="descrizione">
+                    <h4 class="titolo"><?php echo $r->getNome() ?></h4>                
+                </div>
+            </a>
+        </div>
+    <?php    
+       }
+    }
+    
+    
+    public function printPublicRicetta($id){
+        $ricetta = new Ricetta();
+        $ricetta = $this->rC->getRicettaByID($id);
+        
+        $tr = new Tipologia();
+        $tr = $this->rC->getTipologiaByID($ricetta->getIdTipologia());
+        
+        $user_info = get_userdata($ricetta->getIdUtente());
+        $dose = "persona";
+        if($ricetta->getDose() > 1){
+            $dose = "persone";
+        }
+        
+    ?>
+        <div class="row container">
+            <div class="container-ricetta-pubblica col-xs-12">
+                <div class="titolo col-xs-12">
+                    <h2><?php echo $ricetta->getNome() ?></h2>
+                    <div class="cuoco">by <?php echo $user_info->user_nicename ?></div>
+                </div>
+                <div class="clear"></div>
+                <div class="col-xs-12 col-sm-4 tipologia">
+                    <?php echo $tr->getNome() ?>
+                </div>
+                <div class="col-xs-12 col-sm-4 dose">
+                    per <?php echo $ricetta->getDose().' '.$dose ?>
+                </div>
+                <div class="col-xs-12 col-sm-4 durata">
+                    Tempo di preparazione: <?php echo $ricetta->getDurata() ?> minuti
+                </div>
+                <div class="clear"></div>
+                <div class="col-xs-12 col-sm-6 col-sm-push-6 foto">
+                    <img src="<?php echo $ricetta->getFoto() ?>" />
+                </div>
+                <div class="col-xs-12 col-sm-6 col-sm-pull-6 ingredienti">
+                    <h3>Ingredienti</h3>
+                    <ul>   
+                <?php
+                    foreach($ricetta->getIngredienti() as $ingRic){
+                        $ir = new IngredienteRicetta();
+                        $ir = $ingRic;
+                        
+                        $i = new Ingrediente();
+                        $i = $this->iC->getIngredienteByID($ir->getIdIngrediente());
+                        
+                        $string = "";
+                        if($ir->getQuantita() != '0'){
+                            $string.= str_replace('.00', '', $ir->getQuantita()).' ';
+                        }
+                        if($ir->getUnitaMisura() != ''){
+                            $string.= $ir->getUnitaMisura().' ';
+                        }
+                        
+                        $string.= $i->getNome();
+                ?>
+                        <li class="ingrediente col-xs-12">
+                            <?php echo $string ?>
+                        </li>
+                <?php    
+                        
+                    }
+                ?>
+                    </ul>
+                </div>
+                <div class="col-xs-12 preparazione">
+                    <h3>Preparazione</h3>
+                    <p>
+                        <?php echo  str_replace("\r", "<br>", $ricetta->getPreparazione()) ?>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    <?php   
     }
     
 

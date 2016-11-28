@@ -33,9 +33,11 @@ global $LABEL_G_NOME;
 
 global $LABEL_SUBMIT;
 
-
 //URL E PATH
-global $URL_PDF;
+global $URL_PDF, $URL_IMG;
+
+//ADMIN
+global $ADMIN_ID;
 
 
 //DATABASE
@@ -122,4 +124,8 @@ $LABEL_SUBMIT = 'Salva';
 
 
 $URL_PDF = plugins_url().'/pianificatore_ricette/pdf/';
+$URL_IMG = plugins_url().'/pianificatore_ricette/images/';
+
+$ADMIN_ID = 1;
+
 ?>

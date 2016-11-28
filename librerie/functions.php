@@ -353,5 +353,40 @@ function getTime($time){
     //return $time1[2].'/'.$time1[1].'/'.$time1[0].' - '.$time2[0].':'.$time2[1];
 }
 
+function createPages(){
+    if(get_page_by_title('Agenda') == null){
+        //la pagina non esiste
+        
+        $post = array(
+            'comment_status' => 'open',
+            'ping_status' => 'closed',
+            'post_date' => date('Y-m-d H:i:s'),
+            'post_name' => 'agenda',
+            'post_status' => 'publish',
+            'post_title' => 'Agenda',
+            'post_type' => 'page',
+            'post_content' => '[paginaAgenda]'
+        );
+        //insert page and save the id
+        return wp_insert_post($post, false);        
+    }
+    
+    if(get_page_by_title('Ricetta') == null){
+        //la pagina non esiste
+        
+        $post = array(
+            'comment_status' => 'open',
+            'ping_status' => 'closed',
+            'post_date' => date('Y-m-d H:i:s'),
+            'post_name' => 'ricetta',
+            'post_status' => 'publish',
+            'post_title' => 'Ricetta',
+            'post_type' => 'page',
+            'post_content' => '[paginaRicetta]'
+        );
+        //insert page and save the id
+        return wp_insert_post($post, false);        
+    }
+}
 
 ?>

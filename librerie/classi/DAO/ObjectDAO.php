@@ -46,7 +46,7 @@ class ObjectDAO {
      * @param type $order --> array(array('campo' => x, 'ordine' => y) )
      * @return type
      */
-    protected function getObjects($select = null, $where = null, $order = null){        
+    protected function getObjects($select = null, $where = null, $order = null, $limit = null){        
         
         //Vengono indicati i campi di select
         $query = "SELECT";
@@ -105,7 +105,11 @@ class ObjectDAO {
                 $counter++;
             }
         }
-                
+        
+        if($limit != null){
+            $query .= " LIMIT ".$limit;
+        }
+        //print_r($query);    
         try{            
              return $this->wpdb->get_results($query);                        
         } catch (Exception $ex) {

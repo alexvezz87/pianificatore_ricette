@@ -4,8 +4,22 @@
 //url: http://www.alexsoluzioniweb.it/
 
 $view = new AgendaView();
-$view->listenerFormAgenda();
 
+$ricette = new RicettaView();
+
+?>
+
+<h1>Le ricette</h1>
+<div class="container-ricette">
+<?php
+    $ricette->printShowPublicRicette();
+?>
+    
+</div>
+
+<div class="clear"></div>
+<?php 
+    $view->listenerFormAgenda();
 ?>
 
 <h1>Pianifica le ricette durante la settimana</h1>

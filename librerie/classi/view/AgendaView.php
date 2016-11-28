@@ -108,9 +108,16 @@ class AgendaView extends PrinterView {
         
         //ottengo i pasti
         $pasti = $this->tpC->getTipologiaPasti();
+        $classe = "";
+        if($i % 2 == 0){
+            $classe = "pari";
+        }
+        else{
+            $classe = "dispari";
+        }
         
     ?>
-        <div class="giorno-agenda col-xs-12">
+        <div class="giorno-agenda col-xs-12 <?php echo $classe ?>">
             <?php parent::printHiddenFormField($this->form['g-nome'].'-'.$i, $nome) ?>
             <?php parent::printHiddenFormField($this->form['g-data'].'-'.$i, $data) ?>
             <h5><?php echo $nome ?></h5>
@@ -150,6 +157,7 @@ class AgendaView extends PrinterView {
     
     public function listenerFormAgenda(){
         if(isset($_POST[$this->form['a-submit']])){
+            $dose = $_POST['dose-persone'];
             
             $errors = 0;
             
@@ -178,7 +186,7 @@ class AgendaView extends PrinterView {
             
             $a = $temp['agenda'];
             
-            /*
+            
             //salvo l'agenda
             $idAgenda = $this->aC->saveAgenda($a);
             //var_dump($idAgenda);
@@ -203,18 +211,18 @@ class AgendaView extends PrinterView {
                 return;
             }
             else if($idAgenda > 0){
-                parent::printOkBoxMessage('Agenda salvata correttamente!');
+                //parent::printOkBoxMessage('Agenda salvata correttamente!');
                 unset($_POST);                
             }
-            */
+            
             
             //riprendo l'agenda
             $ag = new Agenda();
-            $ag = $this->aC->getAgendaById(4);
+            $ag = $this->aC->getAgendaById($idAgenda);
             
             
             //creo il pdf
-            $urlPDF = $this->aC->createPDF($ag, $_POST['dose-persone']);
+            $urlPDF = $this->aC->createPDF($ag, $dose);
             
            if($urlPDF != false){
                echo '<a target="_blank" href="'.$urlPDF.'">Apri il PDF</a>';

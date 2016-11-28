@@ -29,15 +29,18 @@ $DIR_PDF = plugin_dir_path(__FILE__).'\pdf\\';
 require_once (dirname(__FILE__) . '/pianificatore_ricette.php');
 
 //creo il db al momento dell'attivazione
-register_activation_hook(__FILE__, 'install_DB_pianificatore');
-function install_DB_pianificatore(){
-    install_pianificatore(); 
+register_activation_hook(__FILE__, 'install_pianificatore_ricette');
+function install_pianificatore_ricette(){
+    //installo il database
+    install_pianificatore();     
+    //aggiungo le pagine
+    createPages();    
 }
 
-
 //rimuovo il db quando disattivo il plugin
-register_deactivation_hook( __FILE__, 'remove_DB_pianificatore');
-function remove_DB_pianificatore(){
+register_deactivation_hook( __FILE__, 'remove_pianificatore_ricette');
+function remove_pianificatore_ricette(){
+    //rimuovo il database
     dropPianificatore();
 }
 
@@ -79,6 +82,7 @@ function add_pagina_dettaglio(){
 
 //aggiungo gli shortcode
 add_shortcode('paginaAgenda', 'add_agenda');
+add_shortcode('paginaRicetta', 'add_ricetta');
 
 function add_agenda(){
     
@@ -89,6 +93,10 @@ function add_agenda(){
     else{
         echo '<p>Funzionalità riservata solo agli utenti registrati al sito</p>';
     }
+}
+
+function add_ricetta(){
+    include 'pages/public/ricetta.php';
 }
 
 //registro il menu

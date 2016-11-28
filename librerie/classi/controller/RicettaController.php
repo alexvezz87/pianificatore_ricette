@@ -222,8 +222,8 @@ class RicettaController {
      * @param type $param
      * @return type
      */
-    public function getRicetteByParameters($query){        
-        return $this->getRicette($query);
+    public function getRicetteByParameters($query, $view=false, $limit = null){        
+        return $this->getRicette($query, $view, $limit);
     }
     
     /**
@@ -231,11 +231,20 @@ class RicettaController {
      * @param type $where
      * @return array
      */
-    private function getRicette($where = null){
+    private function getRicette($where = null, $view = false, $limit = null){
+        //view indica se la visualizzazione:
+        //false per lato amministrativo
+        //true per lato pubblico
+        
         $result = array();
         
         //ottengo le ricette dalla query
-        $ricette = $this->rDAO->getRicette($where);
+        if($view == false){
+            $ricette = $this->rDAO->getRicette($where);
+        }
+        else{
+            $ricette = $this->rDAO->getRicetteForPublic($where, $limit);
+        }
         
         //ho le ricette, per ogni ricetta devo associare gli ingredienti
         if($ricette != null){
@@ -256,18 +265,7 @@ class RicettaController {
                     $r->setIngredienti($temp);
                 }
 
-                /*
-                foreach($temp as $t){
-                    $ir = new IngredienteRicetta();
-                    $ir = $t;
-                    //ottengo un ingrediente
-                    $i = $this->iC->getIngredienteByID($ir->getIdIngrediente());
-                    array_push($arrayIngredienti, $i);
-                }
-                //salvo gli ingredienti nella ricetta
-                $r->setIngredienti($arrayIngredienti);
-                */
-
+                
                 //salvo la ricetta aggiornata con gli ingredienti, nell'array result
                 array_push($result, $r);
             }        

@@ -636,6 +636,7 @@ class AgendaController {
         //faccio le somme dividendo l'ingrediente per la dose indicata dalla ricetta e moltiplicando per la dose indicata dall'utente
         $result = array();
         
+        
         foreach($ingredienti as $ing){
             $ia = new IngredienteAgenda();
             $ia = $ing;
@@ -649,11 +650,13 @@ class AgendaController {
             }
         }
         
+        //print_r($result);
+        
         //vado ad arrontodare
         foreach($result as $key => $value){
             foreach($result[$key] as $key2 => $value2){
-                if($key2 == 'qt'){                    
-                    $result[$key][$key2] = round($value2, 0);                    
+                if($key2 == 'qt'){
+                    $result[$key][$key2] = round($value2, 2);                    
                 }
             }
         }        
@@ -687,6 +690,8 @@ class AgendaController {
             $this->pdfWriter->setPage();
             //intestazione
             $this->pdfWriter->createListaHeader();
+            //stampo la lista ingredienti
+            $this->pdfWriter->printListaIngredienti($listaIng);
             
             
             //CALENDARIO            

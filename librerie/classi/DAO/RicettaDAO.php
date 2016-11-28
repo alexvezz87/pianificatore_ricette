@@ -42,8 +42,7 @@ class RicettaDAO extends ObjectDAO {
      * @param string $order
      * @return array
      */
-    public function getRicette($where = null, $order = null){
-        $result = null;
+    public function getRicette($where = null, $order = null){        
         if($order == null){
             $order = array(
                 array(
@@ -53,6 +52,24 @@ class RicettaDAO extends ObjectDAO {
             );
         }
         $temp = parent::getObjects(null, $where, $order);
+        return $this->convertInRicatta($temp);
+    }    
+    
+    public function getRicetteForPublic($where = null, $limit){
+        $order = array(
+            array(
+                'campo'     => '',
+                'ordine'    => 'RAND()'
+            )
+        );
+        
+        $temp = parent::getObjects(null, $where, $order, $limit);
+        return $this->convertInRicatta($temp);
+    }
+    
+    
+    private function convertInRicatta($temp){
+        $result = null;
         if(count($temp) > 0){
             $result = array();
             foreach($temp as $item){

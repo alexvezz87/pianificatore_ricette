@@ -34,8 +34,7 @@ class PdfController extends FPDF {
     
     public function createListaHeader(){
         $this->SetFont('Arial','B',18);
-        $this->Cell($this->GetPageWidth()-20,15, 'Lista ingredienti',0,0,'C');
-        $this->Ln();
+        $this->Cell($this->GetPageWidth()-20,15, 'Lista ingredienti',0,0,'C');       
     }
     
     
@@ -45,9 +44,34 @@ class PdfController extends FPDF {
         
     }
     
+    public function printListaIngredienti($ingredienti){
+        
+        
+        foreach($ingredienti as $key => $value){  
+            
+            $string = "";
+            $this->Ln();
+            $this->SetFont('Arial','',10);
+            
+            if($value['qt']!= '' && $value['qt']!= '0'){
+                $string.= $value['qt'].' ';
+            }
+            
+            if($value['um']!='' && $value['um']!='q.b.'){
+                $string.= $value['um'].' ';
+            }           
+            
+            if($key != ''){
+                $string.= $key;
+            }            
+           
+            $this->Cell($this->GetPageWidth()-20, 8, utf8_decode($string), 0);
+        }
+        
+    }
+    
+    
     public function printCalendario($calendario){
-        //imposto il bordo
-        $border = 0;
         
         $tps = $this->tpC->getTipologiaPasti();
         
@@ -118,12 +142,6 @@ class PdfController extends FPDF {
                     }
                 }
             }
-            
-           
-            
-            
-            
-           
         }
     }
 }
