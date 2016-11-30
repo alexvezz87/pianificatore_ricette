@@ -28,6 +28,26 @@ class TipologiaDAO extends ObjectDAO {
     }
     
     /**
+     * La funzione restituisce una tipologia conoscendone l'ID
+     * @param type $idTipologia
+     * @return type
+     */
+    public function getTipologiaById($idTipologia){
+        $query = array(
+            array(
+                'campo'     => 'ID',
+                'valore'    => $idTipologia,
+                'formato'   => 'INT'
+            )
+        );
+        $temp = $this->getTipologie($query);
+        if($temp != null){
+            return $temp[0];
+        }
+        return null;
+    }
+    
+    /**
      * La funzione restituisce un array di oggetti tipologia 
      * @return array
      */

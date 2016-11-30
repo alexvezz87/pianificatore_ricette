@@ -224,6 +224,12 @@ class AgendaView extends PrinterView {
             //creo il pdf
             $urlPDF = $this->aC->createPDF($ag, $dose);
             
+            //aggiorno l'agenda con il pdf
+            $ag->setPdf($urlPDF);            
+            if($this->aC->updatePDF($ag) != true){
+                parent::printErrorBoxMessage('PDF non salvato correttamente nell\'Agenda');                
+            }
+            
            if($urlPDF != false){
                echo '<a target="_blank" href="'.$urlPDF.'">Apri il PDF</a>';
            }
@@ -304,6 +310,10 @@ class AgendaView extends PrinterView {
         return $result;
     }
     
+    public function printAllAgende(){
+        return $this->printTableAgende($this->aC->getAllAgende());
+    }
+    
     public function printTableAgende($agende){
         $header = array(
             'ID',
@@ -312,6 +322,128 @@ class AgendaView extends PrinterView {
             'PDF',
             'Azioni'
         );
+        
+        $bodyTable = $this->printBodyTable($agende);
+        parent::printTableHover($header, $bodyTable);
+    }
+    
+    protected function printBodyTable($array) {
+        parent::printBodyTable($array);
+        $html = "";
+        foreach($array as $item){
+            $a = new Agenda();
+            $a = $item;
+           
+            $html.='<tr>';            
+            //ID Agenda
+            $html.='<td>'.parent::printTextField(null, $a->getID()).'</td>';
+            //Caricata
+            $html.='<td>'.parent::printTextField(null, getTime($a->getData())).'</td>';
+            //Utente
+            if($a->getIdUtente() != 0){
+                $user = get_userdata($a->getIdUtente());
+                $html.='<td>'.parent::printTextField(null, $user->user_nicename).'</td>';
+            }
+            else{
+                $html.='<td></td>';
+            }
+            //PDF
+            if($a->getPdf() != null){
+                $html.='<td><a target="_blank" href="'.$a->getPdf().'">Apri il PDF</a></td>';
+            }
+            else{
+                $html.='<td></td>';
+            }
+            //dettagli
+            $html.='<td><a href="'. get_admin_url().'admin.php?page=pagina_dettaglio&type=A&id='.$a->getID().'">Vedi dettagli</a></td>';
+            
+            $html.='</tr>';
+        }
+        
+        return $html;
+    }
+    
+    public function printDettaglioAgenda($ID){
+        $a = new Agenda();
+        $a = $this->aC->getAgendaById($ID);
+        $tps = $this->tpC->getTipologiaPasti();
+        
+        if($a != null){
+    ?>
+            <div class="container-agenda">
+                <div class="container-tipologie">
+                    <div class="empty-box"></div>
+    <?php
+                foreach($tps as $tipo){
+                    $tp = new TipologiaPasto();
+                    $tp = $tipo;
+    ?>
+                    <div class="tipo-pasto">
+                        <h5><?php echo $tp->getNome() ?></h5>
+                    </div>
+    <?php                
+                }
+    ?>
+                    
+                </div>
+                <div class="container-giorni">                    
+    <?php
+                foreach($a->getGiorni() as $giorno){
+                    $g = new Giorno();
+                    $g = $giorno;
+    ?>
+                    <div class="giorno">                        
+                        <h5><?php echo $g->getNome() ?></h5>
+    <?php                        
+                        foreach($tps as $tipo){
+                            $tp = new TipologiaPasto();
+                            $tp = $tipo;
+                            foreach($g->getPasti() as $pasto){
+                                $p = new Pasto();
+                                $p = $pasto;
+                                
+                                if($tp->getID() === $p->getIdTipologiaPasto()){
+    ?>                              
+                                    <div class="tipo-pasto">
+    <?php
+                                    if($p->getRicette() != null){
+    ?>
+                                        <div class="container-ricette">    
+    <?php                                    
+                                        foreach($p->getRicette() as $ricetta){
+                                            $r = new Ricetta();
+                                            $r = $ricetta;
+        ?>
+                                            <p><?php echo $r->getNome() ?></p>    
+        <?php                                    
+                                        }
+    ?>
+                                        </div>    
+    <?php                                        
+                                    }
+    ?>  
+                                    </div>  
+    <?php                    
+                                }
+                            }
+                            
+    ?>
+                          
+    <?php
+                        }
+    ?>
+                    </div>
+    <?php
+                }
+    ?>
+                </div>
+            </div>
+    <?php        
+            
+        }
+        else{
+            echo '<p>Agenda non presente nel sistema.</p>';
+        }
     }
    
 }

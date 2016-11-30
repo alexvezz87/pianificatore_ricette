@@ -7,6 +7,7 @@ $type = $_GET['type'];
 $id = $_GET['id'];
 $nome = "";
 
+
 $url = "";
 if($type == 'ING'){
     $url = 'ingredienti';
@@ -17,8 +18,11 @@ else if($type == 'TP'){
 else if($type == 'TR'){
     $url = 'tipologia_ricetta';
 }
-else if($type = 'R'){
+else if($type == 'R'){
     $url = 'pianificatore_ricette';
+}
+else if($type == 'A'){    
+    $url = 'visualizza_agende';
 }
 
 ?>
@@ -63,13 +67,24 @@ else if($type == 'TR'){
 else if($type == 'R'){
     $viewR = new RicettaView();
     $nome = 'Ricetta';
-}
+
 ?>
     <h1>Pagina dettaglio <?php echo $nome ?></h1>
 <?php 
     $viewR->listenerDettaglioRicetta();
     $viewR->printDettaglioRicetta($id);
     die();
+}
+else if($type == 'A'){
+    $viewA = new AgendaView();
+    $nome = 'Agenda';
+
+?>
+    <h1>Pagina dettaglio <?php echo $nome ?></h1>
+<?php 
+    $viewA->printDettaglioAgenda($id);
+    die();
+}
 ?>
 
 

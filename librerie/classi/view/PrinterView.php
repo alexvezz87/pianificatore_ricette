@@ -77,6 +77,28 @@ class PrinterView {
     <?php  
     }
     
+    protected function printSuggestTextFormField($nameField, $label, $required=false, $value=null){
+        $optRequired = "";
+        if($required == true){
+            $optRequired = "required";
+        }
+        if($value == null){
+            if(isset($_POST[$nameField])){
+                $value = $_POST[$nameField];
+            }
+        }
+        
+    ?>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="<?php echo $nameField ?>" ><?php echo $label ?></label>
+            <div class="col-sm-10">            
+                <input class="form-control" type="text" id="<?php echo $nameField ?>" name="<?php echo $nameField ?>" value="<?php echo $value ?>" <?php echo $optRequired ?> />
+                <div class="suggerimenti"></div>
+            </div>
+        </div>
+    <?php  
+    }
+    
     /**
      * Funzione che stampa una input text disabilitata
      * @param type $nameField
@@ -288,6 +310,57 @@ class PrinterView {
                             echo '<option value="'.$k.'">'.$v.'</option>';
                         }                        
                     }
+                ?>
+                </select>
+            </div>
+        </div>
+    <?php      
+    }
+    
+    
+    protected function printMultiSelectFormField($nameField, $label, $array, $required=false, $value=null){
+        $optRequired = "";
+        if($required == true){
+            $optRequired = "required";
+        }
+        if($value == null){
+            if(isset($_POST[$nameField])){
+                $value = $_POST[$nameField];
+            }
+        }       
+    ?>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="<?php echo $nameField ?>" ><?php echo $label ?></label>
+            <div class="col-sm-10">
+                <select multiple name="<?php echo $nameField ?>[]" id="<?php echo $nameField ?>" <?php echo $optRequired ?> >                             
+                <?php
+                    if($value != null){
+                        foreach($array as $k => $v){
+                            $trovato = false;
+                            foreach($value as $item){
+                                if($item == $k){
+                                    $trovato = $k;
+                                }
+                            }                            
+                            if($trovato != false){
+                                echo '<option value="'.$k.'" selected >'.$v.'</option>';
+                            }
+                            else{
+                                echo '<option value="'.$k.'">'.$v.'</option>'; 
+                            }
+                        }
+                    }
+                    else{
+                        foreach($array as $k => $v){
+                            if($value == $k){
+                                echo '<option value="'.$k.'" selected >'.$v.'</option>';
+                            }
+                            else{
+                                echo '<option value="'.$k.'">'.$v.'</option>';
+                            }                        
+                        }
+                    }
+                    
                 ?>
                 </select>
             </div>

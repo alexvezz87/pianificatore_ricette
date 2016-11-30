@@ -29,6 +29,8 @@ require_once 'DAO/TipologiaPastoDAO.php';
 require_once 'DAO/PastoDAO.php';
 require_once 'DAO/GiornoPastoDAO.php';
 require_once 'DAO/PastoRicettaDAO.php';
+require_once 'DAO/RicettaTipologiaDAO.php';
+require_once 'DAO/PreferiteDAO.php';
 
 //CLASSI CONTROLLER
 require_once 'controller/IngredienteController.php';

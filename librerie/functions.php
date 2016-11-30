@@ -8,6 +8,7 @@
 function install_pianificatore(){
     global $DB_TABLE_INGREDIENTI, $DB_TABLE_PREPARAZIONI, $DB_TABLE_RICETTE, $DB_TABLE_TIPOLOGIA_RICETTE, $DB_TABLE_INGREDIENTI_RICETTE;
     global $DB_TABLE_AGENDE, $DB_TABLE_GIORNI, $DB_TABLE_TIPOLOGIA_PASTI, $DB_TABLE_PASTI, $DB_TABLE_GIORNI_PASTI, $DB_TABLE_PASTI_RICETTE;
+    global $DB_TABLE_RICETTE_TIPOLOGIE, $DB_TABLE_PREFERITE;
     try{
         //INGREDIENTI
         $args = array(
@@ -82,12 +83,7 @@ function install_pianificatore(){
                 'nome' => 'foto',
                 'tipo' => 'TEXT',
                 'null' => null
-            ),
-            array(
-                'nome' => 'id_tipologia',
-                'tipo' => 'INT',
-                'null' => null
-            ),
+            ),            
             array(
                 'nome' => 'id_utente',
                 'tipo' => 'INT',
@@ -103,14 +99,55 @@ function install_pianificatore(){
                 'tipo' => 'INT',
                 'null' => 'NOT NULL'
             )
+        );         
+        creaTabella($DB_TABLE_RICETTE, $args);
+        
+        
+        //RICETTE-TIPOLOGIA
+        $args = array(
+            array(
+                'nome'  => 'id_ricetta',
+                'tipo'  => 'INT',
+                'null'  => 'NOT NULL'
+            ),
+            array(
+                'nome'  => 'id_tipologia',
+                'tipo'  => 'INT',
+                'null'  => 'NOT NULL'
+            )            
         );
         $fks = array(
             array(
-                'key1'    => 'id_tipologia',
-                'tabella' => $DB_TABLE_TIPOLOGIA_RICETTE               
+                'key1'      => 'id_ricetta',
+                'tabella'   => $DB_TABLE_RICETTE
+            ),
+            array(
+                'key1'      => 'id_tipologia',
+                'tabella'   => $DB_TABLE_TIPOLOGIA_RICETTE
             )
-        );        
-        creaTabella($DB_TABLE_RICETTE, $args, $fks);
+        );
+        creaTabella($DB_TABLE_RICETTE_TIPOLOGIE, $args, $fks);
+        
+        //PREFERITE
+        $args = array(
+            array(
+                'nome'  => 'id_ricetta',
+                'tipo'  => 'INT',
+                'null'  => 'NOT NULL'
+            ),
+            array(
+                'nome'  => 'id_utente',
+                'tipo'  => 'INT',
+                'null'  => 'NOT NULL'
+            )
+        );
+        $fks = array(
+            array(
+                'key1'      => 'id_ricetta',
+                'tabella'   => $DB_TABLE_RICETTE
+            )            
+        );
+        creaTabella($DB_TABLE_PREFERITE, $args);
         
         //INGREDIENTI RICETTE
         $args = array(
@@ -294,6 +331,7 @@ function install_pianificatore(){
 function dropPianificatore(){
     global $DB_TABLE_INGREDIENTI, $DB_TABLE_PREPARAZIONI, $DB_TABLE_RICETTE, $DB_TABLE_TIPOLOGIA_RICETTE, $DB_TABLE_INGREDIENTI_RICETTE;
     global $DB_TABLE_AGENDE, $DB_TABLE_GIORNI, $DB_TABLE_TIPOLOGIA_PASTI, $DB_TABLE_PASTI, $DB_TABLE_GIORNI_PASTI, $DB_TABLE_PASTI_RICETTE;
+    global $DB_TABLE_RICETTE_TIPOLOGIE, $DB_TABLE_PREFERITE;
     
     try{
         
@@ -307,8 +345,12 @@ function dropPianificatore(){
         
         //drop table di ciò che riguarda ricette
         if(dropTabella($DB_TABLE_PASTI_RICETTE)==true){
-            if(dropTabella($DB_TABLE_RICETTE)==true){
-                dropTabella($DB_TABLE_TIPOLOGIA_RICETTE);
+            if(dropTabella($DB_TABLE_RICETTE_TIPOLOGIE)==true){
+                if(dropTabella($DB_TABLE_PREFERITE) == true){
+                    if(dropTabella($DB_TABLE_RICETTE)==true){
+                        dropTabella($DB_TABLE_TIPOLOGIA_RICETTE);
+                    }
+                }
             }
             
             if(dropTabella($DB_TABLE_GIORNI_PASTI)==true){

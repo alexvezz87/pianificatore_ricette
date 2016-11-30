@@ -79,3 +79,87 @@ span.ui-helper-hidden-accessible{
 .table>tbody>tr>td{
     vertical-align: middle !important;
 }
+
+.container-giorni, .container-tipologie {
+    float:left;
+}
+
+.container-tipologie {
+    width:10%;
+    
+}
+
+.container-tipologie > .tipo-pasto{
+    
+    border-left: 1px solid #999;
+    border-bottom: 1px solid #999;
+    height: 150px;
+    width: 100%;
+    text-align: center;           
+}
+
+.container-tipologie > .empty-box{
+    border-bottom:1px solid #999;
+}
+
+.empty-box {
+    width:100%;
+    height:101px;
+}
+
+.container-tipologie > .tipo-pasto h5{ 
+    margin:0;
+    padding:0;
+    line-height: 150px; 
+    font-weight: bold;
+}
+
+.container-giorni{
+    width:90%;
+}
+
+.container-giorni > .giorno{
+    float:left;
+    width:14.28%;
+    border-top:1px solid #999;
+    
+    border-left: 1px solid #999;
+    text-align: center;
+}
+
+.container-giorni > .giorno h5{
+    margin:0;
+    padding:0;
+    height:100px;
+    padding-top:40px;
+    border-bottom: 1px solid #999;
+    font-weight: bold;
+}
+
+.container-giorni > .giorno:last-child{
+    border-right: 1px solid #999;
+}
+
+.container-giorni .tipo-pasto{
+    height: 150px;
+    border-bottom: 1px solid #999;  
+    display:table;
+    width: 100%;
+}
+
+.container-giorni .tipo-pasto > .container-ricette{
+    display: table-cell;
+    vertical-align: middle;
+    width:100%;    
+    padding:5px;
+}
+
+.container-giorni .tipo-pasto > .container-ricette p{
+    text-align: left;
+}
+
+
+.wp-admin select[multiple]{
+    width:50% !important;
+    height: 150px !important;
+}

@@ -224,7 +224,7 @@ class RicettaView extends PrinterView {
             <div class="col-sm-10">
                 <div class="col-sm-8">
                     <?php parent::printTextFormField($this->form['r-nome'], $this->label['r-nome'], true) ?>
-                    <?php parent::printSelectFormField($this->form['r-tipologia'], $this->label['r-tipologia'], $this->getArraySelectTipologieRicetta(), true) ?>
+                    <?php parent::printMultiSelectFormField($this->form['r-tipologia'], $this->label['r-tipologia'], $this->getArraySelectTipologieRicetta(), true) ?>
                 </div>
                 <div class="clear"></div>
                 
@@ -251,21 +251,7 @@ class RicettaView extends PrinterView {
     ?>
         <script>
             jQuery( function($) {
-                var ingredienti = [
-    <?php
-                $count = 0;
-                foreach($ingredienti as $i){
-                    if($count < count($ingredienti) -1){
-                        echo '"'.$i.'",';
-                    }
-                    else{                        
-                        echo '"'.$i.'"';
-                    }
-                    $count++;
-                }
-    ?>
-                ];
-                
+                var ingredienti = [<?php echo $this->printArraySuggestion($ingredienti) ?>];                
                 $(document.body).on('focus', '.nome-ingrediente input', function(){
                     $(this).autocomplete({
                         source: ingredienti                                              
@@ -276,7 +262,8 @@ class RicettaView extends PrinterView {
         
         <h4>Ingredienti</h4>
         <div class="lista-ingredienti">
-        <?php            
+        <?php    
+            //questa funzione gestisce la visualizzazione dei campi degli ingredienti
             if($arrayIR == null){
                 $countRicette = $this->getNumIngredienti();                   
                 for($i=1; $i <= $countRicette; $i++){                
@@ -350,6 +337,9 @@ class RicettaView extends PrinterView {
    
     public function listenerAddRicettaForm(){
         if(isset($_POST[$this->form['r-submit']])){
+            
+            //print_r($_POST);
+            //die();
                         
             //si fa prima il check sugli argomenti della ricetta
             $r = $this->checkRicettaFormFields() ;
@@ -357,18 +347,27 @@ class RicettaView extends PrinterView {
                 return;
             }
             
-            //print_r($r);
-            
             //faccio un check sugli ingredienti da assegnare alla ricetta
             $irs = $this->checkIngredientiRicettaFormFields();
             if($irs == null){
                 return;
             }
             
-            //print_r($irs);
+            //faccio check sulle tipologie da assegnare alla ricetta
+            $tipologie = array();
+            if(isset($_POST[$this->form['r-tipologia']])){
+                foreach($_POST[$this->form['r-tipologia']] as $item){
+                    array_push($tipologie, $item);
+                }
+            }
+            else{
+                parent::printErrorBoxMessage('Campo '.$this->label['r-tipologia'].' mancante o non corretto.');
+                return;
+            }
+                       
             
             //in caso di successo, salvo la ricetta
-            if($this->rC->saveRicetta($r, $irs)== false){
+            if($this->rC->saveRicetta($r, $irs, $tipologie)== false){
                 parent::printErrorBoxMessage('Ricetta non salvata nel Sistema!');
                 return;
             }
@@ -472,14 +471,6 @@ class RicettaView extends PrinterView {
             $errors++;
         }
         
-        //tipologia ricetta - CAMPO OBBLIGATORIO
-        if(parent::checkRequiredSingleField($this->form['r-tipologia'], $this->label['r-tipologia']) != false){
-            $r->setIdTipologia(parent::checkRequiredSingleField($this->form['r-tipologia'], $this->label['r-tipologia']));
-        }
-        else{
-            $errors++;
-        }
-        
         //preparazione - CAMPO OBBLIGATORIO
         if(parent::checkRequiredSingleField($this->form['r-preparazione'], $this->label['r-preparazione'])!= false){
             $r->setPreparazione(parent::checkRequiredSingleField($this->form['r-preparazione'], $this->label['r-preparazione']));
@@ -509,7 +500,10 @@ class RicettaView extends PrinterView {
         
     }
             
-    
+    /**
+     * La funzione conta gli ingredienti che sono memorizzati in $_POST
+     * @return int
+     */
     private function getNumIngredienti(){
         $countIngr = 1;
         if(isset($_POST[$this->form['r-submit']])){
@@ -541,6 +535,10 @@ class RicettaView extends PrinterView {
         
     }
     
+    /**
+     * Funzione che restiuisce un array di nome ingredienti
+     * @return array
+     */
     private function getNomeIngredienti(){
         $result = array();
         $is = $this->iC->getAllIngredienti();
@@ -552,6 +550,20 @@ class RicettaView extends PrinterView {
         return $result;
     }
     
+    /**
+     * Funzione che restituisce un array di nome ricette
+     * @return array
+     */
+    private function getNomeRicette(){
+        $result = array();
+        $rs = $this->rC->getAllRicette();
+        foreach($rs as $it){
+            $r = new Ricetta();
+            $r  = $it;
+            array_push($result, $r->getNome());
+        }
+        return $result;
+    }
     
     public function printAllRicette(){        
         return $this->printTableRicette($this->rC->getAllRicette());
@@ -586,13 +598,8 @@ class RicettaView extends PrinterView {
             //nome ricetta
             $html.='<td>'.parent::printTextField(null, $r->getNome()).'</td>';
             
-            //tipologia
-            $tr = $this->rC->getTipologiaByID($r->getIdTipologia());
-            $nomeTipologia = "";
-            if($tr != null){
-                $nomeTipologia = $tr->getNome();
-            }
-            $html.='<td>'.$nomeTipologia.'</td>';
+            //tipologia 
+            $html.='<td>'.$this->printCommaString($r->getTipologie()).'</td>';
             
             //utente
             $utente = get_userdata($r->getIdUtente());
@@ -611,6 +618,26 @@ class RicettaView extends PrinterView {
         
     }
     
+    /**
+     * Funzione interna che stampa un array di nomi in un'unica stringa, separata da virgole
+     * @param type $array
+     * @return string
+     */
+    private function printCommaString($array){
+        $count = 0;
+        $string = "";
+        foreach($array as $item){
+            if($count == count($array)-1){
+                $string.=$item->getNome();
+            }
+            else{
+                $string.=$item->getNome().', ';
+            }
+            $count++;
+        }
+        return $string;
+    }
+    
     
     public function printDettaglioRicetta($ID){
         $r = new Ricetta();
@@ -624,7 +651,14 @@ class RicettaView extends PrinterView {
                 <div class="col-sm-10">
                     <div class="col-sm-8">
                         <?php parent::printTextFormField($this->form['r-nome'], $this->label['r-nome'], true, $r->getNome()) ?>
-                        <?php parent::printSelectFormField($this->form['r-tipologia'], $this->label['r-tipologia'], $this->getArraySelectTipologieRicetta(), true, $r->getIdTipologia()) ?>
+                        <?php 
+                            $array = array();
+                            foreach($r->getTipologie() as $tipologia){
+                                array_push($array, $tipologia->getID());
+                            }
+                            parent::printMultiSelectFormField($this->form['r-tipologia'], $this->label['r-tipologia'], $this->getArraySelectTipologieRicetta(), true, $array); 
+                                    
+                        ?>
                     </div>
                     <div class="clear"></div>
                     
@@ -673,7 +707,24 @@ class RicettaView extends PrinterView {
                 return;
             }
             
-            $update = $this->rC->updateRicetta($r, $irs);
+            //faccio check sulle tipologie da assegnare alla ricetta
+            $tipologie = array();
+            if(isset($_POST[$this->form['r-tipologia']])){
+                foreach($_POST[$this->form['r-tipologia']] as $item){
+                    array_push($tipologie, $item);
+                }
+            }
+            else{
+                parent::printErrorBoxMessage('Campo '.$this->label['r-tipologia'].' mancante o non corretto.');
+                return;
+            }
+           
+            if(count($tipologie) == 0){
+                parent::printErrorBoxMessage('Campo '.$this->label['r-tipologia'].' mancante o non corretto.');
+                return;
+            }
+            
+            $update = $this->rC->updateRicetta($r, $irs, $tipologie);
             
             if($update === -1){
                 parent::printErrorBoxMessage('Ricetta non aggiornata! Errore nell\'aggiornamento della ricetta!');
@@ -685,6 +736,14 @@ class RicettaView extends PrinterView {
             }
             else if($update === -3){
                 parent::printErrorBoxMessage('Ricetta non aggiornata! Errore nel salvare un ingrediente nel database.');
+                return;
+            }
+            else if($update === -4){
+                parent::printErrorBoxMessage('Ricetta non aggiornata! Errore nella cancellazione delle vecchie tipologie.');
+                return;
+            }
+            else if($update === -5){
+                parent::printErrorBoxMessage('Ricetta non aggiornata! Errore nel salvare le tipologie nel database.');
                 return;
             }
             else if($update === true){
@@ -730,8 +789,6 @@ class RicettaView extends PrinterView {
         foreach($ricette as $ricetta){
             $r = new Ricetta();
             $r = $ricetta;
-            $t = new Tipologia();
-            $t = $this->rC->getTipologiaByID($r->getIdTipologia());
             
             $urlFoto = $URL_IMG.'no-image-found.gif';
             if($r->getFoto() != null && $r->getFoto() != ''){
@@ -739,7 +796,7 @@ class RicettaView extends PrinterView {
             }
     ?>
         <div class="ricetta col-xs-12 col-sm-4" >
-            <div class="col-xs-6"><?php echo $t->getNome() ?></div>
+            <div class="col-xs-6"><?php echo $this->printCommaString($r->getTipologie()) ?></div>
             <div clasS="col-xs-6"><?php echo $r->getDurata() ?> minuti</div>
             <div class="clear"></div>
             <a href="<?php echo home_url() ?>/ricetta?id=<?php echo $r->getID() ?>">
@@ -758,9 +815,6 @@ class RicettaView extends PrinterView {
         $ricetta = new Ricetta();
         $ricetta = $this->rC->getRicettaByID($id);
         
-        $tr = new Tipologia();
-        $tr = $this->rC->getTipologiaByID($ricetta->getIdTipologia());
-        
         $user_info = get_userdata($ricetta->getIdUtente());
         $dose = "persona";
         if($ricetta->getDose() > 1){
@@ -776,7 +830,7 @@ class RicettaView extends PrinterView {
                 </div>
                 <div class="clear"></div>
                 <div class="col-xs-12 col-sm-4 tipologia">
-                    <?php echo $tr->getNome() ?>
+                    <?php echo $this->printCommaString($ricetta->getTipologie()) ?>
                 </div>
                 <div class="col-xs-12 col-sm-4 dose">
                     per <?php echo $ricetta->getDose().' '.$dose ?>
@@ -830,5 +884,66 @@ class RicettaView extends PrinterView {
     <?php   
     }
     
+    private function printArraySuggestion($array){
+        $count = 0;
+        $html = "";
+        foreach($array as $item){
+            if($count < count($array) -1){
+                $html.= '"'.$item.'",';
+            }
+            else{
+                $html.= '"'.$item.'"';
+            }
+            $count++;
+        }
+        return $html;
+    }
+    
+    
+    public function printFormRicerca(){
+        //ottengo l'array con i nomi degli ingredienti
+        $ingredienti = $this->getNomeIngredienti();
+        $ricette = $this->getNomeRicette();
+        $tipologie = $this->getArraySelectTipologieRicetta();
+        
+        //La chiamata verrà fatta in ajax per evitare il refresh della pagina e perdere i dati dell'agenda
+    ?>
+        <script>
+            jQuery( function($) {
+                var ingredienti = [<?php echo $this->printArraySuggestion($ingredienti) ?>];                
+                var ricette = [<?php echo $this->printArraySuggestion($ricette) ?>];
+                
+                $(document.body).on('focus', '.nome-ingrediente input', function(){
+                    $(this).autocomplete({
+                        source: ingredienti,
+                        appendTo:$(this).siblings('.suggerimenti')
+                    });
+                });
+                
+                $(document.body).on('focus', '.nome-ricetta input', function(){
+                    $(this).autocomplete({
+                        source: ricette,
+                        appendTo:$(this).siblings('.suggerimenti')
+                    });
+                });                
+            });
+        </script>
+       
+   
+        <div class="container-ricerca">            
+            <div class="nome-ricetta ui-widget">
+                <?php parent::printSuggestTextFormField('nome-ricetta', 'Nome Ricetta') ?>                
+            </div>  
+            <div class="clear"></div>
+            <div class="tipologia-ricetta">
+                <?php parent::printMultiSelectFormField('tipologia-ricetta', 'Tipologia Ricetta', $tipologie) ?>
+            </div>
+            <div class="clear"></div>
+            <div class="nome-ingrediente">
+                <?php parent::printSuggestTextFormField('nome-ingrediente', 'Ingredienti') ?>   
+            </div>
+        </div>
+    <?php    
+    }
 
 }

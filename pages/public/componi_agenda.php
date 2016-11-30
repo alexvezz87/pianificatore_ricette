@@ -13,8 +13,15 @@ $ricette = new RicettaView();
 <div class="container-ricette">
 <?php
     $ricette->printShowPublicRicette();
-?>
-    
+?>    
+</div>
+
+<div class="clear"></div>
+<div class="ricerca-ricette">
+    <h3>Ricerca</h3>
+    <?php
+        $ricette->printFormRicerca();
+    ?>
 </div>
 
 <div class="clear"></div>

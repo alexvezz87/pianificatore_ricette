@@ -26,13 +26,12 @@ class RicettaDAO extends ObjectDAO {
             'nome'          => $r->getNome(),
             'preparazione'  => $r->getPreparazione(),
             'durata'        => $r->getDurata(),
-            'foto'          => $r->getFoto(),
-            'id_tipologia'  => $r->getIdTipologia(),
+            'foto'          => $r->getFoto(),            
             'id_utente'     => $r->getIdUtente(),
             'data'          => $timestamp,
             'dose'          => $r->getDose()
         );        
-        $formato = array('%s', '%s', '%d', '%s', '%d', '%d', '%s', '%d');
+        $formato = array('%s', '%s', '%d', '%s', '%d', '%s', '%d');
         return parent::saveObject($campi, $formato);
     }
     
@@ -77,8 +76,7 @@ class RicettaDAO extends ObjectDAO {
                 $r->setData($item->data);
                 $r->setDurata($item->durata);
                 $r->setFoto($item->foto);
-                $r->setID($item->ID);
-                $r->setIdTipologia($item->id_tipologia);
+                $r->setID($item->ID);                
                 $r->setIdUtente($item->id_utente);
                 $r->setNome(stripslashes($item->nome));
                 $r->setPreparazione(stripslashes($item->preparazione));
@@ -99,11 +97,10 @@ class RicettaDAO extends ObjectDAO {
             'nome'          => $r->getNome(),
             'preparazione'  => $r->getPreparazione(),
             'durata'        => $r->getDurata(),
-            'foto'          => $r->getFoto(),
-            'id_tipologia'  => $r->getIdTipologia(), 
+            'foto'          => $r->getFoto(),            
             'dose'          => $r->getDose()
         );
-        $formatUpdate = array('%s', '%s', '%d', '%s', '%d', '%d');
+        $formatUpdate = array('%s', '%s', '%d', '%s', '%d');
         $where = array('ID' => $r->getID());
         $formatWhere = array('%d');
         return parent::updateObject($update, $formatUpdate, $where, $formatWhere);

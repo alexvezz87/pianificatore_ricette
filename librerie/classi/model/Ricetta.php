@@ -10,14 +10,14 @@ class Ricetta {
     private $nome;
     private $preparazione;
     private $durata;
-    private $foto;
-    private $idTipologia;
+    private $foto;   
     private $idUtente;
     private $data;
     private $dose;
     
     //attributo aggiunto 
     private $ingredienti; //array di ingredienti
+    private $tipologie;
     
     function __construct() {
         
@@ -43,10 +43,6 @@ class Ricetta {
         return $this->foto;
     }
 
-    function getIdTipologia() {
-        return $this->idTipologia;
-    }
-
     function setID($ID) {
         $this->ID = $ID;
     }
@@ -65,10 +61,6 @@ class Ricetta {
 
     function setFoto($foto) {
         $this->foto = $foto;
-    }
-
-    function setIdTipologia($idTipologia) {
-        $this->idTipologia = $idTipologia;
     }
 
     function getIdUtente() {
@@ -103,8 +95,12 @@ class Ricetta {
         $this->dose = $dose;
     }
 
+    function getTipologie() {
+        return $this->tipologie;
+    }
 
-
-
+    function setTipologie($tipologie) {
+        $this->tipologie = $tipologie;
+    }
 
 }

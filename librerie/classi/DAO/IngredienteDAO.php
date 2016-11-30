@@ -34,8 +34,15 @@ class IngredienteDAO extends ObjectDAO {
      */
     public function getIngredienti($where = null){        
         $result = null;
-        //omettendo i tre array alla funzione, ottengo una select * from tabella       
-        $temp = parent::getObjects(null, $where);
+        //omettendo i tre array alla funzione, ottengo una select * from tabella 
+        
+        $order = array(
+            array(
+                'campo'  => 'nome',
+                'ordine' => 'ASC'
+            )
+        );
+        $temp = parent::getObjects(null, $where, $order);
         
         if(count($temp) > 0){
             $result = array();
