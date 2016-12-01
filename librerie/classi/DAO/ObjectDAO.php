@@ -120,6 +120,20 @@ class ObjectDAO {
     }
     
     /**
+     * La funzione esegue una query sul database, con query passata come parametro
+     * @param type $query
+     * @return type
+     */
+    protected function searchObjects($query){
+        try{
+            return $this->wpdb->get_results($query);
+        } catch (Exception $ex) {
+            _e($ex);
+            return null;
+        }
+    }
+    
+    /**
      * La funzione elimina un oggetto dal database
      * @param type $array
      * @return boolean

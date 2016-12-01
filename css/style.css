@@ -78,6 +78,28 @@ and open the template in the editor.
     border: 1px solid #ECECFB;
 }
 
+.ui-state-focus {
+    color: #ffffff;
+    background-color: #428bca;
+}
+
+.ui-autocomplete{
+    position: absolute;
+    border:1px solid #DDD;
+    background: #fff;
+    z-index: 9999;
+}
+
+.ui-autocomplete>li{
+    cursor: pointer;
+    padding:5px;
+    list-style: none;
+}
+
+.ui-autocomplete>li:hover{
+    background:#DDDDDD;
+}
+
 @media (min-width: 768px) {
 
     .agenda-container .giorno-agenda{

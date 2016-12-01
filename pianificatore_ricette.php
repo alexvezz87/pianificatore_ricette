@@ -20,6 +20,8 @@ require_once 'librerie/api_db.php';
 require_once 'librerie/classi/classes.php';
 require_once 'librerie/functions.php';
 
+
+
 global $DIR_PDF;
 $DIR_PDF = plugin_dir_path(__FILE__).'\pdf\\';
 
@@ -31,8 +33,7 @@ register_activation_hook(__FILE__, 'install_pianificatore_ricette');
 function install_pianificatore_ricette(){
     //installo il database
     install_pianificatore();     
-    //aggiungo le pagine
-    createPages();    
+   
 }
 
 //rimuovo il db quando disattivo il plugin
@@ -161,5 +162,15 @@ function register_pr_js_script(){
 
 //Aggiungo il file di Javascript al plugin
 add_action( 'wp_enqueue_scripts', 'register_pr_js_script' );
+
+
+//CHIAMATE AJAX
+add_action( 'wp_ajax_nopriv_ricerca_ricette', 'ricerca_ricette' );
+add_action( 'wp_ajax_ricerca_ricette', 'ricerca_ricette' );
+function ricerca_ricette(){
+    \pianificatore_ricette\ricerca_ricette($_POST);
+}
+
+
 
 ?>

@@ -33,4 +33,58 @@ jQuery(document).ready(function($){
         
     });
     
+    //ASCOLTATORE SULLA RICERCA
+    $(document).on('click', '.container-ricerca .nome-ingrediente .suggerimenti li', function(){
+        var value = $(this).text();
+        
+        
+        var lista = $('.container-ricerca .nome-ingrediente input[name=lista-ingredienti]').val();
+       
+        if(lista === ''){
+            $('.container-ricerca .nome-ingrediente input[name=lista-ingredienti]').val(value);
+        }
+        else{
+            var temp = lista.split(',');
+            var trovato = false;
+            for(var i=0; i < temp.length; i++){
+                if(value == temp[i]){
+                    trovato = true;
+                }
+            }
+            if(trovato == false){
+                lista = lista+','+value;
+                $('.container-ricerca .nome-ingrediente input[name=lista-ingredienti]').val(lista);
+            }
+        }
+        
+        $('.container-ricerca .nome-ingrediente input[name=nome-ingrediente]').val('');
+       
+    });
+    
+    $('.container-ricerca input[name=cancella-ingredienti]').click(function(){
+        $('.container-ricerca .nome-ingrediente input[name=lista-ingredienti]').val('');
+    });
+    
+    
+    $('button.ricerca-ricette').click(function(){
+        
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: $('input[name=ajax-url]').val(),
+            data: {
+                action: 'ricerca_ricette',
+                nomeRicetta: $('input[name=nome-ricetta]').val(),
+                tipologia: $('select[multiple]').val(),
+                ingredienti: $('input[name=lista-ingredienti]').val()
+            },
+            success: function(data){
+                alert(data);
+            },
+            error: function(){
+                alert('error');
+            }
+        });
+    });
+    
 });

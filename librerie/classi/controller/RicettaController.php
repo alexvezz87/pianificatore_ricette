@@ -407,7 +407,22 @@ class RicettaController {
         return $this->pDAO->deletePreferite($query);
     }
     
-    
+    /**
+     * La funzione restituisce le ricette ricercate per determinati parametri
+     * @param type $param
+     * @return array
+     */
+    public function searchRicette($param){
+        $temp = $this->searchRicette($param);
+        if($temp != null){
+            $result = array();
+            foreach($temp as $idRicetta){
+                array_push($result, $this->getRicettaByID($idRicetta));
+            }
+            return $result;
+        }
+        return null;
+    }
     
     
 }

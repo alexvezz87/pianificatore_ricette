@@ -98,6 +98,11 @@ function install_pianificatore(){
                 'nome' => 'dose',
                 'tipo' => 'INT',
                 'null' => 'NOT NULL'
+            ),
+            array(
+                'nome' => 'approvata',
+                'tipo' => 'INT',
+                'null' => 'NOT NULL'
             )
         );         
         creaTabella($DB_TABLE_RICETTE, $args);
@@ -429,6 +434,15 @@ function createPages(){
         //insert page and save the id
         return wp_insert_post($post, false);        
     }
+}
+
+/**
+ * Funzione di ricerca ricette, chiamata da ajax
+ */
+function ricerca_ricette($array){
+    
+   print_r($array);
+   die();
 }
 
 ?>

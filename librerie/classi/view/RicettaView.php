@@ -28,7 +28,7 @@ class RicettaView extends PrinterView {
         $this->label['submit'] = $LABEL_SUBMIT;
         
         //ricetta
-        global $FORM_R_NOME, $FORM_R_TIPOLOGIA, $FORM_R_INGREDIENTE, $FORM_R_QT_INGREDIENTE, $FORM_R_UM_INGREDIENTE, $FORM_R_PREPARAZIONE, $FORM_R_DURATA, $FORM_R_SUBMIT, $FORM_R_DOSE, $FORM_R_FOTO;
+        global $FORM_R_NOME, $FORM_R_TIPOLOGIA, $FORM_R_INGREDIENTE, $FORM_R_QT_INGREDIENTE, $FORM_R_UM_INGREDIENTE, $FORM_R_PREPARAZIONE, $FORM_R_DURATA, $FORM_R_SUBMIT, $FORM_R_DOSE, $FORM_R_FOTO, $FORM_R_APPROVATA;
         $this->form['r-nome'] = $FORM_R_NOME;
         $this->form['r-tipologia'] = $FORM_R_TIPOLOGIA;
         $this->form['r-ingrediente'] = $FORM_R_INGREDIENTE;
@@ -38,9 +38,10 @@ class RicettaView extends PrinterView {
         $this->form['r-durata'] = $FORM_R_DURATA;
         $this->form['r-dose'] = $FORM_R_DOSE;
         $this->form['r-foto'] = $FORM_R_FOTO;
+        $this->form['r-approvata'] = $FORM_R_APPROVATA;
         $this->form['r-submit'] = $FORM_R_SUBMIT;        
         
-        global $LABEL_R_NOME, $LABEL_R_TIPOLOGIA, $LABEL_R_INGREDIENTE, $LABEL_R_QT_INGREDIENTE, $LABEL_R_UM_INGREDIENTE, $LABEL_R_PREPARAZIONE, $LABEL_R_DURATA, $LABEL_R_DOSE, $LABEL_R_FOTO;
+        global $LABEL_R_NOME, $LABEL_R_TIPOLOGIA, $LABEL_R_INGREDIENTE, $LABEL_R_QT_INGREDIENTE, $LABEL_R_UM_INGREDIENTE, $LABEL_R_PREPARAZIONE, $LABEL_R_DURATA, $LABEL_R_DOSE, $LABEL_R_FOTO, $LABEL_R_APPROVATA;
         $this->label['r-nome'] = $LABEL_R_NOME;
         $this->label['r-tipologia'] = $LABEL_R_TIPOLOGIA;
         $this->label['r-ingrediente'] = $LABEL_R_INGREDIENTE;
@@ -50,6 +51,7 @@ class RicettaView extends PrinterView {
         $this->label['r-durata'] = $LABEL_R_DURATA;
         $this->label['r-dose'] = $LABEL_R_DOSE;  
         $this->label['r-foto'] = $LABEL_R_FOTO;
+        $this->label['r-approvata'] = $LABEL_R_APPROVATA;
     }
     
     
@@ -430,6 +432,7 @@ class RicettaView extends PrinterView {
      * @return \Ricetta
      */
     protected function checkRicettaFormFields(){
+        global $ADMIN_ID;
         $errors = 0;
         $r = new Ricetta();
         
@@ -458,6 +461,19 @@ class RicettaView extends PrinterView {
         //user id - CAMPO OBBLIGATORIO
         if(parent::checkRequiredSingleField('user-id', 'Utente corrente') != false){
             $r->setIdUtente(parent::checkRequiredSingleField('user-id', 'Utente corrente'));
+            //imposto l'approvazione della ricetta
+            //se l'utente è amministratore, la ricetta è pubblicata di default, altrimenti no
+            if($r->getIdUtente() == $ADMIN_ID){
+                $r->setApprovata(1);
+            }
+            else{
+                if($_POST[$this->form['r-approvata']] == '0'){
+                    $r->setApprovata(0);
+                }
+                else{
+                    $r->setApprovata(1);
+                }
+            }
         }
         else{
             $errors++;
@@ -677,6 +693,10 @@ class RicettaView extends PrinterView {
                             }                                    
                         ?> 
                         <?php parent::printInputFileFormField($this->form['r-foto'], $this->label['r-foto']) ?>
+                        <?php
+                            $array = array(0 => 'No', 1 => 'Si');
+                            parent::printSelectFormField($this->form['r-approvata'], $this->label['r-approvata'], $array, true, $r->getApprovata());
+                        ?>
                     </div>
                     <div class="clear"></div>
                     <?php echo parent::printUpdateDettaglio('r') ?>
@@ -925,8 +945,15 @@ class RicettaView extends PrinterView {
             </div>
             <div class="clear"></div>
             <div class="nome-ingrediente">
-                <?php parent::printSuggestTextFormField('nome-ingrediente', 'Ingredienti') ?>   
+                <?php parent::printSuggestTextFormField('nome-ingrediente', 'Ingredienti') ?>                  
+                <?php parent::printDisabledTextFormField('lista-ingredienti', '', null) ?>
+                <input type="button" name="cancella-ingredienti" value="Cancella ingredienti"/>
+                
             </div>
+            <div class="clear"></div>
+            <input type="hidden" name="ajax-url" value="<?php echo get_home_url() ?>/wp-admin/admin-ajax.php" />
+            <?php parent::printSeachButton('ricerca-ricette', 'Cerca') ?>
+            
         </div>
     <?php    
     }

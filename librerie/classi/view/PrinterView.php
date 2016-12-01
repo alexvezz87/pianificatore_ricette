@@ -591,6 +591,12 @@ class PrinterView {
     }
     
     
+    protected function printSeachButton($nameField, $label){
+    ?>
+        <button type="button" class="btn btn-secondary <?php echo $nameField ?>"><?php echo $label ?></button>
+    <?php
+    }
+    
     protected function printSubmitFormField($nameField, $label){
     ?>
         <input name="<?php echo $nameField ?>" type="submit" class="btn btn-success" value="<?php echo $label ?>" />

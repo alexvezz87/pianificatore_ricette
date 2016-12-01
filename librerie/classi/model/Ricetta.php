@@ -14,6 +14,7 @@ class Ricetta {
     private $idUtente;
     private $data;
     private $dose;
+    private $approvata;
     
     //attributo aggiunto 
     private $ingredienti; //array di ingredienti
@@ -102,5 +103,15 @@ class Ricetta {
     function setTipologie($tipologie) {
         $this->tipologie = $tipologie;
     }
+    
+    function getApprovata() {
+        return $this->approvata;
+    }
+
+    function setApprovata($approvata) {
+        $this->approvata = $approvata;
+    }
+
+
 
 }
