@@ -1,4 +1,5 @@
 <?php
+namespace pianificatore_ricette;
 /*******************************************************************************
 * FPDF                                                                         *
 *                                                                              *
@@ -7,7 +8,7 @@
 * Author:  Olivier PLATHEY                                                     *
 *******************************************************************************/
 
-define('FPDF_VERSION','1.81');
+define('FPDF_VERSION_1','1.81');
 
 class FPDF
 {

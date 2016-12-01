@@ -1,6 +1,5 @@
 <?php
-
-
+namespace pianificatore_ricette;
 /**
  * Description of PrinterView
  *
@@ -47,7 +46,7 @@ class PrinterView {
         $this->giornoCorrente = intval(date('d'));
         
         
-        $date = new DateTime($this->annoCorrente.'-'.$this->meseCorrente.'-'.$this->giornoCorrente);
+        $date = new \DateTime($this->annoCorrente.'-'.$this->meseCorrente.'-'.$this->giornoCorrente);
         $this->settimanaCorrente = $date->format("W");
     }
     
@@ -762,4 +761,18 @@ class PrinterView {
         return $giorno.' '.$temp[1].' '.$mese;
     }
     
+    protected function printArraySuggestion($array){
+        $count = 0;
+        $html = "";
+        foreach($array as $item){
+            if($count < count($array) -1){
+                $html.= '"'.$item.'",';
+            }
+            else{
+                $html.= '"'.$item.'"';
+            }
+            $count++;
+        }
+        return $html;
+    }
 }

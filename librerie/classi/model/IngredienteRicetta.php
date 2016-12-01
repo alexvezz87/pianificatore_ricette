@@ -1,5 +1,5 @@
 <?php
-
+namespace pianificatore_ricette;
 /**
  * Description of IngredienteRicetta
  * Classe di supporto per indicare la quantità di ingredienti con unità di misura 

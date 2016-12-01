@@ -1,5 +1,5 @@
 <?php
-
+namespace pianificatore_ricette;
 /**
  * Description of IngredienteAgenda
  * Classe generata per la gestione degli ingredienti all'interno del calendario

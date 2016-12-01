@@ -1,5 +1,5 @@
 <?php
-
+namespace pianificatore_ricette;
 /**
  * Description of AgendaView
  *
@@ -54,20 +54,7 @@ class AgendaView extends PrinterView {
     ?>
         <script>
             jQuery( function($) {
-                var ricette = [
-    <?php
-                $count = 0;
-                foreach($ricette as $r){
-                    if($count < count($ricette) -1){
-                        echo '"'.$r.'",';
-                    }
-                    else{                        
-                        echo '"'.$r.'"';
-                    }
-                    $count++;
-                }
-    ?>
-                ];
+                var ricette = [<?php echo parent::printArraySuggestion($ricette) ?>];
                 
                 $(document.body).on('focus', '.nome-ricetta input', function(){
                     $(this).autocomplete({

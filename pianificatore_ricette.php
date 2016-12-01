@@ -1,5 +1,4 @@
 <?php
-
 //Autore: Alex Vezzelli - Alex Soluzioni Web
 //url: http://www.alexsoluzioniweb.it/
  /**
@@ -14,7 +13,6 @@ Author: Alex Vezzelli - Alex Soluzioni Web
 Author URI: http://www.alexsoluzioniweb.it/
 License: GPLv2 or later
 */
-
 
 //includo le librerie
 require_once 'librerie/variabili_globali.php';
@@ -52,7 +50,7 @@ function add_pr_admin_menu(){
     add_submenu_page('pianificatore_ricette', 'Tipologia Ricetta', 'Tipologia Ricetta', 'edit_plugins', 'tipologia_ricetta', 'add_gestione_tr');    
     add_submenu_page('pianificatore_ricette', 'Tipologia Pasto', 'Tipologia Pasto', 'edit_plugins', 'tipologia_pasto', 'add_gestione_tp');
         
-    add_submenu_page('', 'Pagina dettaglio',  'Pagina dettaglio', 'edit_plugins', 'pagina_dettaglio', 'add_pagina_dettaglio');
+    add_submenu_page('', 'Pagina dettaglio',  'Pagina dettaglio', 'edit_plugins', 'pagina_dettaglio', 'add_pagina_dettaglio_pr');
 }
 
 function add_pr_page_1(){
@@ -75,7 +73,7 @@ function add_agende(){
     include 'pages/admin/gestione_agende.php';
 }
 
-function add_pagina_dettaglio(){
+function add_pagina_dettaglio_pr(){
     include 'pages/admin/pagina_dettaglio.php';
 }
 

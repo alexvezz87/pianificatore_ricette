@@ -1,5 +1,5 @@
 <?php
-
+namespace pianificatore_ricette;
 /**
  * Description of Pasto
  *

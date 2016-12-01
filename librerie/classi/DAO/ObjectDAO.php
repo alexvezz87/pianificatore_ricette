@@ -1,4 +1,5 @@
 <?php
+namespace pianificatore_ricette;
 /**
  * Description of ObjectDAO
  * Classe generica dedita alle operazioni base sul database

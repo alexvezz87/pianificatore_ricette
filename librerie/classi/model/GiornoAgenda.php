@@ -1,6 +1,5 @@
 <?php
-
-
+namespace pianificatore_ricette;
 /**
  * Description of GiornoAgenda
  * Classe specifica per la creazione dei giorni nel pdf

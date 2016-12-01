@@ -1,6 +1,5 @@
 <?php
-
-
+namespace pianificatore_ricette;
 /**
  * Description of Giorni
  *

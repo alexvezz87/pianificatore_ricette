@@ -1,5 +1,5 @@
 <?php
-
+namespace pianificatore_ricette;
 /**
  * Description of RicettaView
  *
@@ -251,7 +251,7 @@ class RicettaView extends PrinterView {
     ?>
         <script>
             jQuery( function($) {
-                var ingredienti = [<?php echo $this->printArraySuggestion($ingredienti) ?>];                
+                var ingredienti = [<?php echo parent::printArraySuggestion($ingredienti) ?>];                
                 $(document.body).on('focus', '.nome-ingrediente input', function(){
                     $(this).autocomplete({
                         source: ingredienti                                              
@@ -884,21 +884,6 @@ class RicettaView extends PrinterView {
     <?php   
     }
     
-    private function printArraySuggestion($array){
-        $count = 0;
-        $html = "";
-        foreach($array as $item){
-            if($count < count($array) -1){
-                $html.= '"'.$item.'",';
-            }
-            else{
-                $html.= '"'.$item.'"';
-            }
-            $count++;
-        }
-        return $html;
-    }
-    
     
     public function printFormRicerca(){
         //ottengo l'array con i nomi degli ingredienti
@@ -910,8 +895,8 @@ class RicettaView extends PrinterView {
     ?>
         <script>
             jQuery( function($) {
-                var ingredienti = [<?php echo $this->printArraySuggestion($ingredienti) ?>];                
-                var ricette = [<?php echo $this->printArraySuggestion($ricette) ?>];
+                var ingredienti = [<?php echo parent::printArraySuggestion($ingredienti) ?>];                
+                var ricette = [<?php echo parent::printArraySuggestion($ricette) ?>];
                 
                 $(document.body).on('focus', '.nome-ingrediente input', function(){
                     $(this).autocomplete({
