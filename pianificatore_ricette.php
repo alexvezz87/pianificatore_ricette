@@ -32,7 +32,7 @@ require_once (dirname(__FILE__) . '/pianificatore_ricette.php');
 register_activation_hook(__FILE__, 'install_pianificatore_ricette');
 function install_pianificatore_ricette(){
     //installo il database
-    install_pianificatore();     
+    pianificatore_ricette\install_pianificatore();     
    
 }
 
@@ -40,7 +40,7 @@ function install_pianificatore_ricette(){
 register_deactivation_hook( __FILE__, 'remove_pianificatore_ricette');
 function remove_pianificatore_ricette(){
     //rimuovo il database
-    dropPianificatore();
+    pianificatore_ricette\dropPianificatore();
 }
 
 //Aggiungo il menu di Plugin

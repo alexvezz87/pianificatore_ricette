@@ -124,7 +124,7 @@ class ObjectDAO {
      * @param type $query
      * @return type
      */
-    protected function searchObjects($query){
+    protected function searchObjects($query){        
         try{
             return $this->wpdb->get_results($query);
         } catch (Exception $ex) {

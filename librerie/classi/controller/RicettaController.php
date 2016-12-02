@@ -413,16 +413,53 @@ class RicettaController {
      * @return array
      */
     public function searchRicette($param){
-        $temp = $this->searchRicette($param);
+        $temp = $this->rDAO->searchRicette($param);       
         if($temp != null){
             $result = array();
-            foreach($temp as $idRicetta){
-                array_push($result, $this->getRicettaByID($idRicetta));
+            foreach($temp as $item){
+               $r = new Ricetta();
+               $r = $this->getRicettaByID($item->ID);
+               $temp2['ID'] = $r->getID();
+               $temp2['nome'] = $r->getNome();               
+               $tipologie = $this->getTipologieByIdRicetta($r->getID());
+               if($tipologie != null){
+                   $temp2['tipologie'] = array();
+                   $temp2['tipologie'] = $tipologie;
+               }
+               $temp2['durata'] = $r->getDurata();               
+               
+               array_push($result, $temp2);
             }
             return $result;
         }
         return null;
     }
     
+    /**
+     * La funzione restituise un array di nomi tipologia appartenenti ad una ricetta
+     * @param type $idRicetta
+     * @return array
+     */
+    protected function getTipologieByIdRicetta($idRicetta){
+        $query = array(
+            array(
+                'campo'     => 'id_ricetta',
+                'valore'    => $idRicetta,
+                'formato'   => 'INT'
+            )
+        );
+        
+        $temp = $this->rtDAO->getRicetteTipoologie($query);
+        if($temp != null){
+            $result = array();
+            foreach($temp as $item){
+                $t = new Tipologia();
+                $t = $this->tDAO->getTipologiaById($item['idTipologia']);
+                array_push($result, $t->getNome());
+            }
+            return $result;
+        }
+        return null;
+    }
     
 }

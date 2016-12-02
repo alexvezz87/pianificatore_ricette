@@ -46,26 +46,10 @@ class AgendaView extends PrinterView {
         //ottengo la data di oggi
         date_default_timezone_set('Europe/Rome');        
         $now = date('Y-m-d H:i:s', strtotime("now"));        
-        $week = date('W', strtotime("now")); 
+        $week = date('W', strtotime("now"));         
         
-        $ID = 1; //l'ID dell'amministratore **Da modificare nel caso**
-        $ricette = $this->getNomiRicette($ID);
         
-    ?>
-        <script>
-            jQuery( function($) {
-                var ricette = [<?php echo parent::printArraySuggestion($ricette) ?>];
-                
-                $(document.body).on('focus', '.nome-ricetta input', function(){
-                    $(this).autocomplete({
-                        source: ricette,
-                        appendTo:$(this).siblings('.suggerimenti')
-                    });
-                });
-          } );
-        </script>
-
-
+    ?>       
         <form class="form-horizontal agenda-container" role="form" action="<?php echo curPageURL() ?>" name="form-agenda" method="POST">
             <?php parent::printHiddenFormField('user-id', get_current_user_id()) ?>
             <?php parent::printHiddenFormField('id-week', $week) ?>
@@ -111,9 +95,11 @@ class AgendaView extends PrinterView {
             <?php
                 //stampo i pasti
                 $countPasti = 0;
-                foreach($pasti as $pasto){
-                    $this->printFormPasto($i, $countPasti, $pasto);
-                    $countPasti++;
+                if($pasti != null){
+                    foreach($pasti as $pasto){
+                        $this->printFormPasto($i, $countPasti, $pasto);
+                        $countPasti++;
+                    }
                 }
             ?>            
             <div class="clear"></div>
@@ -129,9 +115,10 @@ class AgendaView extends PrinterView {
             <?php parent::printHiddenFormField('id-tp-'.$i.'-'.$j, $tp->getID()) ?>
             <p><?php echo $tp->getNome() ?></p>
             <div class="lista-ricette">
-                <div class="nome-ricetta ui-widget">
-                    <input type="text" name="nome-ricetta-<?php echo $i ?>-<?php echo $tp->getID() ?>-1" />
-                    <div class="suggerimenti"></div>
+                <div class="nome-ricetta">
+                    <select name="nome-ricetta-<?php echo $i ?>-<?php echo $tp->getID() ?>-1">
+                        
+                    </select>
                 </div>
             </div>
             <div class="aggiungi-ricetta">
@@ -263,14 +250,9 @@ class AgendaView extends PrinterView {
                                 if(strpos($key3, 'nome-ricetta-'.$countGiorno.'-'.$value2) !== false) {
                                     //devo ottenere l'id della ricetta dal nome
                                     if(trim($value3 != '')){
-                                        $idRicetta = $this->rC->getIdRicettaByNome($value3);
-                                        if($idRicetta != null){
-                                            array_push($ricette, $idRicetta);
-                                        }
-                                        else{
-                                            parent::printErrorBoxMessage('Ricetta "'.$value3.'" non riconosciuta');
-                                            $errors++;
-                                        }
+                                      
+                                        array_push($ricette, $value3);
+                                        
                                     }
                                 }
                             }                                

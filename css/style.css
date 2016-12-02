@@ -100,6 +100,48 @@ and open the template in the editor.
     background:#DDDDDD;
 }
 
+.add-recipe{
+    display:block;
+    width:auto;
+    height: 20px;
+    background: url('../images/add-recipe.png') left center;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    padding-left: 25px;
+    cursor: pointer;
+}
+
+#selezionatore-ricette{
+    width:50%;
+    border:1px solid #ddd;
+    padding:10px;
+}
+
+#selezionatore-ricette .lista p{
+    float:left;
+    margin:0;padding:0;
+}
+
+.container-ricerca, .container-risultati{
+    border:1px solid #ddd;
+    padding:10px;
+}
+
+.remove-recipe{
+    display:block;
+    float:right;
+    width:20px;
+    height: 20px;
+    background: url('../images/remove-recipe.png') left center;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;    
+    cursor: pointer;
+}
+
+.table.table-striped th, .table.table-striped td{
+    text-align: left;
+}
+
 @media (min-width: 768px) {
 
     .agenda-container .giorno-agenda{

@@ -440,9 +440,42 @@ function createPages(){
  * Funzione di ricerca ricette, chiamata da ajax
  */
 function ricerca_ricette($array){
+   
+    //scompongo l'array
+    $param = array();
     
-   print_r($array);
-   die();
+    //nome
+    if(isset($array['nomeRicetta']) && trim($array['nomeRicetta']) != ''){
+        $param['nome'] = $array['nomeRicetta'];
+    }
+    
+    //tipologia
+    if(isset($array['tipologia']) && count($array['tipologia']) > 0 && $array['tipologia'] != ''){        
+        $param['tipologie'] = array();
+        foreach($array['tipologia'] as $tipo){
+            array_push($param['tipologie'], $tipo);
+        }
+    }
+    
+    //ingredienti
+    if(isset($array['ingredienti']) && trim($array['ingredienti']) != ''){
+        $temp = explode(',', $array['ingredienti']);
+        $param['ingredienti'] = array();
+        $iC = new IngredienteController();        
+        foreach($temp as $ing){ 
+            $idIng = $iC->getIngredienteByNome($ing);
+            if($idIng != null){
+                array_push($param['ingredienti'], $idIng);
+            }
+        }
+    }
+    
+    //eseguo la query
+    $rC = new RicettaController();
+    $ricette = $rC->searchRicette($param);
+    
+    echo json_encode($ricette);        
+    die();
 }
 
 ?>

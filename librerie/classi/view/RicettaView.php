@@ -934,7 +934,7 @@ class RicettaView extends PrinterView {
             });
         </script>
        
-   
+        <?php parent::printHiddenFormField('url-home', home_url()) ?>
         <div class="container-ricerca">            
             <div class="nome-ricetta ui-widget">
                 <?php parent::printSuggestTextFormField('nome-ricetta', 'Nome Ricetta') ?>                
@@ -955,7 +955,9 @@ class RicettaView extends PrinterView {
             <?php parent::printSeachButton('ricerca-ricette', 'Cerca') ?>
             
         </div>
+        
+        <div class="container-risultati"></div>
     <?php    
     }
-
+    
 }

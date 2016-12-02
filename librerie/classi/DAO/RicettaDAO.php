@@ -128,16 +128,15 @@ class RicettaDAO extends ObjectDAO {
      * @return type
      */
     public function searchRicette($param){
-        global $DB_TABLE_RICETTE, $DB_TABLE_INGREDIENTI_RICETTE, $DB_TABLE_INGREDIENTI, $DB_TABLE_RICETTE_TIPOLOGIE;
+        global $DB_PREFIX;
+        global $DB_TABLE_RICETTE, $DB_TABLE_INGREDIENTI_RICETTE, $DB_TABLE_RICETTE_TIPOLOGIE;
         
         
         $query =  "SELECT DISTINCT r.ID ";
-        $query .= "FORM ".$DB_TABLE_RICETTE." r ";
-        $query .= "INNER JOIN ".$DB_TABLE_INGREDIENTI_RICETTE." ir ";
-        $query .= "ON r.ID = ir.id_ricetta";
-        $query .= "INNER JOIN ".$DB_TABLE_INGREDIENTI." i ";
-        $query .= "ON ir.id_ingrediente = i.ID ";
-        $query .= "INNER JOIN ".$DB_TABLE_RICETTE_TIPOLOGIE." rt ";
+        $query .= "FROM ".$DB_PREFIX.$DB_TABLE_RICETTE." r ";
+        $query .= "INNER JOIN ".$DB_PREFIX.$DB_TABLE_INGREDIENTI_RICETTE." ir ";
+        $query .= "ON r.ID = ir.id_ricetta ";        
+        $query .= "INNER JOIN ".$DB_PREFIX.$DB_TABLE_RICETTE_TIPOLOGIE." rt ";
         $query .= "ON rt.id_ricetta = r.ID ";        
         
         //WHERE
@@ -150,38 +149,49 @@ class RicettaDAO extends ObjectDAO {
         
         //ingredienti
         if(isset($param['ingredienti']) && count($param['ingredienti']) > 0){
-            $query .= "AND ( ";
+            $query .= "AND r.ID IN ( ";
+            $query .= "SELECT r.ID FROM ".$DB_PREFIX.$DB_TABLE_RICETTE." r ";
+            $query .= "INNER JOIN ".$DB_PREFIX.$DB_TABLE_INGREDIENTI_RICETTE." ir ";
+            $query .= "ON r.ID = ir.id_ricetta "; 
+            $query .= "WHERE ir.id_ingrediente IN ( ";
             $count = 0;
             foreach($param['ingredienti'] as $ing){
-                if($count == count($param) - 1){
-                    $query .= "i.nome LIKE '%".$ing."%' ";
+                if($count == count($param['ingredienti']) - 1){
+                    $query .= $ing." ";
                 }
                 else{
-                    $query .= "i.nome LIKE '%".$ing."%' OR ";
+                    $query .= $ing.", ";
                 }
                 
                 $count++;
             }
-            $query .= ") ";
+            $query .= ") ";           
+            $query .= "GROUP BY r.ID HAVING COUNT(*) = ".count($param['ingredienti']).") "; 
         }
         
         //tipologie
         if(isset($param['tipologie']) && count($param['tipologie'])>0){
-            $query = "AND ( ";
+            $query .= "AND r.ID IN ( ";
+            $query .= "SELECT r.ID FROM ".$DB_PREFIX.$DB_TABLE_RICETTE." r ";
+            $query .= "INNER JOIN ".$DB_PREFIX.$DB_TABLE_RICETTE_TIPOLOGIE." rt ";
+            $query .= "ON rt.id_ricetta = r.ID ";
+            $query .= "WHERE rt.id_tipologia IN ( ";
             $count = 0;
             foreach($param['tipologie'] as $tipo){
-                if($count == count($param) - 1){
-                    $query .= "rt.id_tipologia = ".$tipo;
+                if($count == count($param['tipologie']) - 1){
+                    $query .= $tipo." ";
                 }
                 else{
-                    $query .= "rt.id_tipologia = ".$tipo;" OR ";
-                }
-                
+                    $query .= $tipo.", ";
+                }                
                 $count++;
             }
-            $query .= ") ";
+            $query .= ") ";            
+            $query .= "GROUP BY r.ID HAVING COUNT(*) = ".count($param['tipologie']).") ";
         }
-                
+        
+        //print_r($query);
+             
         return parent::searchObjects($query); 
     }
 

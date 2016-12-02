@@ -26,6 +26,18 @@ $ricette = new RicettaView();
 </div>
 
 <div class="clear"></div>
+<div id="selezionatore-ricette">
+    <h4>Selezione ricette</h4>
+    <div class="lista">
+        
+    </div>
+    <div class="clear"></div>
+    <div class="azioni">
+        <button type="button" class="btn btn-success prosegui-agenda">Prosegui</button>
+        <button type="button" class="btn btn-danger cancella-lista">Cancella</button>
+    </div>
+</div>
+<div class="clear"></div>
 <?php 
     $view->listenerFormAgenda();
 ?>
