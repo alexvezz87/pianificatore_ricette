@@ -22,8 +22,8 @@ require_once 'librerie/functions.php';
 
 
 
-global $DIR_PDF;
-$DIR_PDF = plugin_dir_path(__FILE__).'\pdf\\';
+global $PR_DIR_PDF;
+$PR_DIR_PDF = plugin_dir_path(__FILE__).'\pdf\\';
 
 //indico la cartella dove è contenuto il plugin
 require_once (dirname(__FILE__) . '/pianificatore_ricette.php');

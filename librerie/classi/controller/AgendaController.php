@@ -670,8 +670,8 @@ class AgendaController {
     
         
     public function createPDF(Agenda $a, $dose){
-        global $DIR_PDF;
-        global $URL_PDF;
+        global $PR_DIR_PDF;
+        global $PR_URL_PDF;
         
         //ottengo informazioni sull'utente
         $user_info = get_userdata($a->getIdUtente());
@@ -704,12 +704,12 @@ class AgendaController {
             
             
             //salvo il pdf
-            $this->pdfWriter->savePDF($DIR_PDF.$name);
+            $this->pdfWriter->savePDF($PR_DIR_PDF.$name);
 
             //$result['url'] = $URL_PDF.$name;
             //$result['dir'] = $DIR_PDF.$name;
         
-        return $URL_PDF.$name;
+        return $PR_URL_PDF.$name;
         
         }
         catch(Exception $ex){

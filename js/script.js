@@ -23,10 +23,10 @@ jQuery(document).ready(function($){
             }
         }
         //cambio il name del nuovo input
-        $element.find('input').attr('name', newName);
+        $element.find('select').attr('name', newName);
         
         //pulisco i valori
-        $element.find('input').val('');
+        $element.find('select').val('');
         
         $element.appendTo($(this).parent('.aggiungi-ricetta').siblings('.lista-ricette'));
         
@@ -87,11 +87,21 @@ jQuery(document).ready(function($){
         
         if(trovato == false){
             $(html).appendTo($('#selezionatore-ricette .lista'));
+            //aggiungo direttamente i valori anche all'agenda
+            var recipe = '<option class="recipe-'+id+'" value="'+id+'">'+nome+'</option>';
+            $(recipe).appendTo($('form.agenda-container .lista-ricette .nome-ricetta select'));
+            
         }        
     });
     
     //RIMUOVI RICETTA DAL SELEZIONATORE
     $(document).on('click', '.remove-recipe', function(){
+        
+        //tolgo la ricetta dall'agenda
+        var id = $(this).siblings('input[name=id-r]').val();
+        $('form.agenda-container .lista-ricette .nome-ricetta select option.recipe-'+id).remove();
+        
+        //la tolgo dal selezionatore
         $(this).parent('.ricetta').remove();
     });
     
@@ -102,7 +112,9 @@ jQuery(document).ready(function($){
     
     //AGGIUNGI CAMPI AI PASTI DELL'AGENDA
     $('#selezionatore-ricette .prosegui-agenda').click(function(){
+        
         if($('#selezionatore-ricette .lista .ricetta').size() > 0){
+            /*
             var html='<option value=""></option>';
             $('#selezionatore-ricette .lista .ricetta').each(function(){
                 var id = $(this).find('input[name=id-r]').val();
@@ -110,13 +122,35 @@ jQuery(document).ready(function($){
                 html+='<option value="'+id+'">'+nome+'</option>';
             });
             $('.lista-ricette .nome-ricetta select').html(html);
+            */
         }
         else{
             alert('Non hai ricette per l\'agenda!');
         }
         
-    })
+    });
     
+    
+    //CHECK delle ricette nei pasti
+    $(document).on('change', '.pasto .lista-ricette select', function(){
+        var currentVal = $(this).val();
+        
+        //controllo all'interno dello stesso pasto
+        var $listaRicette = $(this).parent('.nome-ricetta').siblings('.nome-ricetta');
+        var trovato = false;
+        $listaRicette.each(function(){
+            if($(this).find('select').val() == currentVal){
+                trovato = true;
+            }            
+        });
+        
+        if(trovato == true){
+            alert('Attenzione! Hai indicato ricette uguali per lo stesso pasto!');
+            $(this).parent('.nome-ricetta').remove();
+        }
+        
+        //controllo all'interno dello stesso giorno
+    })
     
     
     $('button.ricerca-ricette').click(function(){

@@ -7,7 +7,7 @@ namespace pianificatore_ricette;
 global $DB_PREFIX;
 global $DB_TABLE_INGREDIENTI, $DB_TABLE_PREPARAZIONI, $DB_TABLE_RICETTE, $DB_TABLE_TIPOLOGIA_RICETTE, $DB_TABLE_INGREDIENTI_RICETTE;
 global $DB_TABLE_AGENDE, $DB_TABLE_GIORNI, $DB_TABLE_PASTI, $DB_TABLE_GIORNI_PASTI, $DB_TABLE_PASTI_RICETTE, $DB_TABLE_TIPOLOGIA_PASTI;
-global $DB_TABLE_RICETTE_TIPOLOGIE, $DB_TABLE_PREFERITE;
+global $DB_TABLE_RICETTE_TIPOLOGIE, $DB_TABLE_PREFERITE, $DB_TABLE_TEMPLATE_AGENDE;
 
 //INGREDIENTI
 global $FORM_ING_NOME, $FORM_ING_GIORNI_ANTICIPO, $FORM_ING_DESCRIZIONE, $FORM_ING_SUBMIT;
@@ -26,7 +26,8 @@ global $FORM_R_NOME, $FORM_R_TIPOLOGIA, $FORM_R_INGREDIENTE, $FORM_R_QT_INGREDIE
 global $LABEL_R_NOME, $LABEL_R_TIPOLOGIA, $LABEL_R_INGREDIENTE, $LABEL_R_QT_INGREDIENTE, $LABEL_R_UM_INGREDIENTE, $LABEL_R_PREPARAZIONE, $LABEL_R_DURATA, $LABEL_R_DOSE, $LABEL_R_FOTO, $LABEL_R_APPROVATA;
 
 //AGENDA
-global $FORM_A_SETTIMANA, $FORM_A_SUBMIT;
+global $FORM_A_SETTIMANA, $FORM_A_SUBMIT,$FORM_A_NOME;
+global $LABEL_A_NOME;
 
 //GIORNO
 global $FORM_G_NOME, $FORM_G_DATA;
@@ -57,6 +58,7 @@ $DB_TABLE_GIORNI_PASTI = 'giorni_pasti';
 $DB_TABLE_PASTI_RICETTE = 'pasti_ricette';
 $DB_TABLE_RICETTE_TIPOLOGIE = 'ricette_tipologie';
 $DB_TABLE_PREFERITE = 'preferite';
+$DB_TABLE_TEMPLATE_AGENDE = 'template_agende';
 
 //FORM & LABEL
 
@@ -115,6 +117,9 @@ $LABEL_R_APPROVATA = 'Approvata';
 
 //agenda
 $FORM_A_SUBMIT = 'a-submit';
+$FORM_A_NOME = 'a-nome';
+
+$LABEL_A_NOME = 'Nome (facoltativo)';
 
 //giorno
 $FORM_G_NOME = 'g-nome';
@@ -128,7 +133,7 @@ $LABEL_SUBMIT = 'Salva';
 //NB. bisogna cambiare il senso degli slash quando si passa da locale a web server
 
 
-$URL_PDF = plugins_url().'/pianificatore_ricette/pdf/';
+$PR_URL_PDF = plugins_url().'/pianificatore_ricette/pdf/';
 $URL_IMG = plugins_url().'/pianificatore_ricette/images/';
 
 $ADMIN_ID = 1;

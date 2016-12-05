@@ -8,7 +8,7 @@ namespace pianificatore_ricette;
 function install_pianificatore(){
     global $DB_TABLE_INGREDIENTI, $DB_TABLE_PREPARAZIONI, $DB_TABLE_RICETTE, $DB_TABLE_TIPOLOGIA_RICETTE, $DB_TABLE_INGREDIENTI_RICETTE;
     global $DB_TABLE_AGENDE, $DB_TABLE_GIORNI, $DB_TABLE_TIPOLOGIA_PASTI, $DB_TABLE_PASTI, $DB_TABLE_GIORNI_PASTI, $DB_TABLE_PASTI_RICETTE;
-    global $DB_TABLE_RICETTE_TIPOLOGIE, $DB_TABLE_PREFERITE;
+    global $DB_TABLE_RICETTE_TIPOLOGIE, $DB_TABLE_PREFERITE, $DB_TABLE_TEMPLATE_AGENDE;
     try{
         //INGREDIENTI
         $args = array(
@@ -192,6 +192,11 @@ function install_pianificatore(){
         //AGENDE
         $args = array(
             array(
+                'nome' => 'nome',
+                'tipo' => 'TEXT',
+                'null' => 'null'
+            ),
+            array(
                 'nome' => 'settimana',
                 'tipo' => 'INT',
                 'null' => 'NOT NULL'
@@ -214,6 +219,27 @@ function install_pianificatore(){
             
         );        
         creaTabella($DB_TABLE_AGENDE, $args);
+        
+        //TEMPLATE AGENDE
+        $args = array(
+            array(
+                'nome' => 'nome',
+                'tipo' => 'TEXT',
+                'null' => 'NOT NULL'
+            ),
+            array(
+                'nome' => 'id_agenda',
+                'tipo' => 'INT',
+                'null' => 'NOT NULL'
+            )
+        );
+        $fks = array(
+            array(
+                'key1'    => 'id_agenda',
+                'tabella' => $DB_TABLE_AGENDE
+            )
+        );
+        creaTabella($DB_TABLE_TEMPLATE_AGENDE, $args, $fks);
         
         //GIORNI
         $args = array(
@@ -336,7 +362,7 @@ function install_pianificatore(){
 function dropPianificatore(){
     global $DB_TABLE_INGREDIENTI, $DB_TABLE_PREPARAZIONI, $DB_TABLE_RICETTE, $DB_TABLE_TIPOLOGIA_RICETTE, $DB_TABLE_INGREDIENTI_RICETTE;
     global $DB_TABLE_AGENDE, $DB_TABLE_GIORNI, $DB_TABLE_TIPOLOGIA_PASTI, $DB_TABLE_PASTI, $DB_TABLE_GIORNI_PASTI, $DB_TABLE_PASTI_RICETTE;
-    global $DB_TABLE_RICETTE_TIPOLOGIE, $DB_TABLE_PREFERITE;
+    global $DB_TABLE_RICETTE_TIPOLOGIE, $DB_TABLE_PREFERITE, $DB_TABLE_TEMPLATE_AGENDE;
     
     try{
         
@@ -361,14 +387,13 @@ function dropPianificatore(){
             if(dropTabella($DB_TABLE_GIORNI_PASTI)==true){
                 if(dropTabella($DB_TABLE_PASTI)== true){
                     if(dropTabella($DB_TABLE_GIORNI) == true){
+                        dropTabella($DB_TABLE_TEMPLATE_AGENDE);
                         dropTabella($DB_TABLE_AGENDE);
                         dropTabella($DB_TABLE_TIPOLOGIA_PASTI);
                     }
                 }
             }
         }
-        
-        
     } catch (Exception $ex) {
         _e($ex);        
         return false;
@@ -477,5 +502,10 @@ function ricerca_ricette($array){
     echo json_encode($ricette);        
     die();
 }
+
+
+$closure = function($name){
+    return "Hello ".$name;
+};
 
 ?>

@@ -19,12 +19,14 @@ class AgendaView extends PrinterView {
         $this->rC = new RicettaController();
         $this->tpC = new TipologiaPastoController();
         
-        global $FORM_G_NOME, $FORM_G_DATA, $FORM_A_SUBMIT, $LABEL_SUBMIT;
+        global $FORM_G_NOME, $FORM_G_DATA, $FORM_A_SUBMIT, $FORM_A_NOME, $LABEL_A_NOME, $LABEL_SUBMIT;
         
         $this->form['g-nome'] = $FORM_G_NOME;
         $this->form['g-data'] = $FORM_G_DATA;
         $this->form['a-submit'] = $FORM_A_SUBMIT;
+        $this->form['a-nome'] = $FORM_A_NOME;
         
+        $this->label['a-nome'] = $LABEL_A_NOME;
         $this->label['submit'] = $LABEL_SUBMIT;
     }
     
@@ -53,6 +55,7 @@ class AgendaView extends PrinterView {
         <form class="form-horizontal agenda-container" role="form" action="<?php echo curPageURL() ?>" name="form-agenda" method="POST">
             <?php parent::printHiddenFormField('user-id', get_current_user_id()) ?>
             <?php parent::printHiddenFormField('id-week', $week) ?>
+            <?php parent::printTextFormField($this->form['a-nome'], $this->label['a-nome']) ?>
             <?php 
                   $dose = array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10);
                   parent::printSelectFormField('dose-persone', 'Indica per quante persone', $dose, true, 1);
@@ -117,7 +120,7 @@ class AgendaView extends PrinterView {
             <div class="lista-ricette">
                 <div class="nome-ricetta">
                     <select name="nome-ricetta-<?php echo $i ?>-<?php echo $tp->getID() ?>-1">
-                        
+                        <option value=""></option>
                     </select>
                 </div>
             </div>
@@ -135,6 +138,7 @@ class AgendaView extends PrinterView {
             
             $errors = 0;
             
+                        
             //faccio un controllo sui nomi ricetta passati (almeno uno deve essere compilato)
             $empty = true;
             foreach($_POST as $key => $value){
@@ -158,8 +162,13 @@ class AgendaView extends PrinterView {
                 return;
             }
             
+            $a = new Agenda();
             $a = $temp['agenda'];
             
+            //nome - CAMPO NON OBBLIGATORIO
+            if(parent::checkSingleField($this->form['a-nome'])!= false){
+                $a->setNome(parent::checkSingleField($this->form['a-nome']));
+            }
             
             //salvo l'agenda
             $idAgenda = $this->aC->saveAgenda($a);
@@ -286,6 +295,7 @@ class AgendaView extends PrinterView {
     public function printTableAgende($agende){
         $header = array(
             'ID',
+            'Nome',
             'Caricata',
             'Utente',
             'PDF',
@@ -299,34 +309,38 @@ class AgendaView extends PrinterView {
     protected function printBodyTable($array) {
         parent::printBodyTable($array);
         $html = "";
-        foreach($array as $item){
-            $a = new Agenda();
-            $a = $item;
-           
-            $html.='<tr>';            
-            //ID Agenda
-            $html.='<td>'.parent::printTextField(null, $a->getID()).'</td>';
-            //Caricata
-            $html.='<td>'.parent::printTextField(null, getTime($a->getData())).'</td>';
-            //Utente
-            if($a->getIdUtente() != 0){
-                $user = get_userdata($a->getIdUtente());
-                $html.='<td>'.parent::printTextField(null, $user->user_nicename).'</td>';
+        if($array != null){
+            foreach($array as $item){
+                $a = new Agenda();
+                $a = $item;
+
+                $html.='<tr>';            
+                //ID Agenda
+                $html.='<td>'.parent::printTextField(null, $a->getID()).'</td>';
+                //nome
+                $html.='<td>'.parent::printTextField(null, $a->getNome()).'</td>';
+                //Caricata
+                $html.='<td>'.parent::printTextField(null, getTime($a->getData())).'</td>';
+                //Utente
+                if($a->getIdUtente() != 0){
+                    $user = get_userdata($a->getIdUtente());
+                    $html.='<td>'.parent::printTextField(null, $user->user_nicename).'</td>';
+                }
+                else{
+                    $html.='<td></td>';
+                }
+                //PDF
+                if($a->getPdf() != null){
+                    $html.='<td><a target="_blank" href="'.$a->getPdf().'">Apri il PDF</a></td>';
+                }
+                else{
+                    $html.='<td></td>';
+                }
+                //dettagli
+                $html.='<td><a href="'. get_admin_url().'admin.php?page=pagina_dettaglio&type=A&id='.$a->getID().'">Vedi dettagli</a></td>';
+
+                $html.='</tr>';
             }
-            else{
-                $html.='<td></td>';
-            }
-            //PDF
-            if($a->getPdf() != null){
-                $html.='<td><a target="_blank" href="'.$a->getPdf().'">Apri il PDF</a></td>';
-            }
-            else{
-                $html.='<td></td>';
-            }
-            //dettagli
-            $html.='<td><a href="'. get_admin_url().'admin.php?page=pagina_dettaglio&type=A&id='.$a->getID().'">Vedi dettagli</a></td>';
-            
-            $html.='</tr>';
         }
         
         return $html;
@@ -339,6 +353,8 @@ class AgendaView extends PrinterView {
         
         if($a != null){
     ?>
+        <form class="form-horizontal agenda-container" role="form" action="<?php echo curPageURL() ?>" name="form-agenda" method="POST">
+            <?php parent::printTextFormField($this->form['a-nome'], $this->label['a-nome'], false, $a->getNome()) ?>
             <div class="container-agenda">
                 <div class="container-tipologie">
                     <div class="empty-box"></div>
@@ -407,6 +423,7 @@ class AgendaView extends PrinterView {
     ?>
                 </div>
             </div>
+        </form>
     <?php        
             
         }

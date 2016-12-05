@@ -223,8 +223,8 @@ class RicettaView extends PrinterView {
     ?>        
         <form class="form-horizontal" role="form" action="<?php echo curPageURL() ?>" name="form-ricetta" method="POST" enctype="multipart/form-data">
             <?php parent::printHiddenFormField('user-id', get_current_user_id()) ?>
-            <div class="col-sm-10">
-                <div class="col-sm-8">
+            <div class="col-sm-12">
+                <div class="col-sm-12">
                     <?php parent::printTextFormField($this->form['r-nome'], $this->label['r-nome'], true) ?>
                     <?php parent::printMultiSelectFormField($this->form['r-tipologia'], $this->label['r-tipologia'], $this->getArraySelectTipologieRicetta(), true) ?>
                 </div>
@@ -233,7 +233,7 @@ class RicettaView extends PrinterView {
                 <?php $this->printFormListaIngredienti() ?>
                 
                 <div class="clear" style="height: 50px"></div>
-                <div class="col-sm-8">
+                <div class="col-sm-12">
                     <?php parent::printTextAreaFormField($this->form['r-preparazione'], $this->label['r-preparazione'], true) ?>
                     <?php parent::printNumberFormField($this->form['r-durata'], $this->label['r-durata'], true) ?>
                     <?php parent::printNumberFormField($this->form['r-dose'], $this->label['r-dose'], true) ?>
@@ -463,17 +463,19 @@ class RicettaView extends PrinterView {
             $r->setIdUtente(parent::checkRequiredSingleField('user-id', 'Utente corrente'));
             //imposto l'approvazione della ricetta
             //se l'utente è amministratore, la ricetta è pubblicata di default, altrimenti no
-            if($r->getIdUtente() == $ADMIN_ID){
-                $r->setApprovata(1);
+            if(isset($_POST[$this->form['r-approvata']])){
+                $r->setApprovata($_POST[$this->form['r-approvata']]);
             }
             else{
-                if($_POST[$this->form['r-approvata']] == '0'){
-                    $r->setApprovata(0);
-                }
-                else{
+                if($r->getIdUtente() == $ADMIN_ID){
                     $r->setApprovata(1);
                 }
+                else{                   
+                    $r->setApprovata(0);                    
+                }
             }
+            
+            
         }
         else{
             $errors++;
