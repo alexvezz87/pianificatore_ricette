@@ -269,7 +269,7 @@ class IngredienteView extends PrinterView{
                 $html.='<td></td><td></td>';
             }
             
-            $html.='<td><a href="'. get_admin_url().'admin.php?page=pagina_dettaglio&type=ING&id='.$i->getID().'">Vedi dettagli</a></td>';
+            $html.='<td><a href="'. get_admin_url().'admin.php?page=pr_pagina_dettaglio&type=ING&id='.$i->getID().'">Vedi dettagli</a></td>';
             $html.='</tr>';
             
         }

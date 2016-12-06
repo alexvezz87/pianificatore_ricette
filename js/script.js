@@ -137,21 +137,43 @@ jQuery(document).ready(function($){
         
         //controllo all'interno dello stesso pasto
         var $listaRicette = $(this).parent('.nome-ricetta').siblings('.nome-ricetta');
-        var trovato = false;
+        var trovatoInPasto = false;
         $listaRicette.each(function(){
             if($(this).find('select').val() == currentVal){
-                trovato = true;
+                trovatoInPasto = true;
             }            
         });
         
-        if(trovato == true){
+        if(trovatoInPasto == true){
             alert('Attenzione! Hai indicato ricette uguali per lo stesso pasto!');
+            //lo elimino 
             $(this).parent('.nome-ricetta').remove();
         }
         
         //controllo all'interno dello stesso giorno
+        var trovatoInGiorno = false;
+        var $giorno = $(this).parent('.nome-ricetta').parent('.lista-ricette').parent('.pasto').parent('.giorno-agenda');
+        
+        var counter = 0;
+        $giorno.find('select').each(function(){
+            if($(this).val() == currentVal){
+                counter++;
+                if(counter > 1){
+                    trovatoInGiorno = true;
+                }
+            }
+        });
+        
+        if(trovatoInGiorno == true){
+            alert('Attenzione! Hai indicato ricette uguali per lo stesso giorno!');
+        }
     })
     
+    
+    //RIMUOVI RICETTA DAL PASTO
+    $(document).on('click', '.remove-from-pasto', function(){
+        $(this).parent('.nome-ricetta').remove();
+    });
     
     $('button.ricerca-ricette').click(function(){
         

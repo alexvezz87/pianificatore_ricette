@@ -231,6 +231,11 @@ function install_pianificatore(){
                 'nome' => 'id_agenda',
                 'tipo' => 'INT',
                 'null' => 'NOT NULL'
+            ),
+            array(
+                'nome' => 'descrizione',
+                'tipo' => 'TEXT',
+                'null' => null
             )
         );
         $fks = array(

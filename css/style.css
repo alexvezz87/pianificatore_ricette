@@ -142,6 +142,11 @@ and open the template in the editor.
     text-align: left;
 }
 
+
+.pasto .lista-ricette .nome-ricetta:first-child .remove-from-pasto{
+    display: none;
+}
+
 @media (min-width: 768px) {
 
     .agenda-container .giorno-agenda{

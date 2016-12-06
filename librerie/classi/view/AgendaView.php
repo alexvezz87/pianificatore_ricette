@@ -122,6 +122,7 @@ class AgendaView extends PrinterView {
                     <select name="nome-ricetta-<?php echo $i ?>-<?php echo $tp->getID() ?>-1">
                         <option value=""></option>
                     </select>
+                    <a class="remove-from-pasto">Rimuovi</a>
                 </div>
             </div>
             <div class="aggiungi-ricetta">
@@ -337,7 +338,7 @@ class AgendaView extends PrinterView {
                     $html.='<td></td>';
                 }
                 //dettagli
-                $html.='<td><a href="'. get_admin_url().'admin.php?page=pagina_dettaglio&type=A&id='.$a->getID().'">Vedi dettagli</a></td>';
+                $html.='<td><a href="'. get_admin_url().'admin.php?page=pr_pagina_dettaglio&type=A&id='.$a->getID().'">Vedi dettagli</a></td>';
 
                 $html.='</tr>';
             }

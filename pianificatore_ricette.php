@@ -21,7 +21,7 @@ require_once 'librerie/classi/classes.php';
 require_once 'librerie/functions.php';
 
 
-
+//NB. bisogna cambiare il senso degli slash quando si passa da locale a web server
 global $PR_DIR_PDF;
 $PR_DIR_PDF = plugin_dir_path(__FILE__).'\pdf\\';
 
@@ -46,12 +46,13 @@ function remove_pianificatore_ricette(){
 //Aggiungo il menu di Plugin
 function add_pr_admin_menu(){
     add_menu_page('Pianificatore Ricette', 'Pianificatore Ricette', 'edit_plugins', 'pianificatore_ricette', 'add_pr_page_1', plugins_url('images/ico_pr.png', __FILE__), 10);
-    add_submenu_page('pianificatore_ricette', 'Ingredienti', 'Ingredienti', 'edit_plugins', 'ingredienti', 'add_gestione_ingredienti');
-    add_submenu_page('pianificatore_ricette', 'Visualizza Agende', 'Visualizza Agende', 'edit_plugins', 'visualizza_agende', 'add_agende');    
+    add_submenu_page('pianificatore_ricette', 'Ingredienti', 'Ingredienti', 'edit_plugins', 'ingredienti', 'add_gestione_ingredienti');      
     add_submenu_page('pianificatore_ricette', 'Tipologia Ricetta', 'Tipologia Ricetta', 'edit_plugins', 'tipologia_ricetta', 'add_gestione_tr');    
     add_submenu_page('pianificatore_ricette', 'Tipologia Pasto', 'Tipologia Pasto', 'edit_plugins', 'tipologia_pasto', 'add_gestione_tp');
-        
-    add_submenu_page('', 'Pagina dettaglio',  'Pagina dettaglio', 'edit_plugins', 'pagina_dettaglio', 'add_pagina_dettaglio_pr');
+    add_submenu_page('pianificatore_ricette', 'Visualizza Agende', 'Visualizza Agende', 'edit_plugins', 'visualizza_agende', 'add_agende');  
+    add_submenu_page('pianificatore_ricette', 'Template Agende', 'Template Agende', 'edit_plugins', 'template_agende', 'add_template_agende');  
+    
+    add_submenu_page('', 'Pagina dettaglio',  'Pagina dettaglio', 'edit_plugins', 'pr_pagina_dettaglio', 'add_pagina_dettaglio_pr');
 }
 
 function add_pr_page_1(){
@@ -72,6 +73,10 @@ function add_gestione_tp(){
 
 function add_agende(){
     include 'pages/admin/gestione_agende.php';
+}
+
+function add_template_agende(){
+    include 'pages/admin/gestione_template.php';
 }
 
 function add_pagina_dettaglio_pr(){

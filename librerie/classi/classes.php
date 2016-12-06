@@ -15,6 +15,7 @@ require_once 'model/TipologiaPasto.php';
 require_once 'model/Pasto.php';
 require_once 'model/GiornoAgenda.php';
 require_once 'model/IngredienteAgenda.php';
+require_once 'model/TemplateAgenda.php';
 
 //CLASSI DAO
 require_once 'DAO/ObjectDAO.php';
@@ -31,6 +32,7 @@ require_once 'DAO/GiornoPastoDAO.php';
 require_once 'DAO/PastoRicettaDAO.php';
 require_once 'DAO/RicettaTipologiaDAO.php';
 require_once 'DAO/PreferiteDAO.php';
+require_once 'DAO/TemplateAgendaDAO.php';
 
 //CLASSI CONTROLLER
 require_once 'controller/IngredienteController.php';
@@ -38,6 +40,7 @@ require_once 'controller/RicettaController.php';
 require_once 'controller/AgendaController.php';
 require_once 'controller/TipologiaPastoController.php';
 require_once 'controller/PdfController.php';
+require_once 'controller/TemplateAgendaController.php';
 
 //CLASSI VIEW
 require_once 'view/PrinterView.php';
@@ -45,6 +48,7 @@ require_once 'view/IngredienteView.php';
 require_once 'view/TipologiaPastoView.php';
 require_once 'view/RicettaView.php';
 require_once 'view/AgendaView.php';
+require_once 'view/TemplateAgendaView.php';
 
 
 ?>

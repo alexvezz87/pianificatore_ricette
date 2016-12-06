@@ -33,6 +33,10 @@ global $LABEL_A_NOME;
 global $FORM_G_NOME, $FORM_G_DATA;
 global $LABEL_G_NOME;
 
+//TEMPLATE AGENDA
+global $FORM_TA_NOME, $FORM_TA_DESCRIZIONE, $FORM_TA_IDAGENDA;
+global $LABEL_TA_NOME, $LABEL_TA_DESCRIZIONE, $LABEL_TA_IDAGENDA;
+
 global $LABEL_SUBMIT;
 
 //URL E PATH
@@ -126,16 +130,22 @@ $FORM_G_NOME = 'g-nome';
 $FORM_G_DATA = 'g-data';
 
 
+//template agenda
+$FORM_TA_NOME = 'ta-nome';
+$FORM_TA_DESCRIZIONE = 'ta-descrizione';
+$FORM_TA_IDAGENDA = 'ta-idagenda';
+$FORM_TA_SUBMIT = 'ta-submit';
+
+$LABEL_TA_NOME = 'Nome';
+$LABEL_TA_DESCRIZIONE = 'Descrizione';
+$LABEL_TA_IDAGENDA = 'Agenda';
+
 $LABEL_SUBMIT = 'Salva';
 
 
 //URL E PATH
-//NB. bisogna cambiare il senso degli slash quando si passa da locale a web server
-
-
 $PR_URL_PDF = plugins_url().'/pianificatore_ricette/pdf/';
 $URL_IMG = plugins_url().'/pianificatore_ricette/images/';
-
 $ADMIN_ID = 1;
 
 ?>

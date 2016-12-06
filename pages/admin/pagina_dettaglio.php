@@ -24,6 +24,9 @@ else if($type == 'R'){
 else if($type == 'A'){    
     $url = 'visualizza_agende';
 }
+else if($type == 'TA'){
+    $url = 'template_agende';
+}
 
 ?>
 <div class="back" style="margin-top:20px">
@@ -83,6 +86,17 @@ else if($type == 'A'){
     <h1>Pagina dettaglio <?php echo $nome ?></h1>
 <?php 
     $viewA->printDettaglioAgenda($id);
+    die();
+}
+else if($type == 'TA'){
+    $viewTA = new TemplateAgendaView();
+    $nome = 'Template Agenda';
+
+?>
+    <h1>Pagina dettaglio <?php echo $nome ?></h1>
+<?php 
+    $viewTA->listenerDettaglioTemplateAgenda();
+    $viewTA->printDettaglioTemplateAgenda($id);
     die();
 }
 ?>

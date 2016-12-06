@@ -126,7 +126,7 @@ class TipologiaPastoView extends PrinterView {
                 $html.='<td>'.parent::printTextField(null, $tp->getNome()).'</td>';
                 //descrizione
                 $html.='<td>'.parent::printTextField(null, $tp->getDescrizione()).'</td>';
-                $html.='<td><a href="'. get_admin_url().'admin.php?page=pagina_dettaglio&type=TP&id='.$tp->getID().'">Vedi dettagli</a></td>';
+                $html.='<td><a href="'. get_admin_url().'admin.php?page=pr_pagina_dettaglio&type=TP&id='.$tp->getID().'">Vedi dettagli</a></td>';
                 $html.='</tr>';
             }
         }

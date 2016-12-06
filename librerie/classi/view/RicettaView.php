@@ -147,7 +147,7 @@ class RicettaView extends PrinterView {
                 $html.='<td>'.parent::printTextField(null, $tr->getNome()).'</td>';
                 //descrizione
                 $html.='<td>'.parent::printTextField(null, $tr->getDescrizione()).'</td>';
-                $html.='<td><a href="'. get_admin_url().'admin.php?page=pagina_dettaglio&type=TR&id='.$tr->getID().'">Vedi dettagli</a></td>';
+                $html.='<td><a href="'. get_admin_url().'admin.php?page=pr_pagina_dettaglio&type=TR&id='.$tr->getID().'">Vedi dettagli</a></td>';
                 $html.='</tr>';
             }
         }
@@ -627,7 +627,7 @@ class RicettaView extends PrinterView {
             $html.='<td>'. getTime($r->getData()).'</td>';
             
             //Azioni
-            $html.='<td><a href="'. get_admin_url().'admin.php?page=pagina_dettaglio&type=R&id='.$r->getID().'">Vedi dettagli</a></td>';
+            $html.='<td><a href="'. get_admin_url().'admin.php?page=pr_pagina_dettaglio&type=R&id='.$r->getID().'">Vedi dettagli</a></td>';
             
             $html.='</tr>';
         }
