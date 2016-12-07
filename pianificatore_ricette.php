@@ -176,6 +176,11 @@ function ricerca_ricette(){
     \pianificatore_ricette\ricerca_ricette($_POST);
 }
 
+add_action( 'wp_ajax_nopriv_get_ricette_template', 'get_ricette_template' );
+add_action( 'wp_ajax_get_ricette_template', 'get_ricette_template' );
+function get_ricette_template(){
+    pianificatore_ricette\get_ricette_template($_POST);
+}
 
 
 ?>

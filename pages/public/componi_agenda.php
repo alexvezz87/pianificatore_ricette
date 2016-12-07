@@ -5,7 +5,6 @@ namespace pianificatore_ricette;
 //url: http://www.alexsoluzioniweb.it/
 
 $view = new AgendaView();
-
 $ricette = new RicettaView();
 
 ?>
@@ -26,7 +25,7 @@ $ricette = new RicettaView();
 </div>
 
 <div class="clear"></div>
-<div id="selezionatore-ricette">
+<div class="col-xs-12 col-sm-6" id="selezionatore-ricette">
     <h4>Selezione ricette</h4>
     <div class="lista">
         
@@ -37,6 +36,11 @@ $ricette = new RicettaView();
         <button type="button" class="btn btn-danger cancella-lista">Cancella</button>
     </div>
 </div>
+
+<div class="col-xs-12 col-sm-6" id="ricerca-template">
+    <?php $view->printSelectTemplate() ?>
+</div>
+
 <div class="clear"></div>
 <?php 
     $view->listenerFormAgenda();

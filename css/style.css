@@ -111,8 +111,7 @@ and open the template in the editor.
     cursor: pointer;
 }
 
-#selezionatore-ricette{
-    width:50%;
+#selezionatore-ricette{   
     border:1px solid #ddd;
     padding:10px;
 }

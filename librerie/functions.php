@@ -508,9 +508,17 @@ function ricerca_ricette($array){
     die();
 }
 
-
-$closure = function($name){
-    return "Hello ".$name;
-};
-
+function get_ricette_template($array){
+    $result = array();
+    $aC = new AgendaController();  
+    $ricette = $aC->getRicetteByTemplate($_POST['idTemplate']);    
+    $result['ricette'] = $ricette;
+    
+    $pastiRicette = $aC->getRicetteSelected($_POST['idTemplate']);
+    $result['pasti'] = $pastiRicette;
+    
+    echo json_encode($result);
+    die();
+    
+}
 ?>

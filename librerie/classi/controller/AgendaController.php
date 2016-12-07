@@ -716,7 +716,71 @@ class AgendaController {
             return false;
         }
         
+    }
+    
+    public function getRicetteByTemplate($idTemplate){
+        //1. ottengo l'id Agenda dal template        
+        $taC = new TemplateAgendaController();
+        $ta = new TemplateAgenda();
+        $ta = $taC->getTemplateAgendaByID($idTemplate);
+        //2. ottengo l'agenda
+        $a = new Agenda();
+        $a = $this->getAgendaById($ta->getIdAgenda());
         
+        //3. scorro l'agenda alla ricerca delle ricette
+        $ricette = array();
+        foreach($a->getGiorni() as $giorno){
+            $g = new Giorno();
+            $g = $giorno;            
+            foreach($g->getPasti() as $pasto){
+                $p = new Pasto();
+                $p = $pasto;
+                foreach($p->getRicette() as $ricetta){
+                    $r = new Ricetta();
+                    $r = $ricetta;
+                    
+                    $ricette[$r->getID()] = $r->getNome();
+                }
+            }
+        }
+        
+        return $ricette;
+    }
+    
+    public function getRicetteSelected($idTemplate){
+        $taC = new TemplateAgendaController();
+        $ta = new TemplateAgenda();
+        $ta = $taC->getTemplateAgendaByID($idTemplate);
+        //2. ottengo l'agenda
+        $a = new Agenda();
+        $a = $this->getAgendaById($ta->getIdAgenda());
+        
+        $result = array();
+        $countGiorni = 0;        
+        foreach($a->getGiorni() as $giorno){
+            $temp = array();
+            $temp['giorno'] = $countGiorni;
+            $g = new Giorno();
+            $g = $giorno;
+            $temp['pasti'] = array();
+            foreach($g->getPasti() as $pasto){                
+                $temp2 = array();
+                $p = new Pasto();
+                $p = $pasto;
+                $temp2['pasto'] = $p->getIdTipologiaPasto();
+                foreach($p->getRicette() as $ricetta){
+                    $r = new Ricetta();
+                    $r = $ricetta;
+                    $temp2['ricetta'] = $r->getID();
+                }
+                
+                array_push($temp['pasti'], $temp2);
+            }
+            array_push($result, $temp);
+            $countGiorni++;
+        }
+        
+        return $result;
     }
 
 }

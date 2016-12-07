@@ -8,7 +8,8 @@ namespace pianificatore_ricette;
 class AgendaView extends PrinterView {
     private $aC;
     private $rC;
-    private $tpC; 
+    private $tpC;
+    private $taC;
     private $form;
     private $label;  
     
@@ -18,6 +19,7 @@ class AgendaView extends PrinterView {
         $this->aC = new AgendaController();
         $this->rC = new RicettaController();
         $this->tpC = new TipologiaPastoController();
+        $this->taC = new TemplateAgendaController();
         
         global $FORM_G_NOME, $FORM_G_DATA, $FORM_A_SUBMIT, $FORM_A_NOME, $LABEL_A_NOME, $LABEL_SUBMIT;
         
@@ -91,7 +93,7 @@ class AgendaView extends PrinterView {
         }
         
     ?>
-        <div class="giorno-agenda col-xs-12 <?php echo $classe ?>">
+        <div class="giorno-agenda day-<?php echo $i ?> col-xs-12 <?php echo $classe ?>">
             <?php parent::printHiddenFormField($this->form['g-nome'].'-'.$i, $nome) ?>
             <?php parent::printHiddenFormField($this->form['g-data'].'-'.$i, $data) ?>
             <h5><?php echo $nome ?></h5>
@@ -114,7 +116,7 @@ class AgendaView extends PrinterView {
     
     protected function printFormPasto($i, $j, TipologiaPasto $tp){    
     ?>  
-        <div class="pasto col-sm-3">
+        <div class="pasto col-sm-3 pasto-<?php echo $tp->getID() ?>">
             <?php parent::printHiddenFormField('id-tp-'.$i.'-'.$j, $tp->getID()) ?>
             <p><?php echo $tp->getNome() ?></p>
             <div class="lista-ricette">
@@ -431,6 +433,24 @@ class AgendaView extends PrinterView {
         else{
             echo '<p>Agenda non presente nel sistema.</p>';
         }
+    }
+    
+    public function printSelectTemplate(){
+        $temp = $this->taC->getTemplateAgenda();
+        $result = array();
+        foreach($temp as $item){
+            $ta = new TemplateAgenda();
+            $ta = $item;
+            $result[$ta->getID()] = $ta->getNome();
+        }
+    ?>
+        
+        <?php parent::printSelectFormField('ricerca-template', 'Scegli un\'agenda già fatta', $result) ?>
+        <div class="col-xs-12">
+            <button class="btn btn-secondary carica-template">Carica</button>
+        </div>
+       
+    <?php
     }
    
 }
