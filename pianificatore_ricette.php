@@ -87,6 +87,7 @@ function add_pagina_dettaglio_pr(){
 //aggiungo gli shortcode
 add_shortcode('paginaAgenda', 'add_agenda');
 add_shortcode('paginaRicetta', 'add_ricetta');
+add_shortcode('dettaglioAgenda', 'add_dettaglio_agenda');
 
 function add_agenda(){
     
@@ -101,6 +102,11 @@ function add_agenda(){
 
 function add_ricetta(){
     include 'pages/public/ricetta.php';
+}
+
+
+function add_dettaglio_agenda(){
+    include 'pages/public/dettaglio-agenda.php';
 }
 
 //registro il menu

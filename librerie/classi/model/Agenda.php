@@ -12,6 +12,7 @@ class Agenda {
     private $data;
     private $pdf;
     private $nome;
+    private $dose;
     
     //attributo esterno
     private $giorni;
@@ -76,7 +77,12 @@ class Agenda {
         $this->nome = $nome;
     }
 
+    function getDose() {
+        return $this->dose;
+    }
 
-
+    function setDose($dose) {
+        $this->dose = $dose;
+    }
 
 }

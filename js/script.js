@@ -311,5 +311,24 @@ jQuery(document).ready(function($){
         }        
     }
     
+    //SISTEMO L'ALTEZZA DELLE CELLE NELL'AGENDA DETTAGLIO
+    if($('.container-agenda-public').size()>0){
+        
+        $('.giorno').each(function(){
+            var max = 49;
+            $(this).find('.tp').each(function(){
+                
+                if($(this).height() > max){
+                    max = $(this).height();
+                }
+            });
+            
+            if(max > 49){
+                $(this).find('.tp').css('height', (max+10)+'px');
+            }
+            
+        });
+    }
+    
 });
 

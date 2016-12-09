@@ -215,6 +215,11 @@ function install_pianificatore(){
                 'nome' => 'pdf',
                 'tipo' => 'TEXT',
                 'null' => null
+            ),
+            array(
+                'nome' => 'dose',
+                'tipo' => 'INT',
+                'null' => null
             )
             
         );        

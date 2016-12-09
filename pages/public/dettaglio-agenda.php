@@ -3,7 +3,32 @@ namespace pianificatore_ricette;
 //Autore: Alex Vezzelli - Alex Soluzioni Web
 //url: http://www.alexsoluzioniweb.it/
 
-$id = $_GET['id'];
 
+if(isset($_GET['id']) && is_user_logged_in()){
+    $id = $_GET['id'];
 
+    //ottengo i dati dell'utente corrente
+    global $current_user;
+    get_currentuserinfo();
+
+    $aC = new AgendaController();
+    $view = new AgendaView();
+
+    $a = new Agenda();
+    $a = $aC->getAgendaById($id);
+
+    if($a->getIdUtente() == $current_user->ID){
+       
+       $view->printDettaglioAgendaPublic($a);
+        
+    }
+    else{
+        //se l'agenda in questione non è associata all'utente corrente allora non mostro i contenuti
+        echo '<p>Non sei autorizzato ad accedere a questa pagina</p>';
+    }
+}
+else{
+    //se atterro su questa pagina senza un ID, non mostro i contenuti
+    echo '<p>Non sei autorizzato ad accedere a questa pagina</p>';
+}
 ?>

@@ -146,6 +146,46 @@ and open the template in the editor.
     display: none;
 }
 
+
+.container-agenda-public, .container-agenda-public .giorno{
+    width:100%;
+    display: block;
+    float:none;
+    clear:both;
+}
+.container-agenda-public .container-tp{
+    width:100%;
+}
+
+.container-agenda-public .tp{
+    float:left;
+    min-height: 50px;
+    width: 200px;
+    border:1px solid #999;
+    text-align: center;    
+    padding:5px;
+}
+
+.container-agenda-public .giorno {
+   
+}
+
+.container-agenda-public .giorno .tp{
+    border:0;
+    border-left: 1px solid #999;
+    border-bottom: 1px solid #999;
+}
+
+.container-agenda-public .giorno .tp:last-child{
+    border-right: 1px solid #999;
+}
+
+.container-ingredienti .ingrediente{
+    border-bottom:1px solid #999;
+    padding:5px;
+}
+
+
 @media (min-width: 768px) {
 
     .agenda-container .giorno-agenda{

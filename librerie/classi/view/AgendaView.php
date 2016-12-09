@@ -139,8 +139,7 @@ class AgendaView extends PrinterView {
         if(isset($_POST[$this->form['a-submit']])){
             $dose = $_POST['dose-persone'];
             
-            $errors = 0;
-            
+            $errors = 0;            
                         
             //faccio un controllo sui nomi ricetta passati (almeno uno deve essere compilato)
             $empty = true;
@@ -167,6 +166,7 @@ class AgendaView extends PrinterView {
             
             $a = new Agenda();
             $a = $temp['agenda'];
+            $a->setDose($dose);
             
             //nome - CAMPO NON OBBLIGATORIO
             if(parent::checkSingleField($this->form['a-nome'])!= false){
@@ -434,6 +434,137 @@ class AgendaView extends PrinterView {
             echo '<p>Agenda non presente nel sistema.</p>';
         }
     }
+    
+    public function printDettaglioAgendaPublic(Agenda $a){
+        
+        $array = $this->aC->createAgenda($a);
+        $ingredienti = $this->aC->createListaIngredienti($a, $a->getDose());
+        //print_r($ingredienti);
+        
+        $tps = $this->tpC->getTipologiaPasti();
+        $arrayPasti = array();
+        
+        array_push($arrayPasti, 'Preparazione');
+        
+        foreach($tps as $tipo){
+            $tp = new TipologiaPasto();
+            $tp = $tipo;
+            array_push($arrayPasti, $tp->getNome());
+        }
+        //print_r($array);
+        
+        //creo un array di risultati 
+        $result = array();
+        foreach($array as $keyG => $valueG){
+            //scorro il giorno
+            $giorno = array();
+            foreach($valueG as $keyP => $valueP){ 
+                //vado nel primo array: i pasti
+                foreach($arrayPasti as $pasto){                    
+                    //controllo se il pasto è una preparazione perchè ha una formattazione particolare
+                    if($pasto == 'Preparazione' && $keyP == 'Preparazione'){
+                        $countPrep = 0;
+                        foreach($valueP as $keyPrep => $valuePrep){
+                           
+                                $giorno[$keyG][$pasto][$countPrep] = $valuePrep[0];
+                                $countPrep++;
+                        }                       
+                    }
+                    else{
+                        if($pasto == $keyP){
+                            $countRicetta = 0;
+                            foreach($valueP[0] as $ricetta){
+                                $giorno[$keyG][$pasto][$countRicetta] = $ricetta;
+                                $countRicetta++;
+                            }                            
+                        }
+                    }                   
+                }
+            }            
+            foreach($giorno as $keyP => $pasto){                
+                foreach($arrayPasti as $p ){
+                    if(!isset($pasto[$p])){
+                        $giorno[$keyP][$p] = array();
+                    }
+                }
+            }
+            array_push($result, $giorno);
+        }
+    ?>
+        <button id="printbutton" onclick="window.print();">STAMPA</button>
+        <h3>Calendario</h3>
+        <div class="container-agenda-public">
+            <div class="container-tp">
+                <div class="tp"></div>                
+    <?php
+            foreach($arrayPasti as $pasto){               
+    ?>
+                <div class="tp"><?php echo $pasto ?></div>
+    <?php            
+            }
+    ?>
+            </div>
+    <?php
+        //print_r($result);
+        if(count($result) > 0){    
+            foreach($result as $giorni){
+                foreach($giorni as $keyG => $valueG){
+                    //print_r($valueG);
+    ?>
+            <div class="giorno">
+                <div class="tp">
+                    <?php echo $keyG ?>
+                </div>
+    <?php
+                    foreach($arrayPasti as $pasto){
+    ?>
+                <div class="tp <?php echo strtolower($pasto) ?>">
+                            <?php
+                               foreach($valueG[$pasto] as $item){
+                                   echo $item.'<br>';
+                               }
+                            ?>
+                        </div>
+    <?php            
+                    }
+    ?>
+            </div>
+    <?php        
+                }
+            }
+        }
+    ?>        
+        </div>
+        <div class="clear"></div>
+        <h3>Ingredienti</h3>
+        <div class="container-ingredienti">
+    <?php
+            foreach($ingredienti as $key => $value){
+                $string = ""; 
+                if($value['qt']!= '' && $value['qt']!= '0'){
+                    $string.= $value['qt'].' ';
+                }
+
+                if($value['um']!='' && $value['um']!='q.b.'){
+                    $string.= $value['um'].' ';
+                }           
+
+                if($key != ''){
+                    $string.= $key;
+                }            
+    ?>
+            <div class="col-xs-12 col-sm-6 ingrediente">
+                <?php echo $string ?>
+            </div>
+    <?php
+            }
+    ?>
+        </div>
+    <?php         
+        
+         
+    }
+    
     
     public function printSelectTemplate(){
         $temp = $this->taC->getTemplateAgenda();

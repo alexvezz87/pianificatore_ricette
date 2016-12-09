@@ -27,9 +27,10 @@ class AgendaDAO extends ObjectDAO {
             'settimana' => $a->getSettimana(),
             'id_utente' => $a->getIdUtente(),
             'data'      => $timestamp,
-            'nome'      => $a->getNome()
+            'nome'      => $a->getNome(),
+            'dose'      => $a->getDose(),
         );       
-        $formato = array('%d', '%d', '%s', '%s');
+        $formato = array('%d', '%d', '%s', '%s', '%d');
         return parent::saveObject($campi, $formato);
     }
     
@@ -51,6 +52,7 @@ class AgendaDAO extends ObjectDAO {
                 $a->setData($item->data);
                 $a->setPdf($item->pdf);
                 $a->setNome($item->nome);
+                $a->setDose($item->dose);
                 array_push($result, $a);
             }
         }
@@ -66,9 +68,10 @@ class AgendaDAO extends ObjectDAO {
         $update = array(
             'settimana' => $a->getSettimana(),
             'id_utente' => $a->getIdUtente(),
-            'nome'      => $a->getNome()
+            'nome'      => $a->getNome(),
+            'dose'      => $a->getDose()
         );
-        $formatUpdate = array('%s', '%d', '%s');
+        $formatUpdate = array('%s', '%d', '%s', '%d');
         $where = array('ID' => $a->getID());
         $formatWhere = array('%d');
         return parent::updateObject($update, $formatUpdate, $where, $formatWhere);
