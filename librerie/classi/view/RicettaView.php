@@ -815,13 +815,14 @@ class RicettaView extends PrinterView {
        
         $query = array(
             array(
-                'campo'     => 'id_utente',
-                'valore'    => $ADMIN_ID,
+                'campo'     => 'approvata',
+                'valore'    => 1,
                 'formato'   => 'INT'
             )
         );
         
         $ricette = $this->rC->getRicetteByParameters($query, true, 6);
+        $count = 1;
         foreach($ricette as $ricetta){
             $r = new Ricetta();
             $r = $ricetta;
@@ -842,7 +843,12 @@ class RicettaView extends PrinterView {
                 </div>
             </a>
         </div>
-    <?php    
+    <?php
+        if($count % 3 == 0){
+            echo '<div class="clear"></div>';
+        }
+    
+        $count++;    
        }
     }
     

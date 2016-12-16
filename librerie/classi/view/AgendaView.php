@@ -49,8 +49,8 @@ class AgendaView extends PrinterView {
     public function printFormAgenda(){
         //ottengo la data di oggi
         date_default_timezone_set('Europe/Rome');        
-        $now = date('Y-m-d H:i:s', strtotime("now"));        
-        $week = date('W', strtotime("now"));         
+        $now = date('Y-m-d H:i:s', strtotime("now + 1 day"));        
+        $week = date('W', strtotime("now + 1 day"));         
         
         
     ?>       
