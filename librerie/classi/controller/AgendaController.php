@@ -679,7 +679,10 @@ class AgendaController {
         $name = 'agenda-'.$a->getID().'.pdf';
                 
         //ottengo il calendario
-        $calendario = $this->createAgenda($a);        
+        //$calendario = $this->createAgenda($a);   
+        //upgrade calendario
+        $calendario2 = $this->createArrayCalendario($a);        
+        
         //ottengo la lista degli ingredienti
         $listaIng = $this->createListaIngredienti($a, $dose);
         
@@ -700,8 +703,8 @@ class AgendaController {
             //intestazione calendario
             $this->pdfWriter->createCalendarioHeader($user_info->user_nicename);            
            //stampo il calendario
-            $this->pdfWriter->printCalendario($calendario);
-            
+            //$this->pdfWriter->printCalendario($calendario);
+            $this->pdfWriter->printCalendario2($calendario2);
             
             //salvo il pdf
             $this->pdfWriter->savePDF($PR_DIR_PDF.$name);
@@ -778,6 +781,65 @@ class AgendaController {
             }
             array_push($result, $temp);
             $countGiorni++;
+        }
+        
+        return $result;
+    }
+    
+    public function createArrayCalendario(Agenda $a, $arrayPasti=null){
+        //compongo l'array dell'agenda
+        $array = $this->createAgenda($a);
+        
+        if($arrayPasti == null){
+            $tps = $this->tpC->getTipologiaPasti();
+            $arrayPasti = array();
+            array_push($arrayPasti, 'Preparazione');
+            foreach($tps as $tipo){
+                $tp = new TipologiaPasto();
+                $tp = $tipo;
+                array_push($arrayPasti, $tp->getNome());
+            }
+        }
+        
+        
+        //creo un array di risultati 
+        $result = array();
+        //scorro l'array di composizione dell'agenda e lo sistemo in modo più semplice
+        foreach($array as $keyG => $valueG){
+            //scorro il giorno
+            $giorno = array();
+            foreach($valueG as $keyP => $valueP){ 
+                //vado nel primo array: i pasti
+                foreach($arrayPasti as $pasto){
+                    //controllo se il pasto è una preparazione perchè ha una formattazione particolare
+                    if($pasto == 'Preparazione' && $keyP == 'Preparazione'){
+                        $countPrep = 0;
+                        foreach($valueP as $keyPrep => $valuePrep){                           
+                            $giorno[$keyG][$pasto][$countPrep] = $valuePrep[0];
+                            $countPrep++;
+                        }                       
+                    }
+                    else{
+                        if($pasto == $keyP){
+                            $countRicetta = 0;
+                            foreach($valueP[0] as $ricetta){
+                                $giorno[$keyG][$pasto][$countRicetta] = $ricetta;
+                                $countRicetta++;
+                            }                            
+                        }
+                    }  
+                }
+            }
+            //per avere un array composto da un egual numero di pasti, aggiungo quelli che durante 
+            //il processo di iterazione soprastante non sono stati individuati
+            foreach($giorno as $keyP => $pasto){                
+                foreach($arrayPasti as $p ){
+                    if(!isset($pasto[$p])){
+                        $giorno[$keyP][$p] = array();
+                    }
+                }
+            }
+            array_push($result, $giorno);
         }
         
         return $result;

@@ -39,7 +39,7 @@ class IngredienteController {
                         }
                     }   
                 }
-                return true;
+                return $idIngrediente;
             }
             return false;
         }

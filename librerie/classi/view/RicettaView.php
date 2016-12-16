@@ -405,8 +405,22 @@ class RicettaView extends PrinterView {
                     //questo campo va elaborato, trovando l'id dell'ingrediente, conoscendone il nome
                     $id = $this->iC->getIngredienteByNome($value);
                     if($id == null){
-                        $errors++;
-                        parent::printErrorBoxMessage('Ingrediente: '.$value.' non riconosciuto!' );
+                        //MODIFICA DEL COMPORTAMENTO
+                        //se l'ingrediente non viene trovato, nel caso sia un utente esterno ad aggiungerlo, 
+                        //bisogna inserirlo nuovo nel database
+                        
+                        $i = new Ingrediente();
+                        $i->setNome(trim($value));
+                        $idIngrediente = $this->iC->saveIngrediente($i);
+                        
+                        $ir->setIdIngrediente($idIngrediente);
+                        //carico l'oggetto nell'array
+                        array_push($result, $ir);
+                        //spacco l'oggetto
+                        unset($ir);
+                        
+                        //$errors++;
+                        //parent::printErrorBoxMessage('Ingrediente: '.$value.' non riconosciuto!' );
                     }
                     else{
                         $ir->setIdIngrediente($id);

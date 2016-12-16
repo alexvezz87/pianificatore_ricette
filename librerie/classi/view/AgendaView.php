@@ -437,61 +437,21 @@ class AgendaView extends PrinterView {
     
     public function printDettaglioAgendaPublic(Agenda $a){
         
-        $array = $this->aC->createAgenda($a);
         $ingredienti = $this->aC->createListaIngredienti($a, $a->getDose());
-        //print_r($ingredienti);
         
         $tps = $this->tpC->getTipologiaPasti();
-        $arrayPasti = array();
-        
-        array_push($arrayPasti, 'Preparazione');
-        
+        $arrayPasti = array();        
+        array_push($arrayPasti, 'Preparazione');        
         foreach($tps as $tipo){
             $tp = new TipologiaPasto();
             $tp = $tipo;
             array_push($arrayPasti, $tp->getNome());
-        }
-        //print_r($array);
+        }       
         
         //creo un array di risultati 
-        $result = array();
-        foreach($array as $keyG => $valueG){
-            //scorro il giorno
-            $giorno = array();
-            foreach($valueG as $keyP => $valueP){ 
-                //vado nel primo array: i pasti
-                foreach($arrayPasti as $pasto){                    
-                    //controllo se il pasto è una preparazione perchè ha una formattazione particolare
-                    if($pasto == 'Preparazione' && $keyP == 'Preparazione'){
-                        $countPrep = 0;
-                        foreach($valueP as $keyPrep => $valuePrep){
-                           
-                                $giorno[$keyG][$pasto][$countPrep] = $valuePrep[0];
-                                $countPrep++;
-                        }                       
-                    }
-                    else{
-                        if($pasto == $keyP){
-                            $countRicetta = 0;
-                            foreach($valueP[0] as $ricetta){
-                                $giorno[$keyG][$pasto][$countRicetta] = $ricetta;
-                                $countRicetta++;
-                            }                            
-                        }
-                    }                   
-                }
-            }            
-            foreach($giorno as $keyP => $pasto){                
-                foreach($arrayPasti as $p ){
-                    if(!isset($pasto[$p])){
-                        $giorno[$keyP][$p] = array();
-                    }
-                }
-            }
-            array_push($result, $giorno);
-        }
+        $result = $this->aC->createArrayCalendario($a, $arrayPasti);
     ?>
-        <button id="printbutton" onclick="window.print();">STAMPA</button>
+<button id="printbutton" onclick="location.href='<?php echo $a->getPdf() ?>'">STAMPA</button>
         <h3>Calendario</h3>
         <div class="container-agenda-public">
             <div class="container-tp">

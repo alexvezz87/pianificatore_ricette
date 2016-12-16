@@ -88,6 +88,7 @@ function add_pagina_dettaglio_pr(){
 add_shortcode('paginaAgenda', 'add_agenda');
 add_shortcode('paginaRicetta', 'add_ricetta');
 add_shortcode('dettaglioAgenda', 'add_dettaglio_agenda');
+add_shortcode('aggiungiRicetta', 'add_aggiungi_ricetta');
 
 function add_agenda(){
     
@@ -109,6 +110,15 @@ function add_dettaglio_agenda(){
     include 'pages/public/dettaglio-agenda.php';
 }
 
+function add_aggiungi_ricetta(){
+    if(is_user_logged_in()){    
+        include 'pages/public/aggiungi_ricetta.php';
+    }
+    else{
+        echo '<p>Funzionalità riservata solo agli utenti registrati al sito</p>';
+    }
+}
+
 //registro il menu
 add_action('admin_menu', 'add_pr_admin_menu');
 
@@ -116,21 +126,23 @@ add_action('admin_menu', 'add_pr_admin_menu');
 function register_pr_style(){
     wp_register_style('pr_style_css', plugins_url('css/style.css', __FILE__));
     wp_register_style('pr_bootstrap-style', plugins_url('css/bootstrap.min.css', __FILE__) );
+    wp_register_style('pr_file-input', plugins_url('css/fileinput.min.css', __FILE__) );
     
     wp_enqueue_style('pr_style_css');
     wp_enqueue_style('pr_bootstrap-style');
+    wp_enqueue_style('pr_file-input');
 }
 
 
 function register_pr_admin_style() {
     wp_register_style('pr_admin-style', plugins_url('css/admin-style.css', __FILE__) );
     wp_register_style('pr_admin-bootstrap-style', plugins_url('css/bootstrap.min.css', __FILE__) );
-    wp_register_style('pr_file-input', plugins_url('css/fileinput.min.css', __FILE__) );
+    wp_register_style('pr_admin-file-input', plugins_url('css/fileinput.min.css', __FILE__) );
     
     //wp_register_style('pr_file-input-style', plugins_url('css/fileinput.min.css', __FILE__) );    
     wp_enqueue_style('pr_admin-style');
     wp_enqueue_style('pr_admin-bootstrap-style');
-    wp_enqueue_style('pr_file-input');
+    wp_enqueue_style('pr_admin-file-input');
     //wp_enqueue_style('pr_file-input-style');
 }
 
@@ -143,13 +155,13 @@ add_action( 'admin_enqueue_scripts', 'register_pr_admin_style' );
 function register_pr_admin_js_script(){
     wp_register_script('autocomplete-js', plugins_url('pianificatore_ricette/js/jquery.autocomplete-min.js'), array('jquery'), '1.0', false);   
     wp_register_script('ui-widget-js', plugins_url('pianificatore_ricette/js/jquery-ui.min.js'), array('jquery'), '1.0', false);       
-    wp_register_script('file-input', plugins_url('pianificatore_ricette/js/fileinput.min.js'), array('jquery'), '1.0', false);       
+    wp_register_script('admin-file-input', plugins_url('pianificatore_ricette/js/fileinput.min.js'), array('jquery'), '1.0', false);       
     wp_register_script('admin-js', plugins_url('pianificatore_ricette/js/admin-script.js'), array('jquery'), '1.0', false);   
     
     
     wp_enqueue_script('autocomplete-js');  
     wp_enqueue_script('ui-widget-js'); 
-    wp_enqueue_script('file-input'); 
+    wp_enqueue_script('admin-file-input'); 
     wp_enqueue_script('admin-js');  
 }
 

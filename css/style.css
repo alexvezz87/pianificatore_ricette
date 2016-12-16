@@ -186,6 +186,10 @@ and open the template in the editor.
 }
 
 
+.ingrediente:first-child .rimuovi-ingrediente{
+    display:none;
+}
+
 @media (min-width: 768px) {
 
     .agenda-container .giorno-agenda{

@@ -371,9 +371,12 @@ class RicettaController {
         if($this->irDAO->deleteIngredientiRicette($query) == true){
             //elimino le preferite sulla ricetta
             if($this->pDAO->deletePreferite($query) == true){
-                //elimino la ricetta
-                if($this->rDAO->deleteRicettaByID($idRicetta) == true){
-                    return true;
+                //elimino la ricetta tipologia
+                if($this->rtDAO->deleteRicetteTipologie($query) == true){                
+                    //elimino la ricetta
+                    if($this->rDAO->deleteRicettaByID($idRicetta) == true){
+                        return true;
+                    }
                 }
             }
         }

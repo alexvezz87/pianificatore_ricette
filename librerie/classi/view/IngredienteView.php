@@ -72,7 +72,7 @@ class IngredienteView extends PrinterView{
                parent::printErrorBoxMessage('Ingrediente non salvato nel Sistema! L\'ingrediente è già presente nel DB');
                 return; 
             }
-            else if($save === true){
+            else if($save > 0){
                 parent::printOkBoxMessage('Ingrediente salvato con successo!');
                 //Pulisco la variabile $_POST
                 unset($_POST);
