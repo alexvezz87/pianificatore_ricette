@@ -978,7 +978,6 @@ class RicettaView extends PrinterView {
             
         </div>
         
-        <div class="container-risultati"></div>
     <?php    
     }
     

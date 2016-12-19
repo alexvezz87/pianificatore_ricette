@@ -54,7 +54,7 @@ class AgendaView extends PrinterView {
         
         
     ?>       
-        <form class="form-horizontal agenda-container" role="form" action="<?php echo curPageURL() ?>" name="form-agenda" method="POST">
+        <form class="form-horizontal agenda-container pianificatore-ricette" role="form" action="<?php echo curPageURL() ?>" name="form-agenda" method="POST">
             <?php parent::printHiddenFormField('user-id', get_current_user_id()) ?>
             <?php parent::printHiddenFormField('id-week', $week) ?>
             <?php parent::printTextFormField($this->form['a-nome'], $this->label['a-nome']) ?>
@@ -216,9 +216,14 @@ class AgendaView extends PrinterView {
                 parent::printErrorBoxMessage('PDF non salvato correttamente nell\'Agenda');                
             }
             
-           if($urlPDF != false){
-               echo '<a target="_blank" href="'.$urlPDF.'">Apri il PDF</a>';
-           }
+            //pubblico il link per andare alla pagina dettaglio ricetta
+            ?>
+                <div class="container-link-dettaglio">
+                    <h2>La tua Agenda è stata creata!</h2>
+                    <p>Puoi consultarla cliccando sul bottone sottostante</p>
+                    <a href="<?php echo home_url().'/dettaglio-agenda?id='.$idAgenda ?>">Visualizza l'agenda</a>
+                </div>
+            <?php
         }
     }
     
@@ -536,7 +541,7 @@ class AgendaView extends PrinterView {
         }
     ?>
         
-        <?php parent::printSelectFormField('ricerca-template', 'Scegli un\'agenda già fatta', $result) ?>
+        <?php parent::printSelectFormField('ricerca-template', 'Seleziona', $result) ?>
         <div class="col-xs-12">
             <button class="btn btn-secondary carica-template">Carica</button>
         </div>

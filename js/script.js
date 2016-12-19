@@ -7,6 +7,8 @@
 
 jQuery(document).ready(function($){   
     
+    
+    
     $('.aggiungi-ricetta a').click(function(){
         var countRicetta = $(this).parent('.aggiungi-ricetta').siblings('.lista-ricette').find('.nome-ricetta').size();
         var $element = $(this).parent('.aggiungi-ricetta').siblings('.lista-ricette').find('.nome-ricetta:first-child').clone();
@@ -73,6 +75,9 @@ jQuery(document).ready(function($){
         
         aggiungiRicettaAlSelezionatore(id, nome);
         
+        //visualzzo il selezionatore
+        $('#selezionatore-ricette').show();
+        
     });
     
     //RIMUOVI RICETTA DAL SELEZIONATORE
@@ -91,21 +96,16 @@ jQuery(document).ready(function($){
         $('#selezionatore-ricette .lista .ricetta').remove();
         //Pulisco le select
         $('form.agenda-container .lista-ricette .nome-ricetta select').html('<option value=""></option>');
+        $('.pianificatore-ricette').hide();
     });
     
     //AGGIUNGI CAMPI AI PASTI DELL'AGENDA
     $('#selezionatore-ricette .prosegui-agenda').click(function(){
         
         if($('#selezionatore-ricette .lista .ricetta').size() > 0){
-            /*
-            var html='<option value=""></option>';
-            $('#selezionatore-ricette .lista .ricetta').each(function(){
-                var id = $(this).find('input[name=id-r]').val();
-                var nome = $(this).find('input[name=nome-r]').val();
-                html+='<option value="'+id+'">'+nome+'</option>';
-            });
-            $('.lista-ricette .nome-ricetta select').html(html);
-            */
+           //visualizzo il pianificatore
+           $('.pianificatore-ricette').show();
+           
         }
         else{
             alert('Non hai ricette per l\'agenda!');
@@ -159,6 +159,8 @@ jQuery(document).ready(function($){
     });
     
     $('button.ricerca-ricette').click(function(){
+        //visualizzo il loader
+        $('.loader-container').show();
         
         $.ajax({
             type: 'POST',
@@ -172,9 +174,11 @@ jQuery(document).ready(function($){
             },
             success: function(data){
                 printTabellaRisultati(data);
+                $('.loader-container').hide();
             },
             error: function(){
                 alert('error');
+                $('.loader-container').hide();
             }
         });
     });
@@ -228,6 +232,8 @@ jQuery(document).ready(function($){
     
     //ASCOLTATORE CARICA TEMPLATE
     $('#ricerca-template .carica-template').click(function(){
+        //visualizzo il loader
+        $('.loader-container').show();
         var idTemplate = $(this).parent('div').parent('#ricerca-template').find('select').val();
         if(idTemplate != ''){
             //devo caricare le ricette di quel template
@@ -268,10 +274,18 @@ jQuery(document).ready(function($){
                             }
                         });                        
                     }                  
-                }
+                }                
+                                
+                //visualizzo il selezionatore ricette
+                $('#selezionatore-ricette').show();
+                
+                //tolgo il loader
+                $('.loader-container').hide();
             },
             error: function(){
                 alert('error');
+                //tolgo il loader
+                $('.loader-container').hide();
             }
         });
             
@@ -311,6 +325,12 @@ jQuery(document).ready(function($){
         }        
     }
     
+    //SISTEMO LA LUNGHEZZA DELLE CELLA NELL'AGENDA DETTAGLIO
+    if($('.container-agenda-public').size()>0){
+        var nTp = $('.container-tp .tp').size(); 
+        $('.tp').css('width', 100/nTp+'%');
+    }
+    
     //SISTEMO L'ALTEZZA DELLE CELLE NELL'AGENDA DETTAGLIO
     if($('.container-agenda-public').size()>0){
         
@@ -329,6 +349,31 @@ jQuery(document).ready(function($){
             
         });
     }
+    
+    
+    //open e close del box selezionatore ricette
+    $('.oc-button').click(function(){
+        
+        if($(this).hasClass('open')){
+           //chiudiamo
+           $('#selezionatore-ricette').animate({
+               marginRight: '-=30%'
+           }, 500);
+           
+            $(this).removeClass('open');
+            $(this).addClass('close');
+        }
+        else if($(this).hasClass('close')){
+           //apriamo
+           $('#selezionatore-ricette').animate({
+               marginRight: '+=30%'
+           }, 500);
+            $(this).removeClass('close');
+            $(this).addClass('open');
+        }
+        
+    });    
+    
     
 });
 
