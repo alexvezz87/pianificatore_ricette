@@ -508,7 +508,7 @@ class AgendaView extends PrinterView {
         //creo un array di risultati 
         $result = $this->aC->createArrayCalendario($a, $arrayPasti);
     ?>
-        <button id="printbutton" onclick="location.href='<?php echo $a->getPdf() ?>'">STAMPA</button>
+        
         <h3>Calendario</h3>
         <div class="container-agenda-public">
             <div class="container-tp">

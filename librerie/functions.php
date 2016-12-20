@@ -477,6 +477,13 @@ function createPages(){
  */
 function ricerca_ricette($array){
    
+    //ottengo la modalità
+    
+    $mode = null;
+    if($array['mode'] != ''){
+        $mode = $array['mode'];
+    }
+    
     //scompongo l'array
     $param = array();
     
@@ -508,7 +515,7 @@ function ricerca_ricette($array){
     
     //eseguo la query
     $rC = new RicettaController();
-    $ricette = $rC->searchRicette($param);
+    $ricette = $rC->searchRicette($param, $mode);
     
     echo json_encode($ricette);        
     die();

@@ -415,8 +415,8 @@ class RicettaController {
      * @param type $param
      * @return array
      */
-    public function searchRicette($param){
-        $temp = $this->rDAO->searchRicette($param);       
+    public function searchRicette($param, $mode){
+        $temp = $this->rDAO->searchRicette($param, $mode);       
         if($temp != null){
             $result = array();
             foreach($temp as $item){

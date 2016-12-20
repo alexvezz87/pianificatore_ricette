@@ -19,6 +19,9 @@ require_once 'librerie/variabili_globali.php';
 require_once 'librerie/api_db.php';
 require_once 'librerie/classi/classes.php';
 require_once 'librerie/functions.php';
+//includo pagina agenda
+require_once 'pages/public/componi_agenda.php';
+require_once 'pages/public/dettaglio-agenda.php';
 
 
 //NB. bisogna cambiare il senso degli slash quando si passa da locale a web server
@@ -85,16 +88,27 @@ function add_pagina_dettaglio_pr(){
 
 
 //aggiungo gli shortcode
-add_shortcode('paginaAgenda', 'add_agenda');
+add_shortcode('paginaAgendaPremium', 'add_agenda_premium');
+add_shortcode('paginaAgendaStandard', 'add_agenda_standard');
 add_shortcode('paginaRicetta', 'add_ricetta');
-add_shortcode('dettaglioAgenda', 'add_dettaglio_agenda');
+add_shortcode('dettaglioAgendaPremium', 'add_dettaglio_agenda_premium');
+add_shortcode('dettaglioAgendaStandard', 'add_dettaglio_agenda_standard');
 add_shortcode('aggiungiRicetta', 'add_aggiungi_ricetta');
 
-function add_agenda(){
-    
+function add_agenda_premium(){    
     //solo per gli utenti loggati al sito
     if(is_user_logged_in()){    
-        include 'pages/public/componi_agenda.php';
+        \pianificatore_ricette\printPaginaAgenda();
+    }
+    else{
+        echo '<p>Funzionalità riservata solo agli utenti registrati al sito</p>';
+    }
+}
+
+function add_agenda_standard(){    
+    //solo per gli utenti loggati al sito
+    if(is_user_logged_in()){    
+        \pianificatore_ricette\printPaginaAgenda('s');
     }
     else{
         echo '<p>Funzionalità riservata solo agli utenti registrati al sito</p>';
@@ -106,8 +120,12 @@ function add_ricetta(){
 }
 
 
-function add_dettaglio_agenda(){
-    include 'pages/public/dettaglio-agenda.php';
+function add_dettaglio_agenda_premium(){
+    pianificatore_ricette\printAgendaPublic();
+}
+
+function add_dettaglio_agenda_standard(){
+    pianificatore_ricette\printAgendaPublic('s');
 }
 
 function add_aggiungi_ricetta(){

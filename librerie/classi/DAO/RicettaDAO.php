@@ -127,10 +127,10 @@ class RicettaDAO extends ObjectDAO {
      * @param type $param
      * @return type
      */
-    public function searchRicette($param){
+    public function searchRicette($param, $mode){
         global $DB_PREFIX;
         global $DB_TABLE_RICETTE, $DB_TABLE_INGREDIENTI_RICETTE, $DB_TABLE_RICETTE_TIPOLOGIE;
-        
+        global $ADMIN_ID;
         
         $query =  "SELECT DISTINCT r.ID ";
         $query .= "FROM ".$DB_PREFIX.$DB_TABLE_RICETTE." r ";
@@ -141,6 +141,11 @@ class RicettaDAO extends ObjectDAO {
         
         //WHERE
         $query .= "WHERE r.approvata = 1 ";
+        
+        //per la modalità standard, bisogna far visualizzare solo le ricette pubblicate dall'amministratore
+        if($mode == 's'){
+            $query .= 'AND r.id_utente = '.$ADMIN_ID.' ';
+        }
         
         //nome ricetta
         if(isset($param['nome'])){

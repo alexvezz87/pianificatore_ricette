@@ -7,8 +7,6 @@
 
 jQuery(document).ready(function($){   
     
-    
-    
     $('.aggiungi-ricetta a').click(function(){
         var countRicetta = $(this).parent('.aggiungi-ricetta').siblings('.lista-ricette').find('.nome-ricetta').size();
         var $element = $(this).parent('.aggiungi-ricetta').siblings('.lista-ricette').find('.nome-ricetta:first-child').clone();
@@ -168,6 +166,7 @@ jQuery(document).ready(function($){
             url: $('input[name=ajax-url]').val(),
             data: {
                 action: 'ricerca_ricette',
+                mode: $('input[name=mode]').val(),
                 nomeRicetta: $('input[name=nome-ricetta]').val(),
                 tipologia: $('select[multiple]').val(),
                 ingredienti: $('input[name=lista-ingredienti]').val()

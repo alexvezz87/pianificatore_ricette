@@ -809,10 +809,26 @@ class RicettaView extends PrinterView {
      * @global type $ADMIN_ID
      * @global type $URL_IMG
      */
-    public function printShowPublicRicette(){
+    public function printShowPublicRicette($mode=null){
         //mostro le ricette pubblicate dall'amministratore
         global $ADMIN_ID, $URL_IMG;
        
+        $query = array();
+        array_push($query, array(
+                'campo'     => 'approvata',
+                'valore'    => 1,
+                'formato'   => 'INT'
+            ));
+        
+        if($mode == 's'){
+            array_push($query, array(
+                'campo'     => 'id_utente',
+                'valore'    => $ADMIN_ID,
+                'formato'   => 'INT'
+            ));
+        }
+        
+        /*
         $query = array(
             array(
                 'campo'     => 'approvata',
@@ -820,6 +836,7 @@ class RicettaView extends PrinterView {
                 'formato'   => 'INT'
             )
         );
+        */
         
         $ricette = $this->rC->getRicetteByParameters($query, true, 6);
         $count = 1;
@@ -927,7 +944,7 @@ class RicettaView extends PrinterView {
     }
     
     
-    public function printFormRicerca(){
+    public function printFormRicerca($mode = null){
         //ottengo l'array con i nomi degli ingredienti
         $ingredienti = $this->getNomeIngredienti();
         $ricette = $this->getNomeRicette();
@@ -957,7 +974,8 @@ class RicettaView extends PrinterView {
         </script>
        
         <?php parent::printHiddenFormField('url-home', home_url()) ?>
-        <div class="container-ricerca">            
+        <div class="container-ricerca">
+            <?php parent::printHiddenFormField('mode', $mode) ?>
             <div class="nome-ricetta ui-widget">
                 <?php parent::printSuggestTextFormField('nome-ricetta', 'Nome Ricetta') ?>                
             </div>  
