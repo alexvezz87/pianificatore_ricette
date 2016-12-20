@@ -47,4 +47,25 @@ class TemplateAgendaController {
     public function deleteTipologiaAgenda($ID){
         return $this->taDAO->deleteTemplateAgenda($ID);
     }
+    
+    /**
+     * La funzione controlla se un'agenda, passata per parametro, è stata utilizzata come template agenda
+     * restituisce true in caso affermativo, false altrimenti
+     * @param type $idAgenda
+     * @return boolean
+     */
+    public function isAgendaInTemplate($idAgenda){
+        $query = array(
+            array(
+                'campo'     => 'id_agenda',
+                'valore'    => $idAgenda,
+                'formato'   => 'INT'
+            )
+        );
+        $temp = $this->taDAO->getTemplateAgenda($query);
+        if($temp != null){
+            return true;
+        }
+        return false;        
+    }
 }

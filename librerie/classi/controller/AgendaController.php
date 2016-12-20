@@ -352,6 +352,7 @@ class AgendaController {
      * @return boolean
      */
     public function deleteAgenda($ID){
+        global $PR_DIR_PDF;
         //per eliminare l'agenda devo eliminare in successione
         //1. pasti-ricette
         //2. giorno-pasto
@@ -387,7 +388,7 @@ class AgendaController {
                     'formato'   => 'INT'
                 )
             );
-            $giorniPasti = $this->gpDAO->getGiorniPasti($query);
+            $giorniPasti = $this->gpDAO->getGiorniPasti($query2);
             
             //al momento ho id dei pasti relativi al giorno
             foreach($giorniPasti as $giornoPasto){                
@@ -420,14 +421,19 @@ class AgendaController {
         if($this->gDAO->deleteGiorno($delete4) == true){
             //cancello l'agenda
             if($this->aDAO->deleteAgendaByID($ID)==true){
-                return true;
+                //elimino il pdf
+                if(unlink($PR_DIR_PDF.'agenda-'.$ID.'.pdf') == false){
+                    return -6;
+                }
+                else{                
+                    return true;
+                }
             }
             return -5;
         }
         return -4;
         
     }
-    
     
     /**
      * La funzione aggiorna il campo pdf di un'agenda
@@ -440,9 +446,6 @@ class AgendaController {
         }        
         return false;
     }
-    
-    
-    
     
     /**
      * La funzione elimina le ricette duplicati nei singoli pasti

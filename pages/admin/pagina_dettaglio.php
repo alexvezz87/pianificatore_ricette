@@ -85,6 +85,7 @@ else if($type == 'A'){
 ?>
     <h1>Pagina dettaglio <?php echo $nome ?></h1>
 <?php 
+    $viewA->listenerDettaglioAgenda();
     $viewA->printDettaglioAgenda($id);
     die();
 }

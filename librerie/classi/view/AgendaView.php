@@ -362,6 +362,7 @@ class AgendaView extends PrinterView {
         if($a != null){
     ?>
         <form class="form-horizontal agenda-container" role="form" action="<?php echo curPageURL() ?>" name="form-agenda" method="POST">
+            <?php echo parent::printHiddenFormField('id-agenda', $a->getID()) ?>
             <?php parent::printTextFormField($this->form['a-nome'], $this->label['a-nome'], false, $a->getNome()) ?>
             <div class="container-agenda">
                 <div class="container-tipologie">
@@ -391,6 +392,7 @@ class AgendaView extends PrinterView {
                         foreach($tps as $tipo){
                             $tp = new TipologiaPasto();
                             $tp = $tipo;
+                            if($g->getPasti() != null){
                             foreach($g->getPasti() as $pasto){
                                 $p = new Pasto();
                                 $p = $pasto;
@@ -419,6 +421,7 @@ class AgendaView extends PrinterView {
     <?php                    
                                 }
                             }
+                            }
                             
     ?>
                           
@@ -431,12 +434,61 @@ class AgendaView extends PrinterView {
     ?>
                 </div>
             </div>
+            <div class="clear" style="height:30px"></div>            
+            <?php echo parent::printDeleteDettaglio('agenda') ?>
         </form>
     <?php        
             
         }
         else{
             echo '<p>Agenda non presente nel sistema.</p>';
+        }
+    }
+    
+    
+    public function listenerDettaglioAgenda(){
+        //Cancellazione
+        if(isset($_POST['delete-agenda'])){
+            
+            //prima di eliminare un'agenda devo vedere se questa è sfruttata in un template
+            if($this->taC->isAgendaInTemplate($_POST['id-agenda']) == false){
+            
+                $delete = $this->aC->deleteAgenda($_POST['id-agenda']);
+
+                if($delete === -1){
+                    parent::printErrorBoxMessage('Errore nel cancellare pasti ricette');
+                    return;
+                }
+                else if($delete === -2){
+                    parent::printErrorBoxMessage('Errore nel cancellare giorni pasto');
+                    return;
+                }
+                else if($delete === -3){
+                    parent::printErrorBoxMessage('Errore nel cancellare i pasti');
+                    return;
+                }
+                else if($delete === -4){
+                    parent::printErrorBoxMessage('Errore nel cancellare i giorni');
+                    return;
+                }
+                else if($delete === -5){
+                    parent::printErrorBoxMessage('Errore nel cancellare l\'agenda');
+                    return;
+                }
+                else if($delete === -6){
+                    parent::printErrorBoxMessage('Errore nel cancellare il pdf');
+                    return;
+                }
+                else if($delete === true){
+                    parent::printOkBoxMessage('Agenda eliminata con successo!');
+                    unset($_POST);
+                    return;
+                }
+            }
+            else{
+                parent::printErrorBoxMessage('L\'Agenda non può essere cancellata in quanto è utilizzata per un template');
+                return;
+            }
         }
     }
     
@@ -456,7 +508,7 @@ class AgendaView extends PrinterView {
         //creo un array di risultati 
         $result = $this->aC->createArrayCalendario($a, $arrayPasti);
     ?>
-<button id="printbutton" onclick="location.href='<?php echo $a->getPdf() ?>'">STAMPA</button>
+        <button id="printbutton" onclick="location.href='<?php echo $a->getPdf() ?>'">STAMPA</button>
         <h3>Calendario</h3>
         <div class="container-agenda-public">
             <div class="container-tp">
@@ -533,20 +585,25 @@ class AgendaView extends PrinterView {
     
     public function printSelectTemplate(){
         $temp = $this->taC->getTemplateAgenda();
-        $result = array();
-        foreach($temp as $item){
-            $ta = new TemplateAgenda();
-            $ta = $item;
-            $result[$ta->getID()] = $ta->getNome();
-        }
+        if($temp != null){
+            $result = array();
+            foreach($temp as $item){
+                $ta = new TemplateAgenda();
+                $ta = $item;
+                $result[$ta->getID()] = $ta->getNome();
+            }
     ?>
         
-        <?php parent::printSelectFormField('ricerca-template', 'Seleziona', $result) ?>
-        <div class="col-xs-12">
-            <button class="btn btn-secondary carica-template">Carica</button>
-        </div>
+            <?php parent::printSelectFormField('ricerca-template', 'Seleziona', $result) ?>
+            <div class="col-xs-12">
+                <button class="btn btn-secondary carica-template">Carica</button>
+            </div>
        
     <?php
+        }
+        else{
+            echo '<p>Nessun template caricato</p>';
+        }
     }
    
 }

@@ -375,7 +375,7 @@ function dropPianificatore(){
     global $DB_TABLE_RICETTE_TIPOLOGIE, $DB_TABLE_PREFERITE, $DB_TABLE_TEMPLATE_AGENDE;
     
     try{
-        
+        /*
         //drop di ingredienti_ricette
         dropTabella($DB_TABLE_INGREDIENTI_RICETTE);
         
@@ -383,9 +383,10 @@ function dropPianificatore(){
         if(dropTabella($DB_TABLE_PREPARAZIONI) == true ){
             dropTabella($DB_TABLE_INGREDIENTI);
         }
-        
+        */
         //drop table di ciò che riguarda ricette
         if(dropTabella($DB_TABLE_PASTI_RICETTE)==true){
+            /*
             if(dropTabella($DB_TABLE_RICETTE_TIPOLOGIE)==true){
                 if(dropTabella($DB_TABLE_PREFERITE) == true){
                     if(dropTabella($DB_TABLE_RICETTE)==true){
@@ -393,7 +394,7 @@ function dropPianificatore(){
                     }
                 }
             }
-            
+            */
             if(dropTabella($DB_TABLE_GIORNI_PASTI)==true){
                 if(dropTabella($DB_TABLE_PASTI)== true){
                     if(dropTabella($DB_TABLE_GIORNI) == true){

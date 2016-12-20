@@ -16,15 +16,19 @@ if(isset($_GET['id']) && is_user_logged_in()){
 
     $a = new Agenda();
     $a = $aC->getAgendaById($id);
+    if($a != null){
+        if($a->getIdUtente() == $current_user->ID){
 
-    if($a->getIdUtente() == $current_user->ID){
-       
-       $view->printDettaglioAgendaPublic($a);
-        
+           $view->printDettaglioAgendaPublic($a);
+
+        }
+        else{
+            //se l'agenda in questione non è associata all'utente corrente allora non mostro i contenuti
+            echo '<p>Non sei autorizzato ad accedere a questa pagina</p>';
+        }
     }
     else{
-        //se l'agenda in questione non è associata all'utente corrente allora non mostro i contenuti
-        echo '<p>Non sei autorizzato ad accedere a questa pagina</p>';
+        echo '<p>L\'Agenda che si vuole visualizzare non è presente nel sistema.';
     }
 }
 else{
