@@ -88,6 +88,7 @@ class PdfController extends FPDF {
             $this->SetFillColor(191, 207, 255);
             $this->MultiCell($this->GetPageWidth()-20, 12, utf8_decode($data), 1, 'C', true);
             //$this->Ln();
+            
             //stampo le preparazioni
             $this->SetFont('Arial','',12);
             if(isset($calendario[$data]['Preparazione'])){   
@@ -195,10 +196,16 @@ class PdfController extends FPDF {
                     foreach($arrayPasti as $pasto){
                         $string = "";
                         $count = 0;
-                        foreach($valueG[$pasto] as $item){
+                        foreach($valueG[$pasto] as $item){                            
                             if($item != null && $item != ''){
-                                $string.='- '.utf8_decode($item).PHP_EOL;    
+                                if($count == count($valueG[$pasto]) - 1){
+                                    $string.='- '.utf8_decode($item);
+                                }
+                                else{
+                                    $string.='- '.utf8_decode($item).PHP_EOL;
+                                }
                             }
+                            $count++;
                         }
                         //$this->Cell($singleCell, 12, $string,1,0,'C');
                         array_push($arrayGiorno, $string);

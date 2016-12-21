@@ -882,7 +882,7 @@ class RicettaView extends PrinterView {
         
     ?>
         <div class="row container">
-            <div class="container-ricetta-pubblica col-xs-12">
+            <div class="container-ricetta-pubblica">
                 <div class="titolo col-xs-12">
                     <h2><?php echo $ricetta->getNome() ?></h2>
                     <div class="cuoco">by <?php echo $user_info->user_nicename ?></div>
@@ -898,10 +898,13 @@ class RicettaView extends PrinterView {
                     Tempo di preparazione: <?php echo $ricetta->getDurata() ?> minuti
                 </div>
                 <div class="clear"></div>
-                <div class="col-xs-12 col-sm-6 col-sm-push-6 foto">
+                <div class="col-sm-6 col-sm-push-6 foto hidden-xs">
                     <img src="<?php echo $ricetta->getFoto() ?>" />
                 </div>
-                <div class="col-xs-12 col-sm-6 col-sm-pull-6 ingredienti">
+                
+                    <img class="col-xs-12 visible-xs" src="<?php echo $ricetta->getFoto() ?>" />
+                
+                <div class="col-sm-6 col-sm-pull-6 ingredienti hidden-xs">
                     <h3>Ingredienti</h3>
                     <ul>   
                 <?php
@@ -931,6 +934,38 @@ class RicettaView extends PrinterView {
                 ?>
                     </ul>
                 </div>
+                
+                <div class="col-xs-12 ingredienti visible-xs">
+                    <h3>Ingredienti</h3>
+                    <ul>   
+                <?php
+                    foreach($ricetta->getIngredienti() as $ingRic){
+                        $ir = new IngredienteRicetta();
+                        $ir = $ingRic;
+                        
+                        $i = new Ingrediente();
+                        $i = $this->iC->getIngredienteByID($ir->getIdIngrediente());
+                        
+                        $string = "";
+                        if($ir->getQuantita() != '0'){
+                            $string.= str_replace('.00', '', $ir->getQuantita()).' ';
+                        }
+                        if($ir->getUnitaMisura() != ''){
+                            $string.= $ir->getUnitaMisura().' ';
+                        }
+                        
+                        $string.= $i->getNome();
+                ?>
+                        <li class="ingrediente col-xs-12">
+                            <?php echo $string ?>
+                        </li>
+                <?php    
+                        
+                    }
+                ?>
+                    </ul>
+                </div>    
+                    
                 <div class="col-xs-12 preparazione">
                     <h3>Preparazione</h3>
                     <p>

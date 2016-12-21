@@ -21,7 +21,7 @@ function printAgendaPublic($mode = null){
             if($a->getIdUtente() == $current_user->ID){
 
                if($mode == null){
-                   echo '<button id="printbutton" onclick="location.href='.$a->getPdf().'">STAMPA</button>';
+                   echo '<button id="printbutton" onclick="location.href=\''.$a->getPdf().'\'">STAMPA</button>';
                }  
                 
                $view->printDettaglioAgendaPublic($a);

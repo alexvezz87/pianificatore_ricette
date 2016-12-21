@@ -507,10 +507,47 @@ class AgendaView extends PrinterView {
         
         //creo un array di risultati 
         $result = $this->aC->createArrayCalendario($a, $arrayPasti);
+        
+        //ottengo info sull'utente
+        $user = get_userdata($a->getIdUtente());
+        
+        //ottengo il periodo
+        $firstDay = "";
+        $lastDay = "";
+        if(count($result) > 0){
+            $count = 0;
+            //print_r($result);
+            foreach($result as $giorni){               
+                foreach($giorni as $keyG => $valueG){
+                    if($count == 0){
+                        $firstDay = $keyG;
+                    }
+                    if($count == count($result) - 1){
+                        $lastDay = $keyG;
+                    }
+                }
+                $count++;
+            }
+        }
+        
+        $dose = $a->getDose();
+        if($a->getDose() > 1){
+            $dose .= ' persone';
+        }
+        else{
+            $dose .= ' persona';
+        }
+        
     ?>
         
-        <h3>Calendario</h3>
-        <div class="container-agenda-public">
+        <h2 class="title">Agenda settimanale di <?php echo $user->user_nicename ?></h2> 
+        <div class="descrizione-agenda">
+            <p>Periodo: <?php echo $firstDay ?> - <?php echo $lastDay ?></p>
+            <p>La dose indicata per le ricette è per <?php echo $dose ?></p>
+        </div>
+        <h3 class="title">Calendario</h3>
+        
+        <div class="container-agenda-public hidden-xs">
             <div class="container-tp">
                 <div class="tp"></div>                
     <?php
@@ -523,40 +560,140 @@ class AgendaView extends PrinterView {
             </div>
     <?php
         //print_r($result);
-        if(count($result) > 0){    
-            foreach($result as $giorni){
+        if(count($result) > 0){ 
+            $counterDay = 0;
+            foreach($result as $giorni){                
                 foreach($giorni as $keyG => $valueG){
                     //print_r($valueG);
+                    $giorno = 'dispari';
+                    if($counterDay % 2 == 0){
+                        $giorno = 'pari';
+                    }
     ?>
-            <div class="giorno">
-                <div class="tp">
-                    <?php echo $keyG ?>
+            <div class="giorno <?php echo $giorno ?>">
+                <div class="tp nome-giorno">
+                    <p><?php echo $keyG ?></p>
                 </div>
     <?php
                     foreach($arrayPasti as $pasto){
     ?>
                 <div class="tp <?php echo strtolower($pasto) ?>">
-                            <?php
-                               foreach($valueG[$pasto] as $item){
-                                   echo $item.'<br>';
-                               }
-                            ?>
-                        </div>
+                <?php
+                    echo '<div class="container-elemento">';
+                    foreach($valueG[$pasto] as $item){
+                        if($pasto != 'Preparazione'){
+                            $idRicetta = $this->rC->getIdRicettaByNome($item);
+                            $r = new Ricetta();
+                            $r = $this->rC->getRicettaByID($idRicetta);
+                        ?>
+                            <div class="ricetta">
+                                <?php if($r->getFoto() != null && $r->getFoto() != '') { ?>
+                                    <a target="_blank" href="<?php echo home_url() ?>/ricetta?id=<?php echo $idRicetta ?>">
+                                        <img class="img-ricetta" alt="<?php echo $item ?>" title="<?php echo $item ?>" src="<?php echo $r->getFoto() ?>"/>                                                
+                                    </a>
+                                <?php } ?>
+                                <a style="display:block;" target="_blank" href="<?php echo home_url() ?>/ricetta?id=<?php echo $idRicetta ?>">
+                                    <?php echo $item ?>
+                                </a>
+                            </div>
+                        <?php                                       
+                        }
+                        else{
+                            echo $item.'<br>';                                                           
+                        }
+                    }                    
+                    echo '</div>';                    
+                ?>
+                </div>
     <?php            
                     }
-    ?>
+    ?>                
             </div>
-    <?php        
+    <?php       
+                    $counterDay++;
                 }
             }
         }
     ?>        
         </div>
-        <div class="clear"></div>
-        <h3>Ingredienti</h3>
-        <div class="container-ingredienti">
+    
+        <div class="container-agenda-public-mobile visible-xs">
     <?php
+        //stampo l'agenda per il mobile
+        //ottengo il calendario
+        $calendario = $this->aC->createAgenda($a);
+        
+        //ottengo le tipologie pasti
+        $tps = $this->tpC->getTipologiaPasti();
+        
+        foreach($calendario as $data => $dataValue){
+    ?>
+            <div class="giorno col-xs-12">
+                <?php echo $data ?>
+            </div>
+    <?php
+            if(isset($calendario[$data]['Preparazione'])){ 
+    ?>
+                <div class="pasto col-xs-12">Preparazioni</div>
+                <div class="descrizione-pasto col-xs-12">
+    <?php
+                foreach($calendario[$data]['Preparazione'] as $preparazioni){              
+                    foreach($preparazioni as $preparazione){
+                        echo '<p>'.$preparazione.'</p>';
+                    }                  
+                }
+    ?>
+                </div>    
+    <?php
+            }
+            
+            //ciclo sui pasti
+            foreach($tps as $tipoPasto){
+                $tp = new TipologiaPasto();
+                $tp = $tipoPasto;
+                if(isset($calendario[$data][$tp->getNome()])){   
+    ?>
+                    <div class="pasto col-xs-12"><?php echo $tp->getNome() ?></div>
+                    <div class="descrizione-pasto col-xs-12">
+    <?php
+                   foreach($calendario[$data][$tp->getNome()] as $tipi){
+                       foreach($tipi as $tipo ){
+                            $idRicetta = $this->rC->getIdRicettaByNome($tipo);
+                            $r = new Ricetta();
+                            $r = $this->rC->getRicettaByID($idRicetta);
+    ?>
+                            <div class="ricetta">
+                                <?php if($r->getFoto() != null && $r->getFoto() != '') { ?>
+                                    <a target="_blank" href="<?php echo home_url() ?>/ricetta?id=<?php echo $idRicetta ?>">
+                                        <img class="img-ricetta" alt="<?php echo $tipo ?>" title="<?php echo $tipo ?>" src="<?php echo $r->getFoto() ?>"/>                                                
+                                    </a>
+                                <?php } ?>
+                                <a style="display:block;" target="_blank" href="<?php echo home_url() ?>/ricetta?id=<?php echo $idRicetta ?>">
+                                    <?php echo $tipo ?>
+                                </a>
+                            </div>
+    <?php                 
+                       }
+                   } 
+    ?>
+                    </div>
+    <?php                
+                }
+            }
+        }        
+    ?>  
+        </div>
+        
+        <div class="clear"></div>
+        <h3 class="title">Ingredienti</h3>
+        <div class="container-ingredienti col-xs-12 ">
+    <?php
+            $count = 0;
             foreach($ingredienti as $key => $value){
+                $classe = 'dispari';
+                if($count % 2 == 0){
+                    $classe = 'pari';
+                }
                 $string = ""; 
                 if($value['qt']!= '' && $value['qt']!= '0'){
                     $string.= $value['qt'].' ';
@@ -570,10 +707,12 @@ class AgendaView extends PrinterView {
                     $string.= $key;
                 }            
     ?>
-            <div class="col-xs-12 col-sm-6 ingrediente">
+            <div class="col-xs-12 col-sm-6 ingrediente <?php echo $classe ?>">
                 <?php echo $string ?>
             </div>
     <?php
+            
+                $count++;
             }
     ?>
         </div>

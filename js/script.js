@@ -343,7 +343,8 @@ jQuery(document).ready(function($){
             });
             
             if(max > 49){
-                $(this).find('.tp').css('height', (max+10)+'px');
+                $(this).find('.tp').css('height', (max+15)+'px');
+                
             }
             
         });

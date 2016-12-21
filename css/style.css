@@ -193,6 +193,25 @@ and open the template in the editor.
 }
 .container-agenda-public .container-tp{
     width:100%;
+    margin-left: 1px;
+}
+
+.container-agenda-public .container-tp .tp {
+    font-weight: bold;
+    font-size:20px;
+    border: none;
+    border-right: 1px solid #999;
+    border-top:1px solid #999;
+    border-bottom:1px solid #999;    
+    background:rgba(106,206,68, 0.4);
+    color:#000;
+}
+
+.container-agenda-public .container-tp .tp:first-child{
+    border:none;
+    border-right: 1px solid #999;
+    border-bottom: 1px solid #999;
+    background: transparent;
 }
 
 .container-agenda-public .tp{
@@ -204,14 +223,76 @@ and open the template in the editor.
     padding:5px;
 }
 
-.container-agenda-public .giorno {
-   
+.container-agenda-public .tp .ricetta img{
+    margin-top:10px;
+    width:80%;
+    border:1px solid #ddd;
 }
+
+.container-agenda-public .giorno {
+    
+}
+
+.container-ingredienti .pari{
+    background:rgba(221,221,221, 0.2);
+}
+
+.container-ingredienti .dispari{
+    background:rgba(106,206,68, 0.2);
+}
+
+.container-ingredienti .pari:hover{
+    background:rgba(221,221,221, 0.5);
+}
+
+.container-ingredienti .dispari:hover{
+    background:rgba(106,206,68, 0.4);
+}
+
+.container-agenda-public .giorno.pari .tp {
+    background:rgba(221,221,221, 0.2);
+}
+
+.container-agenda-public .giorno.pari:hover > .tp {
+    background:rgba(221,221,221, 0.5);
+}
+
+.container-agenda-public .giorno.dispari .tp {
+    background:rgba(106,206,68, 0.2);
+}
+
+.container-agenda-public .giorno.dispari:hover > .tp {
+    background:rgba(106,206,68, 0.4);
+}
+
+.container-agenda-public .nome-giorno{
+    display:table;
+    color:#000;
+}
+
+.container-agenda-public .nome-giorno p{
+    display: table-cell;
+    vertical-align: middle;
+    font-size:16px;
+    font-weight: bold;
+}
+
+.container-agenda-public .tp{
+    display: table;
+}
+
+.container-agenda-public .tp .container-elemento{
+    display: table-cell;
+    vertical-align: middle;
+    padding-top:10px;
+    padding-bottom:10px;
+}
+
 
 .container-agenda-public .giorno .tp{
     border:0;
     border-left: 1px solid #999;
-    border-bottom: 1px solid #999;
+    border-bottom: 1px solid #999;    
 }
 
 .container-agenda-public .giorno .tp:last-child{
@@ -298,6 +379,78 @@ and open the template in the editor.
     border: 1px solid rgb(160, 206, 78);
 }
 
+.container-agenda-public-mobile > div{
+    border: 1px solid #999;
+    border-top:none;
+    padding-top:15px;
+    padding-bottom: 15px;
+    color:#000
+}
+
+.container-agenda-public-mobile > div:first-child{
+    border-top:1px solid #999;
+}
+
+.container-agenda-public-mobile .descrizione-pasto a{
+    margin-top:10px;
+    font-size:16px;
+}
+
+.container-agenda-public-mobile .descrizione-pasto p{
+    margin:0;
+    margin-top:10px;
+    font-size:16px;
+}
+
+.container-agenda-public-mobile .giorno{
+    text-align: center;
+    font-size:22px;
+    font-weight: bold;  
+    background:rgba(106,206,68, 0.4);
+}
+
+.container-agenda-public-mobile .pasto{
+    font-size:18px;
+    font-weight: bold;  
+    background:rgba(106,206,68, 0.2);
+}
+
+.container-agenda-public-mobile .descrizione-pasto {
+    text-align: center;    
+}
+
+.container-agenda-public-mobile .descrizione-pasto .ricetta {
+    margin-top:10px;
+}
+
+.container-agenda-public-mobile .descrizione-pasto .ricetta img{
+    width:50%;
+    border: 1px solid #ddd;
+}
+
+#wrapper .post-content h2.title{
+    font-size:34px;
+}
+
+.post-content h3.title {
+    font-size:30px;
+}
+
+#printbutton{
+    float:right;
+    height: 50px;
+    width: 150px;
+    font-size:18px;
+}
+
+.descrizione-agenda p{
+    font-size:16px;
+    padding-left:30px;
+}
+
+.container {
+    width: 100% !important;
+}
 
 @media (min-width: 768px) {
 
