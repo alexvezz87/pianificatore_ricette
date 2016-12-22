@@ -31,7 +31,7 @@ function printPaginaAgenda($mode=null){
 
     <div class="clear"></div>
     <div class="ricerca-ricette col-sm-6">
-        <h3>Ricerca le ricette</h3>
+        <h3 class="titolo">Ricerca le ricette</h3>
         <?php
             if($mode == null){
                 $ricette->printFormRicerca();
@@ -44,7 +44,7 @@ function printPaginaAgenda($mode=null){
    
     <?php if($mode == null){ ?>
     <div class="col-xs-12 col-sm-6" id="ricerca-template">
-        <h3>Utilizza un'agenda già fatta</h3>
+        <h3 class="titolo">Utilizza un'agenda già fatta</h3>
         <?php $view->printSelectTemplate() ?>
     </div>
     <?php } ?>
@@ -53,7 +53,7 @@ function printPaginaAgenda($mode=null){
     <div class="col-xs-12 container-risultati"></div>
 
 
-    <div class="col-xs-12 col-sm-3" id="selezionatore-ricette">
+    <div class="" id="selezionatore-ricette">
         <div class="oc-button open">
 
         </div>

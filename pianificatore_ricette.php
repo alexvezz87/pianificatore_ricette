@@ -191,13 +191,13 @@ function register_pr_js_script(){
     wp_register_script('autocomplete-js', plugins_url('pianificatore_ricette/js/jquery.autocomplete-min.js'), array('jquery'), '1.0', false);   
     wp_register_script('ui-widget-js', plugins_url('pianificatore_ricette/js/jquery-ui.min.js'), array('jquery'), '1.0', false);       
     wp_register_script('file-input', plugins_url('pianificatore_ricette/js/fileinput.min.js'), array('jquery'), '1.0', false); 
-    wp_register_script('bootstrap', plugins_url('pianificatore_ricette/js/bootstrap.min.js'), array('jquery'), '1.0', false);       
+    wp_register_script('livequery', plugins_url('pianificatore_ricette/js/jquery.livequery.js'), array('jquery'), '1.0', false);       
     wp_register_script('script', plugins_url('pianificatore_ricette/js/script.js'), array('jquery'), '1.0', false);   
     
     wp_enqueue_script('autocomplete-js');  
     wp_enqueue_script('ui-widget-js'); 
     wp_enqueue_script('file-input'); 
-    wp_enqueue_script('bootstrap');
+    wp_enqueue_script('livequery');
     wp_enqueue_script('script'); 
 }
 

@@ -593,7 +593,7 @@ class PrinterView {
     
     protected function printSeachButton($nameField, $label){
     ?>
-        <button type="button" class="btn btn-secondary <?php echo $nameField ?>"><?php echo $label ?></button>
+        <button type="button" class="btn <?php echo $nameField ?>"><?php echo $label ?></button>
     <?php
     }
     

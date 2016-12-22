@@ -57,7 +57,9 @@ class AgendaView extends PrinterView {
         <form class="form-horizontal agenda-container pianificatore-ricette" role="form" action="<?php echo curPageURL() ?>" name="form-agenda" method="POST">
             <?php parent::printHiddenFormField('user-id', get_current_user_id()) ?>
             <?php parent::printHiddenFormField('id-week', $week) ?>
-            <?php parent::printTextFormField($this->form['a-nome'], $this->label['a-nome']) ?>
+            <div class="nome-agenda">
+                <?php parent::printTextFormField($this->form['a-nome'], $this->label['a-nome']) ?>
+            </div>
             <?php 
                   $dose = array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10);
                   parent::printSelectFormField('dose-persone', 'Indica per quante persone', $dose, true, 1);
@@ -96,7 +98,7 @@ class AgendaView extends PrinterView {
         <div class="giorno-agenda day-<?php echo $i ?> col-xs-12 <?php echo $classe ?>">
             <?php parent::printHiddenFormField($this->form['g-nome'].'-'.$i, $nome) ?>
             <?php parent::printHiddenFormField($this->form['g-data'].'-'.$i, $data) ?>
-            <h5><?php echo $nome ?></h5>
+            <span class="title-giorno"><?php echo $nome ?></span>
             <?php
                 //stampo i pasti
                 $countPasti = 0;
@@ -118,17 +120,17 @@ class AgendaView extends PrinterView {
     ?>  
         <div class="pasto col-sm-3 pasto-<?php echo $tp->getID() ?>">
             <?php parent::printHiddenFormField('id-tp-'.$i.'-'.$j, $tp->getID()) ?>
-            <p><?php echo $tp->getNome() ?></p>
+            <span class="title-pasto"><?php echo $tp->getNome() ?></span>
             <div class="lista-ricette">
                 <div class="nome-ricetta">
                     <select name="nome-ricetta-<?php echo $i ?>-<?php echo $tp->getID() ?>-1">
                         <option value=""></option>
                     </select>
-                    <a class="remove-from-pasto">Rimuovi</a>
+                    <a title="Rimuovi Ricetta" class="remove-from-pasto"></a>
                 </div>
             </div>
             <div class="aggiungi-ricetta">
-                <a>+ Ricetta</a>
+                <a title="Aggiungi Ricetta">Ricetta</a>
             </div>
         </div>
     <?php
@@ -735,7 +737,7 @@ class AgendaView extends PrinterView {
         
             <?php parent::printSelectFormField('ricerca-template', 'Seleziona', $result) ?>
             <div class="col-xs-12">
-                <button class="btn btn-secondary carica-template">Carica</button>
+                <button class="btn carica-template">Carica agenda</button>
             </div>
        
     <?php

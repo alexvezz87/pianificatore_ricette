@@ -71,11 +71,12 @@ and open the template in the editor.
 }
 
 .giorno-agenda.dispari{
-    background:#ECECFB;
+     background:rgba(106,206,68, 0.2);
 }
 
 .giorno-agenda.pari{
     border: 1px solid #ECECFB;
+    background:rgba(221,221,221, 0.2);
 }
 
 .ui-state-focus {
@@ -115,13 +116,15 @@ and open the template in the editor.
     border:1px solid #ddd;
     padding:10px;
     position: fixed;
-    right:0;
-    margin-right:5%;
+    right:0;    
     top:0;
     margin-top:15%;
+    margin-right:25px;
     background: #fff;
     display: none;
     z-index:99999;
+    width:75%;
+    min-width:300px;
 }
 
 #selezionatore-ricette .oc-button{
@@ -452,11 +455,267 @@ and open the template in the editor.
     width: 100% !important;
 }
 
+
+.giorno-agenda span.title-giorno{
+    display:block;
+    padding-top:15px;
+    padding-bottom:15px;
+    font-size:24px;
+    font-weight: bold;
+    width:100%;
+    text-align: center;
+}
+
+.giorno-agenda span.title-pasto{
+    display:block;
+    padding-top:10px;
+    padding-bottom:10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.giorno-agenda .lista-ricette .nome-ricetta select{
+    width:80%;
+    height: 40px;
+    float:left;
+    font-size:14px;
+    margin-bottom:5px;
+}
+
+.giorno-agenda .lista-ricette .nome-ricetta a.remove-from-pasto{
+    display:block;
+    width:15%;
+    float:left;
+    height: 40px;
+    background: url('../images/remove-recipe.png') center center;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;    
+    cursor: pointer;
+    margin-left:2px;
+}
+
+.giorno-agenda .aggiungi-ricetta{
+    clear:both;
+}
+
+.giorno-agenda .aggiungi-ricetta a{
+    display: block;
+    height: 35px; 
+    padding-left: 20px;
+    background: url('../images/add-recipe.png') left center;
+    background-size: 15px 15px;
+    background-repeat: no-repeat;    
+    cursor: pointer;
+    font-size:14px;
+    line-height: 35px;
+    width:100px;
+}
+
+.ricetta .descrizione{
+    margin:0;
+    margin-top:10px;
+}
+
+.descrizione span.titolo{
+    font-size: 16px;
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+}
+
+.ricerca-ricette{
+    font-size:14px;
+}
+
+.ricerca-ricette h3.titolo, #ricerca-template h3.titolo, .container-risultati h3.titolo{
+    font-size:24px;
+}
+
+#ricerca-template select{
+    width:80%;
+    font-size:14px;
+}
+
+.ricerca-ricette select{
+    width:100%;
+    min-height: 150px;
+    padding:10px;
+}
+
+.ricerca-ricette input[name=cancella-ingredienti]{
+    float:right;
+    margin-top:10px;
+    margin-right: 15px;
+}
+
+.ricerca-ricette input[name=cancella-ingredienti]{
+    background: transparent url('../images/ico-trash.png');
+    height: 40px;
+    width:200px;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;  
+    background-position-y: center;
+    background-position-x: 5px;
+    cursor: pointer;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:25px;
+    padding-right: 5px;
+    border: 1px solid #ddd;
+    
+    color:#999;
+}
+
+.ricerca-ricette input[name=cancella-ingredienti]:hover{
+    border: 1px solid rgb(106,206,68);   
+}
+
+.ricerca-ricette .ricerca-ricette, #ricerca-template .carica-template{
+    width:200px;
+    height:50px;
+    background: transparent url('../images/ico-search.png');
+    background-size: 30px 30px;
+    background-repeat: no-repeat;  
+    background-position-y: center;
+    background-position-x: 5px;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:40px;
+    padding-right: 5px;
+    font-size:16px; 
+    text-transform: uppercase;
+    border:2px solid rgb(106,206,68);
+    font-weight: bold;
+    margin:auto;
+    display: block;
+    margin-top:40px;
+    color:rgb(106,206,68);
+}
+
+.ricerca-ricette .ricerca-ricette:hover, #ricerca-template .carica-template:hover{
+    border: 2px solid rgb(68,145,38);
+    color: rgb(68,145,38);
+}
+
+.container-risultati thead tr th {
+    font-size: 18px; 
+    font-weight: bold;
+}
+
+.container-risultati tbody tr td{
+    font-size:14px;
+    vertical-align:middle !important;
+}
+
+.container-risultati tbody tr td .image-ricetta{
+    width:100px;
+    float:left;
+    border:1px solid #ddd;
+}
+
+.container-risultati-mobile .ricetta {
+    border:1px solid rgb(106,206,68);
+    padding:15px;
+    margin-bottom:10px;
+}
+
+.container-risultati-mobile .ricetta:hover{
+    border:1px solid rgb(68,145,38);
+}
+
+.container-risultati-mobile .image-ricetta{
+    border:1px solid #ddd;
+}
+
+.container-risultati-mobile .title-ricetta{
+    display: block;
+    width:100%;
+    text-align: center;
+    font-size:20px;
+    margin-top:10px;
+}
+
+.container-risultati-mobile p.info {
+    margin:0;
+    width:100%;
+    text-align:center;
+    font-size:16px;
+    margin-top:10px;
+}
+
+.container-risultati-mobile .add-recipe{
+    float:right;
+    margin-bottom:15px;
+}
+
+.tabella-risultati {
+    position: relative;
+    display: none;
+    
+}
+
+.tabella-risultati[data-tabella="0"]{
+    display: table;
+}
+
+.tabella-risultati tr.pag-info{
+    background:transparent !important;
+}
+
+.container-gruppo-ricette-mobile{
+    position:relative;
+    display: none;
+}
+
+.container-gruppo-ricette-mobile[data-gruppo="0"]{
+    display: block;
+}
+
+.arrows, .arrows-mobile {
+    display: block;
+    width:100px;
+    height: 50px;
+    margin:auto;
+}
+
+.arrows-mobile {
+    width:50px;
+    cursor:pointer;
+    background:url('../images/add-mobile.png') center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.arrows > div{
+    float:left;
+    height: 50px;
+    width:50px;
+    cursor:pointer;
+}
+
+.arrows .avanti{
+    background:url('../images/right-arrow.png') center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.arrows .indietro{
+    background:url('../images/left-arrow.png') center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+
 @media (min-width: 768px) {
 
     .agenda-container .giorno-agenda{
         float:left;
         
     }
-
+    
+    #selezionatore-ricette{
+        
+        width:25%;
+        min-width:400px;
+    }
 }

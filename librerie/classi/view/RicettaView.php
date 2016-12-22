@@ -854,15 +854,15 @@ class RicettaView extends PrinterView {
             <div clasS="col-xs-6"><?php echo $r->getDurata() ?> minuti</div>
             <div class="clear"></div>
             <a href="<?php echo home_url() ?>/ricetta?id=<?php echo $r->getID() ?>">
-                <div class="foto" style="background: url('<?php echo $urlFoto ?>')"></div>
+                <div class="foto" title="<?php echo $r->getNome() ?>" style="background: url('<?php echo $urlFoto ?>')"></div>
                 <div class="descrizione">
-                    <h4 class="titolo"><?php echo $r->getNome() ?></h4>                
+                    <span class="titolo"><?php echo $r->getNome() ?></span>                
                 </div>
             </a>
         </div>
     <?php
         if($count % 3 == 0){
-            echo '<div class="clear"></div>';
+            echo '<div class="clear" style="height:1px; padding-top:20px; padding-bottom:20px;"></div>';
         }
     
         $count++;    
@@ -1022,12 +1022,12 @@ class RicettaView extends PrinterView {
             <div class="nome-ingrediente">
                 <?php parent::printSuggestTextFormField('nome-ingrediente', 'Ingredienti') ?>                  
                 <?php parent::printDisabledTextFormField('lista-ingredienti', '', null) ?>
-                <input type="button" name="cancella-ingredienti" value="Cancella ingredienti"/>
+                <input type="button" name="cancella-ingredienti" value="RIMUOVI INGREDIENTI"/>
                 
             </div>
             <div class="clear"></div>
             <input type="hidden" name="ajax-url" value="<?php echo get_home_url() ?>/wp-admin/admin-ajax.php" />
-            <?php parent::printSeachButton('ricerca-ricette', 'Cerca') ?>
+            <?php parent::printSeachButton('ricerca-ricette', 'Cerca ricette') ?>
             
         </div>
         

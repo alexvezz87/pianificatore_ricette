@@ -182,45 +182,130 @@ jQuery(document).ready(function($){
         });
     });
     
-    function printTabellaRisultati(data){
+    
+    function printSingolaTabellaDesktop(data, url, counter, tot){
+        
+        var html = "";        
+        html+='<table class="table table-striped hidden-xs tabella-risultati" data-tabella="'+counter+'">';
+        html+='<thead>';
+        html+='<tr><th colspan="2">Ricetta</th><th>Caratteristiche</th><th>Preparazione</th><th></th></tr>';
+        html+='</thead>';
+        html+='<tbody>';
+        
+        for(var i=0; i < data.length; i++){
+                
+            html+='<tr>';
+            //nome
+            var urlRicetta = url+'/ricetta?id='+data[i].ID;
+            html+='<td>';
+            html+='<a class="title-ricetta" target="_blank" href="'+urlRicetta+'">';
+            html+='<img class="image-ricetta" src="'+data[i].foto+'" title="'+data[i].nome+'" />';
+            html+='</a>';
+            html+='</td>'
+            html+='<td>';
+            html+='<a class="title-ricetta" target="_blank" href="'+urlRicetta+'">'+data[i].nome+'</a>';
+            html+='</td>'
+
+            //tipologie
+            //alert(data[i].tipologie[0]);
+            html+='<td>'+data[i].tipologie+'</td>';
+
+            //durata
+            html+='<td>'+data[i].durata+' minuti</td>';                
+
+            //azioni
+            html+='<td>';
+            html+='<a class="add-recipe"> Ricetta</a>';
+            html+='<input type="hidden" name="id-r" value="'+data[i].ID+'">';
+            html+='<input type="hidden" name="nome-r" value="'+data[i].nome+'">';
+            html+='</td>';
+
+
+            html+='</tr>';
+        }
+        html+='<tr class="pag-info"><td colspan="5"><p>Pagina '+(counter+1)+' di '+tot+'</p></td></tr>'
+        html+='</tbody>';
+        html+='</table>';
+        
+        return html;
+    }
+    
+    function printRisultatiMobile(data, url, counter, tot){
         
         var html = "";
+        
+        html+='<div class="container-gruppo-ricette-mobile" data-gruppo="'+counter+'" >';
+        for(var i=0; i < data.length; i++){                
+            var urlRicetta = url+'/ricetta?id='+data[i].ID;                
+            html+='<div class="ricetta">';
+            html+='<a class="add-recipe">Aggiungi Ricetta</a>';
+            html+='<input type="hidden" name="id-r" value="'+data[i].ID+'">';
+            html+='<input type="hidden" name="nome-r" value="'+data[i].nome+'">';
+            html+='<a class="title-ricetta" target="_blank" href="'+urlRicetta+'">';
+            html+='<img class="image-ricetta" src="'+data[i].foto+'" title="'+data[i].nome+'" />';
+            html+='</a>';
+            html+='<a class="title-ricetta" target="_blank" href="'+urlRicetta+'">'+data[i].nome+'</a>';
+            html+='<p class="info">'+data[i].tipologie+'</p>';
+            html+='<p class="info">'+data[i].durata+' minuti</p>';
+            html+='</div>';
+        }
+        
+        html+='</div>';
+        
+        return html;
+    }
+    
+    function printTabellaRisultati(data){
+        var url = $('input[name=url-home]').val();
+        var risultatiVisibili = 10;
+        var html = "";
         if(data != null){
-            html+='<h3>Risultati ricerca</h3>'
-            html+='<table class="table table-striped">';
-            html+='<thead>';
-            html+='<tr><th>Ricetta</th><th>Caratteristiche</th><th>Tempo preparazione</th><th></th></tr>';
-            html+='</thead>';
-            html+='<tbody>';
+            html+='<h3 class="titolo">Risultati ricerca</h3>'
             
-            var url = $('input[name=url-home]').val();
-            
-            for(var i=0; i < data.length; i++){
-                html+='<tr>';
-                //nome
-                var urlRicetta = url+='/ricetta?id='+data[i].ID;
-                html+='<td><a target="_blank" href="'+urlRicetta+'">'+data[i].nome+'</a></td>';
-                
-                //tipologie
-                //alert(data[i].tipologie[0]);
-                html+='<td>'+data[i].tipologie+'</td>';
-                
-                //durata
-                html+='<td>'+data[i].durata+' minuti</td>';                
-                
-                //azioni
-                html+='<td>';
-                html+='<a class="add-recipe"> Ricetta</a>';
-                html+='<input type="hidden" name="id-r" value="'+data[i].ID+'">';
-                html+='<input type="hidden" name="nome-r" value="'+data[i].nome+'">';
-                html+='</td>';
-                
-                
-                html+='</tr>';
+            html+='<div class="carosello-risultati hidden-xs">';        
+            //Lo scopo e creare uno slider di tabelle per visualizzare più risultati
+            var tabelle = [];
+            var count = 1;
+            var risultati = [];
+            //divido i risultati in tante tabelle da stampare
+            for(var i=0; i < data.length; i++){                
+                risultati.push(data[i]);                
+                if(count % risultatiVisibili == 0 || i == data.length-1){
+                    tabelle.push(risultati);
+                    risultati = [];
+                }
+                count++;
             }
             
-            html+='</tbody>';
-            html+='</table>';
+            //console.log(tabelle);
+            
+            for(var i=0; i< tabelle.length; i++ ){
+                html+= printSingolaTabellaDesktop(tabelle[i], url, i, tabelle.length);               
+            }
+            
+            if(data.length > risultatiVisibili ){
+                html+='<div class="arrows">';            
+                html+='<div class="indietro"></div><div class="avanti"></div>';
+                html+='</div>';
+               
+            }
+             html+='</div>';
+            
+            
+            
+            //versione mobile
+            html+='<div class="container-risultati-mobile col-xs-12 visible-xs">';
+                        
+            for(var i=0; i < tabelle.length; i++){
+                html+= printRisultatiMobile(tabelle[i], url, i, tabelle.length);
+            }
+            
+            if(data.length > risultatiVisibili ){
+                html+='<div class="arrows-mobile"></div>';
+                html+='</div>';
+            }
+            
+            html+='</div>';
         }
         else{
             html = "<p>Nessuna ricetta corrisponde ai criteri di ricerca.</p>"
@@ -230,11 +315,12 @@ jQuery(document).ready(function($){
     }
     
     //ASCOLTATORE CARICA TEMPLATE
-    $('#ricerca-template .carica-template').click(function(){
-        //visualizzo il loader
-        $('.loader-container').show();
+    $('#ricerca-template .carica-template').click(function(){        
         var idTemplate = $(this).parent('div').parent('#ricerca-template').find('select').val();
         if(idTemplate != ''){
+            //visualizzo il loader
+            $('.loader-container').show();
+            
             //devo caricare le ricette di quel template
             //ottengo le ricette
             
@@ -298,7 +384,7 @@ jQuery(document).ready(function($){
         var html = '<div class="ricetta">';
         html += '<input type="hidden" name="id-r" value="'+id+'" />';
         html += '<input type="hidden" name="nome-r" value="'+nome+'" />';
-        html += '<p>'+nome+'</p><a class="remove-recipe"></a>';
+        html += '<p>'+nome+'</p><a title="Rimuovi Ricetta" class="remove-recipe"></a>';
         html += '<div class="clear"></div></div>';
         
         return html;
@@ -350,14 +436,46 @@ jQuery(document).ready(function($){
         });
     }
     
+    //ASCOLTATORE SU VISUALIZZAZIONE RISULTATI RICERCA
+    //AVANTI
+    $(document).on('click', '.arrows .avanti', function(){
+        var currentTable = $('.tabella-risultati:visible').data('tabella');
+        var maxValueTable = $('.tabella-risultati').size(); 
+        if(currentTable < maxValueTable -1 ){
+            //vado avanti
+            $('.tabella-risultati[data-tabella="'+currentTable+'"').hide();
+            $('.tabella-risultati[data-tabella="'+(currentTable+1)+'"').css('display', 'table');
+        }        
+    });
+    //INDIETRO
+    $(document).on('click', '.arrows .indietro', function(){
+        var currentTable = $('.tabella-risultati:visible').data('tabella');        
+        if(currentTable > 0 ){
+            //vado avanti
+            $('.tabella-risultati[data-tabella="'+currentTable+'"').hide();
+            $('.tabella-risultati[data-tabella="'+(currentTable-1)+'"').css('display', 'table');
+        }        
+    });    
+    //MORE
+    $(document).on('click', '.arrows-mobile', function(){
+        var currentGruppo = $('.container-gruppo-ricette-mobile:visible:last').data('gruppo');
+        var maxValueGruppo = $('.container-gruppo-ricette-mobile').size();
+        console.log(currentGruppo);
+        $('.container-gruppo-ricette-mobile[data-gruppo="'+(currentGruppo+1)+'"]').fadeIn();
+        if(currentGruppo == maxValueGruppo - 2){
+            $(this).hide();
+        }
+    });
     
     //open e close del box selezionatore ricette
     $('.oc-button').click(function(){
+        //prendo la misura del box
+        var widthBox = $('#selezionatore-ricette').width()+21+25;
         
         if($(this).hasClass('open')){
            //chiudiamo
            $('#selezionatore-ricette').animate({
-               marginRight: '-=30%'
+               marginRight: '-='+widthBox+'px'
            }, 500);
            
             $(this).removeClass('open');
@@ -366,7 +484,7 @@ jQuery(document).ready(function($){
         else if($(this).hasClass('close')){
            //apriamo
            $('#selezionatore-ricette').animate({
-               marginRight: '+=30%'
+               marginRight: '+='+widthBox+'px'
            }, 500);
             $(this).removeClass('close');
             $(this).addClass('open');

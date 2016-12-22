@@ -423,7 +423,8 @@ class RicettaController {
                $r = new Ricetta();
                $r = $this->getRicettaByID($item->ID);
                $temp2['ID'] = $r->getID();
-               $temp2['nome'] = $r->getNome();               
+               $temp2['nome'] = $r->getNome();    
+               $temp2['foto'] = $r->getFoto();
                $tipologie = $this->getTipologieByIdRicetta($r->getID());
                if($tipologie != null){
                    $temp2['tipologie'] = array();
