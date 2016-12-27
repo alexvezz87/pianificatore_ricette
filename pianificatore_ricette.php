@@ -94,6 +94,7 @@ add_shortcode('paginaRicetta', 'add_ricetta');
 add_shortcode('dettaglioAgendaPremium', 'add_dettaglio_agenda_premium');
 add_shortcode('dettaglioAgendaStandard', 'add_dettaglio_agenda_standard');
 add_shortcode('aggiungiRicetta', 'add_aggiungi_ricetta');
+add_shortcode('paginaPersonale', 'add_pagina_personale');
 
 function add_agenda_premium(){    
     //solo per gli utenti loggati al sito
@@ -131,6 +132,15 @@ function add_dettaglio_agenda_standard(){
 function add_aggiungi_ricetta(){
     if(is_user_logged_in()){    
         include 'pages/public/aggiungi_ricetta.php';
+    }
+    else{
+        echo '<p>Funzionalità riservata solo agli utenti registrati al sito</p>';
+    }
+}
+
+function add_pagina_personale(){
+    if(is_user_logged_in()){    
+        include 'pages/public/pagina_personale.php';
     }
     else{
         echo '<p>Funzionalità riservata solo agli utenti registrati al sito</p>';

@@ -201,36 +201,6 @@ class PrinterView {
     <?php      
     }
     
-    /**
-     * La funzione stampa il link al documento di iscrizione/rinnovo
-     * @param type $nameField
-     * @param type $label
-     * @param type $required
-     * @param type $value
-     */
-    protected function printImageLinkDocument($nameField, $label, $required=false, $value=null, $testoModulo){
-        global $URL_IMG;
-        $optRequired = "";
-        if($required == true){
-            $optRequired = "required";
-        }
-        if($value==null){
-            if(isset($_POST[$nameField])){
-                $value = $_POST[$nameField];
-            }
-        }
-    ?>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="<?php echo $nameField ?>" ><?php echo $label ?></label>
-            <div class="col-sm-10">            
-                <a title="<?php echo $testoModulo ?>" href="<?php echo $value ?>" target="_blank">
-                    <img title="<?php echo $testoModulo ?>" class="modulo-iscrizione" alt="iscrizione-rinnovo" src="<?php echo $URL_IMG ?>/ico_document.png" /> 
-                    <span style="padding-left:10px;"><?php echo $testoModulo ?></span>
-                </a>
-            </div>
-        </div>
-    <?php      
-    }
     
     /**
      * Funzione che stampa secondo i canoni di bootstrap una input file upload

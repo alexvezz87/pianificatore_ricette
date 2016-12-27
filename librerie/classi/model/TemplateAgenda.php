@@ -13,6 +13,8 @@ class TemplateAgenda {
     private $idAgenda;
     private $descrizione;
     private $nome;
+    private $inizio;
+    private $fine;
     
     function __construct() {
         
@@ -49,6 +51,23 @@ class TemplateAgenda {
     function setNome($nome) {
         $this->nome = $nome;
     }
+
+    function getInizio() {
+        return $this->inizio;
+    }
+
+    function getFine() {
+        return $this->fine;
+    }
+
+    function setInizio($inizio) {
+        $this->inizio = $inizio;
+    }
+
+    function setFine($fine) {
+        $this->fine = $fine;
+    }
+
 
 
     

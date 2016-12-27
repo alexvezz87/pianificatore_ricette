@@ -241,6 +241,16 @@ function install_pianificatore(){
                 'nome' => 'descrizione',
                 'tipo' => 'TEXT',
                 'null' => null
+            ),
+            array(
+                'nome' => 'inizio',
+                'tipo' => 'INT',
+                'null' => null
+            ),
+            array(
+                'nome' => 'fine',
+                'tipo' => 'INT',
+                'null' => null
             )
         );
         $fks = array(

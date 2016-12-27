@@ -74,7 +74,7 @@ function printPaginaAgenda($mode=null){
         $view->listenerFormAgenda();
     ?>
 
-    <h1 class="pianificatore-ricette">Pianifica le ricette durante la settimana</h1>
+    <h1 id="pianificatore-ricette" class="pianificatore-ricette">Pianifica le ricette durante la settimana</h1>
 
     <?php $view->printFormAgenda() ?>
 

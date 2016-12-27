@@ -302,54 +302,93 @@ class AgendaView extends PrinterView {
         return $this->printTableAgende($this->aC->getAllAgende());
     }
     
+    
+    public function printLeMieAgende($idUtente){        
+        return $this->printTableAgende($this->aC->getUserAgende($idUtente));
+    }
+    
     public function printTableAgende($agende){
-        $header = array(
-            'ID',
-            'Nome',
-            'Caricata',
-            'Utente',
-            'PDF',
-            'Azioni'
-        );
+        global $ADMIN_ID;
+        
+        if(get_current_user_id() == $ADMIN_ID){
+            $header = array(
+                'ID',
+                'Nome',
+                'Caricata',
+                'Utente',
+                'PDF',
+                'Azioni'
+            );
+        }
+        else{
+            $header = array( 
+                'Agenda',
+                'Nome',
+                'Caricata', 
+                'Azioni',
+                ''
+            );
+        }
         
         $bodyTable = $this->printBodyTable($agende);
         parent::printTableHover($header, $bodyTable);
     }
     
     protected function printBodyTable($array) {
+        global $ADMIN_ID;
         parent::printBodyTable($array);
         $html = "";
         if($array != null){
+            $counter = 1;
             foreach($array as $item){
                 $a = new Agenda();
                 $a = $item;
 
-                $html.='<tr>';            
+                $html.='<tr>';
+                
                 //ID Agenda
-                $html.='<td>'.parent::printTextField(null, $a->getID()).'</td>';
+                if(get_current_user_id() == $ADMIN_ID){
+                    $html.='<td>'.parent::printTextField(null, $a->getID()).'</td>';
+                }
+                else{
+                    $html.='<td>'.parent::printTextField(null, $counter).'</td>';
+                }
+                
+                
                 //nome
                 $html.='<td>'.parent::printTextField(null, $a->getNome()).'</td>';
                 //Caricata
                 $html.='<td>'.parent::printTextField(null, getTime($a->getData())).'</td>';
+                if(get_current_user_id() == $ADMIN_ID){
                 //Utente
-                if($a->getIdUtente() != 0){
-                    $user = get_userdata($a->getIdUtente());
-                    $html.='<td>'.parent::printTextField(null, $user->user_nicename).'</td>';
+                    if($a->getIdUtente() != 0){
+                        $user = get_userdata($a->getIdUtente());
+                        $html.='<td>'.parent::printTextField(null, $user->user_nicename).'</td>';
+                    }
+                    else{
+                        $html.='<td></td>';
+                    }
                 }
-                else{
-                    $html.='<td></td>';
-                }
-                //PDF
-                if($a->getPdf() != null){
-                    $html.='<td><a target="_blank" href="'.$a->getPdf().'">Apri il PDF</a></td>';
-                }
-                else{
-                    $html.='<td></td>';
+                if(get_current_user_id() == $ADMIN_ID){
+                    //PDF
+                    if($a->getPdf() != null){
+                        $html.='<td><a target="_blank" href="'.$a->getPdf().'">Apri il PDF</a></td>';
+                    }
+                    else{
+                        $html.='<td></td>';
+                    }
                 }
                 //dettagli
-                $html.='<td><a href="'. get_admin_url().'admin.php?page=pr_pagina_dettaglio&type=A&id='.$a->getID().'">Vedi dettagli</a></td>';
+                if(get_current_user_id() == $ADMIN_ID){
+                    $html.='<td><a href="'. get_admin_url().'admin.php?page=pr_pagina_dettaglio&type=A&id='.$a->getID().'">Vedi dettagli</a></td>';
+                }
+                else{
+                    $html.='<td><a href="'. home_url().'/dettaglio-agenda?id='.$a->getID().'">Vedi dettagli</a></td>';
+                    $html.='<td><form action="'. curPageURL().'" method="POST"><input type="hidden" name="id-agenda" value="'.$a->getID().'" /><input type="submit" name="delete-agenda" class="btn btn-danger" value="ELIMINA" /></form></td>';
+                }
 
                 $html.='</tr>';
+                $counter++;
             }
         }
         
@@ -551,7 +590,7 @@ class AgendaView extends PrinterView {
         
         <div class="container-agenda-public hidden-xs">
             <div class="container-tp">
-                <div class="tp"></div>                
+                <div class="tp">&nbsp;</div>                
     <?php
             foreach($arrayPasti as $pasto){               
     ?>
@@ -726,12 +765,34 @@ class AgendaView extends PrinterView {
     
     public function printSelectTemplate(){
         $temp = $this->taC->getTemplateAgenda();
+        
+        //MODIFICA COMPORTAMENTO
+        //vengono visualizzati i template che sono in un determinato arco temporale
+        //oppure quelli che non posseggono un arco temporale
+        
+        date_default_timezone_set('Europe/Rome');
+        $now = date('Y-m-d', strtotime("now"));
+        $currentYear = date('Y', strtotime("now"));
+        
         if($temp != null){
             $result = array();
             foreach($temp as $item){
                 $ta = new TemplateAgenda();
                 $ta = $item;
-                $result[$ta->getID()] = $ta->getNome();
+                
+                $start = date('Y-m-d', strtotime($ta->getInizio().'/01/'.$currentYear));
+                $end = date('Y-m-d', strtotime($ta->getFine().'/01/'.$currentYear));
+                if($ta->getFine() < $ta->getInizio()){
+                    //ho passato l'anno
+                    $end = date('Y-m-d', strtotime($ta->getFine().'/01/'.($currentYear+1)));
+                }
+                
+                if($ta->getInizio() == 0 && $ta->getFine() == 0){
+                    $result[$ta->getID()] = $ta->getNome();
+                }
+                else if($now >= $start && $now <= $end){                    
+                    $result[$ta->getID()] = $ta->getNome();
+                }
             }
     ?>
         

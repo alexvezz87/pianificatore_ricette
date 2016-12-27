@@ -13,22 +13,43 @@ class TemplateAgendaView extends PrinterView {
     private $form;
     private $label;
     
+    private $mesi;
+    
     function __construct() {
         parent::__construct();
         $this->taC = new TemplateAgendaController();
         $this->aC = new AgendaController();
         
-        global $FORM_TA_DESCRIZIONE, $FORM_TA_IDAGENDA, $FORM_TA_NOME, $FORM_TA_SUBMIT;
+        global $FORM_TA_DESCRIZIONE, $FORM_TA_IDAGENDA, $FORM_TA_NOME, $FORM_TA_SUBMIT, $FORM_TA_INIZIO, $FORM_TA_FINE;
         $this->form['nome'] = $FORM_TA_NOME;
         $this->form['descrizione'] = $FORM_TA_DESCRIZIONE;
         $this->form['idAgenda'] = $FORM_TA_IDAGENDA;
         $this->form['submit'] = $FORM_TA_SUBMIT;
+        $this->form['inizio'] = $FORM_TA_INIZIO;
+        $this->form['fine'] = $FORM_TA_FINE;
         
-        global $LABEL_TA_DESCRIZIONE, $LABEL_TA_IDAGENDA, $LABEL_TA_NOME, $LABEL_SUBMIT;
+        global $LABEL_TA_DESCRIZIONE, $LABEL_TA_IDAGENDA, $LABEL_TA_NOME, $LABEL_SUBMIT, $LABEL_TA_INIZIO, $LABEL_TA_FINE;
         $this->label['nome'] = $LABEL_TA_NOME;
         $this->label['descrizione'] = $LABEL_TA_DESCRIZIONE;
         $this->label['idAgenda'] = $LABEL_TA_IDAGENDA;
         $this->label['submit'] = $LABEL_SUBMIT;
+        $this->label['inizio'] = $LABEL_TA_INIZIO;
+        $this->label['fine'] = $LABEL_TA_FINE;
+        
+        $this->mesi = array(
+            1  => 'Gennaio',
+            2  => 'Febbraio',
+            3  => 'Marzo',
+            4  => 'Aprile',
+            5  => 'Maggio',
+            6  => 'Giugno',
+            7  => 'Luglio',
+            8  => 'Agosto',
+            9  => 'Settembre',
+            10 => 'Ottobre',
+            11 => 'Novembre',
+            12 => 'Dicembre'
+        );
     }
     
     public function printAddTemplateAgendaForm(){
@@ -38,6 +59,8 @@ class TemplateAgendaView extends PrinterView {
                 <?php parent::printTextFormField($this->form['nome'], $this->label['nome'], true) ?>
                 <?php parent::printTextAreaFormField($this->form['descrizione'], $this->label['descrizione']) ?>
                 <?php parent::printSelectFormField($this->form['idAgenda'], $this->label['idAgenda'], $this->getArrayAgenda(), true) ?>
+                <?php parent::printSelectFormField($this->form['inizio'], $this->label['inizio'], $this->mesi); ?>
+                <?php parent::printSelectFormField($this->form['fine'], $this->label['fine'], $this->mesi); ?>                
             </div>
             <div class="clear"></div>
             <?php parent::printSubmitFormField($this->form['submit'], $this->label['submit']) ?>
@@ -116,6 +139,16 @@ class TemplateAgendaView extends PrinterView {
             $ta->setDescrizione(parent::checkSingleField($this->form['descrizione']));
         }
         
+        //inizio - CAMPO NON OBBLIGATORIO
+        if(parent::checkSingleField($this->form['inizio'])){
+            $ta->setInizio(parent::checkSingleField($this->form['inizio']));
+        }
+        
+        //fine - CAMPO NON OBBLIGATORIO
+        if(parent::checkSingleField($this->form['fine'])){
+            $ta->setFine(parent::checkSingleField($this->form['fine']));
+        }
+        
         if($errors > 0){
             return null;
         }
@@ -130,7 +163,8 @@ class TemplateAgendaView extends PrinterView {
     public function printTableTemplateAgenda($ta){
         $header = array(
             $this->label['nome'],
-            $this->label['descrizione'], 
+            $this->label['descrizione'],
+            'Periodo',
             'Azioni'
         );
         $bodyTable = $this->printBodyTable($ta);
@@ -151,6 +185,12 @@ class TemplateAgendaView extends PrinterView {
                 $html.='<td>'.parent::printTextField(null, $ta->getNome()).'</td>';
                 //descrizione
                 $html.='<td>'.parent::printTextField(null, $ta->getDescrizione()).'</td>';
+                //periodo
+                $periodo = "";
+                if($ta->getInizio() != 0 && $ta->getFine() != 0){
+                    $periodo = $this->mesi[$ta->getInizio()].' - '.$this->mesi[$ta->getFine()];
+                }                
+                $html.='<td>'.$periodo.'</td>';
                 $html.='<td><a href="'. get_admin_url().'admin.php?page=pr_pagina_dettaglio&type=TA&id='.$ta->getID().'">Vedi dettagli</a></td>';
                 $html.='</tr>';
             }
@@ -172,6 +212,8 @@ class TemplateAgendaView extends PrinterView {
                     <?php echo parent::printTextFormField($this->form['nome'], $this->label['nome'], true, $ta->getNome()) ?>
                     <?php echo parent::printTextAreaFormField($this->form['descrizione'], $this->label['descrizione'], false, $ta->getDescrizione()) ?>
                     <?php echo parent::printSelectFormField($this->form['idAgenda'], $this->label['idAgenda'], $this->getArrayAgenda(), true, $ta->getIdAgenda()) ?>
+                    <?php echo parent::printSelectFormField($this->form['inizio'], $this->label['inizio'], $this->mesi, false, $ta->getInizio()) ?>
+                    <?php echo parent::printSelectFormField($this->form['fine'], $this->label['fine'], $this->mesi, true, $ta->getFine()) ?>
                 </div>
                 <div class="clear"></div>
                 <?php echo parent::printUpdateDettaglio('ta') ?>

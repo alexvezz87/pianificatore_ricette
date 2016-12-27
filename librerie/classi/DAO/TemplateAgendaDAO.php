@@ -19,9 +19,11 @@ class TemplateAgendaDAO extends ObjectDAO {
         $campi = array(
             'id_agenda'   => $ta->getIdAgenda(),
             'nome'        => $ta->getNome(),
-            'descrizione' => $ta->getDescrizione()
+            'descrizione' => $ta->getDescrizione(),
+            'inizio'      => $ta->getInizio(),
+            'fine'        => $ta->getFine()
         );
-        $formato = array('%d', '%s', '%s');
+        $formato = array('%d', '%s', '%s', '%d', '%d');
         return parent::saveObject($campi, $formato);        
     }
     
@@ -37,7 +39,9 @@ class TemplateAgendaDAO extends ObjectDAO {
                 $ta->setID($item->ID);
                 $ta->setNome(stripslashes($item->nome));
                 $ta->setIdAgenda($item->id_agenda);
-                $ta->setDescrizione(stripslashes($item->descrizione));  
+                $ta->setDescrizione(stripslashes($item->descrizione));
+                $ta->setInizio($item->inizio);
+                $ta->setFine($item->fine);
                 array_push($result, $ta);
             }
         }
@@ -53,9 +57,11 @@ class TemplateAgendaDAO extends ObjectDAO {
         $update = array(
             'nome'          => $ta->getNome(),
             'id_agenda'     => $ta->getIdAgenda(),
-            'descrizione'   => $ta->getDescrizione()
+            'descrizione'   => $ta->getDescrizione(),
+            'inizio'        => $ta->getInizio(),
+            'fine'          => $ta->getFine()
         );
-        $formatUpdate = array('%s', '%d', '%s');
+        $formatUpdate = array('%s', '%d', '%s', '%d', '%d');
         $where = array('ID' => $ta->getID());
         $formatWhere = array('%d');
         return parent::updateObject($update, $formatUpdate, $where, $formatWhere);

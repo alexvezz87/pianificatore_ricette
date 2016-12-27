@@ -34,13 +34,13 @@ global $FORM_G_NOME, $FORM_G_DATA;
 global $LABEL_G_NOME;
 
 //TEMPLATE AGENDA
-global $FORM_TA_NOME, $FORM_TA_DESCRIZIONE, $FORM_TA_IDAGENDA;
-global $LABEL_TA_NOME, $LABEL_TA_DESCRIZIONE, $LABEL_TA_IDAGENDA;
+global $FORM_TA_NOME, $FORM_TA_DESCRIZIONE, $FORM_TA_IDAGENDA, $FORM_TA_INIZIO, $FORM_TA_FINE;
+global $LABEL_TA_NOME, $LABEL_TA_DESCRIZIONE, $LABEL_TA_IDAGENDA, $LABEL_TA_INIZIO, $LABEL_TA_FINE;
 
 global $LABEL_SUBMIT;
 
 //URL E PATH
-global $URL_PDF, $URL_IMG;
+global $PR_URL_PDF, $PR_URL_IMG;
 
 //ADMIN
 global $ADMIN_ID;
@@ -135,17 +135,21 @@ $FORM_TA_NOME = 'ta-nome';
 $FORM_TA_DESCRIZIONE = 'ta-descrizione';
 $FORM_TA_IDAGENDA = 'ta-idagenda';
 $FORM_TA_SUBMIT = 'ta-submit';
+$FORM_TA_INIZIO = 'ta-inizio';
+$FORM_TA_FINE = 'ta-fine';
 
 $LABEL_TA_NOME = 'Nome';
 $LABEL_TA_DESCRIZIONE = 'Descrizione';
 $LABEL_TA_IDAGENDA = 'Agenda';
+$LABEL_TA_INIZIO = 'Mese inzio';
+$LABEL_TA_FINE = 'Mese fine';
 
 $LABEL_SUBMIT = 'Salva';
 
 
 //URL E PATH
 $PR_URL_PDF = plugins_url().'/pianificatore_ricette/pdf/';
-$URL_IMG = plugins_url().'/pianificatore_ricette/images/';
+$PR_URL_IMG = plugins_url().'/pianificatore_ricette/images/';
 $ADMIN_ID = 1;
 
 ?>

@@ -174,6 +174,7 @@ class AgendaController {
     public function getAllAgende(){
         return $this->getAgende();
     }
+  
     
     /**
      * La funzione restituisce tutte le agende associate ad un determinato utente

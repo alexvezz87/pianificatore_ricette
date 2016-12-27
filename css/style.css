@@ -482,7 +482,8 @@ and open the template in the editor.
     margin-bottom:5px;
 }
 
-.giorno-agenda .lista-ricette .nome-ricetta a.remove-from-pasto{
+.giorno-agenda .lista-ricette .nome-ricetta a.remove-from-pasto,
+.rimuovi-ingrediente a{
     display:block;
     width:15%;
     float:left;
@@ -494,11 +495,17 @@ and open the template in the editor.
     margin-left:2px;
 }
 
+.rimuovi-ingrediente a{
+    width:40px;
+    margin-top:20px;
+}
+
 .giorno-agenda .aggiungi-ricetta{
     clear:both;
 }
 
-.giorno-agenda .aggiungi-ricetta a{
+.giorno-agenda .aggiungi-ricetta a, 
+.add-ingrediente a{
     display: block;
     height: 35px; 
     padding-left: 20px;
@@ -509,6 +516,12 @@ and open the template in the editor.
     font-size:14px;
     line-height: 35px;
     width:100px;
+}
+
+.add-ingrediente a{
+    width:200px;
+    cursor: pointer;
+    float:right;
 }
 
 .ricetta .descrizione{
@@ -705,17 +718,111 @@ and open the template in the editor.
     background-repeat: no-repeat;
 }
 
+#wrapper .post-content .insert-ricetta-public h2.titolo{
+    font-size:30px;
+    font-weight: bold;
+}
+
+.insert-ricetta-public {
+    font-size:14px;
+}
+
+.insert-ricetta-public select{
+    min-width:250px;
+    min-height: 150px;
+}
+
+.post-content .insert-ricetta-public h4 {
+    font-size:24px;
+}
+
+
+.lista-ingredienti .ingrediente > div{
+    float:left;
+}
+
+.insert-ricetta-public textarea{
+    min-height: 300px;
+}
+
+
+.modifica-ricetta, .modifica-annulla{
+    float:right;
+}
+
+.edit-ricetta, .modifica-annulla{
+    display: none;
+}
+
+
+.container-mie-agende{
+    margin-bottom:100px;
+}
+
+
+.modifica-ricetta{
+    height:40px;
+    width:200px;
+    border:none;
+    background: url('../images/ico-edit.png') left center;
+    background-size: 40px auto;
+    background-repeat: no-repeat;   
+    font-size:16px;    
+}
+
+.modifica-annulla{
+    height:40px;
+    width:200px;
+    border:none;
+    background: url('../images/ico-annulla.png') left center;
+    background-size: 40px auto;
+    background-repeat: no-repeat;   
+    font-size:16px;    
+}
+
+
+@media (max-width: 767px) {
+    
+}
 
 @media (min-width: 768px) {
 
     .agenda-container .giorno-agenda{
         float:left;
         
-    }
-    
+    }    
     #selezionatore-ricette{
         
         width:25%;
         min-width:400px;
     }
+    
+    .lista-ingredienti .ingrediente > div label,
+    .lista-ingredienti .ingrediente > div label+div {
+        display: block;
+        clear:both;    
+        width: 100%;
+        text-align: left;
+    }
+    
+    .lista-ingredienti .ingrediente .qt {
+        width:8%;
+        margin-right:20px;
+        margin-left: 50px;
+    }
+    
+   .lista-ingredienti .ingrediente .qt input{
+        height: 29px;
+    }
+    
+    .lista-ingredienti .ingrediente .um{
+        width:18%;
+        margin-right:20px;       
+    }
+    
+    .lista-ingredienti .ingrediente .nome-ingrediente{
+        width:35%;
+    }
+    
+    
 }

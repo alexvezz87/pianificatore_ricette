@@ -46,5 +46,18 @@ jQuery(document).ready(function($){
         $(this).parent('.rimuovi-ingrediente').parent('.ingrediente').remove();
     });
     
+    
+    //APRO IL FORM DI INSERIMENTO RICETTE
+    $('.open-close-insert-ricetta').click(function(){
+        if($(this).hasClass('down')){
+            $(this).removeClass('down');
+            $(this).addClass('up');
+        }
+        else if($(this).hasClass('up')){
+            $(this).removeClass('up');
+            $(this).addClass('down');
+        }
+        $('.inser-ricetta-admin').slideToggle(); 
+    });
 
 });

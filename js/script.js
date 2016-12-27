@@ -104,6 +104,11 @@ jQuery(document).ready(function($){
            //visualizzo il pianificatore
            $('.pianificatore-ricette').show();
            
+           //scrollo fino al punto
+           $('html,body').animate({
+                scrollTop: $("#pianificatore-ricette").offset().top - 120},
+                'slow');
+           
         }
         else{
             alert('Non hai ricette per l\'agenda!');
@@ -492,6 +497,20 @@ jQuery(document).ready(function($){
         
     });    
     
+    //EDIT RICETTA DA UTENTE
+    $('button.modifica-ricetta').click(function(){
+        $('.edit-ricetta').show();
+        $('.modifica-annulla').show();
+        $('.view-ricetta').hide();
+        $('.modifica-ricetta').hide();
+    });
+    
+    $('button.modifica-annulla').click(function(){
+        $('.edit-ricetta').hide();
+        $('.modifica-annulla').hide();
+        $('.view-ricetta').show();
+        $('.modifica-ricetta').show();
+    });
     
 });
 

@@ -163,3 +163,119 @@ span.ui-helper-hidden-accessible{
     width:50% !important;
     height: 150px !important;
 }
+
+
+.rimuovi-ingrediente a{
+    display:block;
+    width:15%;
+    float:left;
+    height: 40px;
+    background: url('../images/remove-recipe.png') center center;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;    
+    cursor: pointer;
+    margin-left:2px;
+}
+
+.rimuovi-ingrediente a{
+    width:40px;
+    margin-top:20px;
+}
+
+.add-ingrediente a{
+    display: block;
+    height: 35px; 
+    padding-left: 20px;
+    background: url('../images/add-recipe.png') left center;
+    background-size: 15px 15px;
+    background-repeat: no-repeat;    
+    cursor: pointer;
+    font-size:14px;
+    line-height: 35px;
+    width:100px;
+}
+
+
+.add-ingrediente a{
+    width:200px;
+    cursor: pointer;
+    float:right;
+}
+
+.lista-ingredienti .ingrediente > div{
+    float:left;
+}
+
+.inser-ricetta-admin textarea, .dettaglio-utente textarea{
+    min-height: 300px;
+}
+
+
+.open-close-insert-ricetta{
+    float:right;
+    width:40px;
+    height: 40px;
+    
+    margin-right: 5%;
+    cursor: pointer;
+}
+
+.title-inserisci{
+    float:left;
+}
+
+.inser-ricetta-admin{
+    display: none;
+    clear:both;
+    padding-top:20px;
+    padding-bottom: 20px;
+}
+
+
+.open-close-insert-ricetta.down{
+    background: url('../images/down-arrow.png') center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.open-close-insert-ricetta.up{
+    background: url('../images/up-arrow.png') center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.container-ricette-admin{
+    margin-bottom:100px;
+}
+
+@media (min-width: 768px) {   
+    
+    .lista-ingredienti .ingrediente > div label,
+    .lista-ingredienti .ingrediente > div label+div {
+        display: block;
+        clear:both;    
+        width: 100%;
+        text-align: left;
+    }
+    
+    .lista-ingredienti .ingrediente .qt {
+        width:8%;
+        margin-right:20px;
+        margin-left: 50px;
+    }
+    
+    .lista-ingredienti .ingrediente .qt input{
+        height: 29px;
+    }
+    
+    .lista-ingredienti .ingrediente .um{
+        width:18%;
+        margin-right:20px;       
+    }
+    
+    .lista-ingredienti .ingrediente .nome-ingrediente{
+        width:35%;
+    }
+    
+    
+}

@@ -284,7 +284,7 @@ class RicettaView extends PrinterView {
         ?>
         </div>
         <div class="add-ingrediente clear">
-            <a>+ Aggiungi ingrediente</a>
+            <a>Aggiungi Ingrediente</a>
         </div>
     <?php
     }
@@ -306,7 +306,7 @@ class RicettaView extends PrinterView {
                 <?php parent::printTextFormField($this->form['r-ingrediente'].'-'.$counter, $this->label['r-ingrediente'], true) ?>               
             </div>
             <div class="rimuovi-ingrediente">
-                <a>- Rimuovi ingrediente</a>
+                <a></a>
             </div>
             <div class="clear"></div>
         </div> 
@@ -330,7 +330,7 @@ class RicettaView extends PrinterView {
                 <?php parent::printTextFormField($this->form['r-ingrediente'].'-'.$counter, $this->label['r-ingrediente'], true, $i->getNome()) ?>
             </div>
             <div class="rimuovi-ingrediente">
-                <a>- Rimuovi ingrediente</a>
+                <a></a>
             </div>
             <div class="clear"></div>
         </div>
@@ -481,12 +481,16 @@ class RicettaView extends PrinterView {
                 $r->setApprovata($_POST[$this->form['r-approvata']]);
             }
             else{
+                /*
+                 * modifica del comportamento, la ricetta è sempre approvata
                 if($r->getIdUtente() == $ADMIN_ID){
                     $r->setApprovata(1);
                 }
                 else{                   
                     $r->setApprovata(0);                    
                 }
+                */
+                $r->setApprovata(1);
             }
             
             
@@ -601,31 +605,82 @@ class RicettaView extends PrinterView {
         return $this->printTableRicette($this->rC->getAllRicette());
     }
     
-    public function printTableRicette($ricette){
-        $header = array(
-            $this->label['r-foto'],
-            $this->label['r-nome'],            
-            $this->label['r-tipologia'],
-            'Utente',
-            'Caricata',
-            'Azioni'
+    public function printRicetteApprovate(){
+        $query = array(
+            array(
+                'campo'     => 'approvata',
+                'valore'    => 1,
+                'formato'   => 'INT'
+            )
         );
+        
+        return $this->printTableRicette($this->rC->getRicetteByParameters($query));
+    }
+    
+    public function printRicetteNonApprovate(){
+        $query = array(
+            array(
+                'campo'     => 'approvata',
+                'valore'    => 0,
+                'formato'   => 'INT'
+            )
+        );
+        
+        return $this->printTableRicette($this->rC->getRicetteByParameters($query));
+    }
+    
+    public function printRicetteByUtente($idUtente){        
+        return $this->printTableRicette($this->rC->getRicetteByUtente($idUtente));
+    }
+    
+    
+    public function printTableRicette($ricette){
+        global $ADMIN_ID;
+        
+        if(get_current_user_id() == $ADMIN_ID){
+            $header = array(
+                'ID',
+                $this->label['r-nome'],            
+                $this->label['r-tipologia'],
+                'Utente',
+                'Caricata',
+                'Approvata',
+                'Azioni'
+            );
+        }
+        else{
+            $header = array(
+                'Ricetta',
+                $this->label['r-nome'],            
+                $this->label['r-tipologia'],                
+                'Caricata',
+                'Pubblicata',
+                'Azioni'
+            );
+        }
         
         $bodyTable = $this->printBodyTable($ricette);
         parent::printTableHover($header, $bodyTable);
     }
     
     protected function printBodyTable($array) {
+        global $ADMIN_ID;
         parent::printBodyTable($array);
         $html = "";
+        $counter = 1;
         foreach($array as $item){
             $r = new Ricetta();
             $r = $item;
             
             $html.='<tr>';
             
-            //foto ricetta
-            $html.='<td><div class="image-preview" style="background:url(\''.$r->getFoto().'\'"></div></td>';
+            if(get_current_user_id() == $ADMIN_ID){
+                $html.='<td>'.parent::printTextField(null, $r->getID()).'</td>';
+            }
+            else{
+                //contatore
+                $html.='<td>'.parent::printTextField(null, $counter).'</td>';
+            }
             
             //nome ricetta
             $html.='<td>'.parent::printTextField(null, $r->getNome()).'</td>';
@@ -633,17 +688,39 @@ class RicettaView extends PrinterView {
             //tipologia 
             $html.='<td>'.$this->printCommaString($r->getTipologie()).'</td>';
             
-            //utente
-            $utente = get_userdata($r->getIdUtente());
-            $html.='<td>'.$utente->user_nicename.'</td>';
+            if(get_current_user_id() == $ADMIN_ID){
+                //utente
+                $utente = get_userdata($r->getIdUtente());
+                $html.='<td>'.$utente->user_nicename.'</td>';
+            }
             
             //caricamento
             $html.='<td>'. getTime($r->getData()).'</td>';
             
+            //pubblicata
+            if($r->getApprovata() == 1){
+                $string = '<span style="color:green; font-weight:bold">SI</span>';
+            }
+            else{
+                if(get_current_user_id() == $ADMIN_ID){
+                    $string = '<span style="color:red; font-weight:bold">NO</span>';
+                }
+                else{
+                    $string = '<span>in attesa di approvazione...</span>';
+                }
+            }
+            $html.='<td>'.$string.'</td>';
+            
             //Azioni
-            $html.='<td><a href="'. get_admin_url().'admin.php?page=pr_pagina_dettaglio&type=R&id='.$r->getID().'">Vedi dettagli</a></td>';
+            if(get_current_user_id() == $ADMIN_ID){
+                $html.='<td><a href="'. get_admin_url().'admin.php?page=pr_pagina_dettaglio&type=R&id='.$r->getID().'">Vedi dettagli</a></td>';
+            }
+            else{
+                $html.='<td><a href="'. home_url().'/ricetta?id='.$r->getID().'">Vedi dettagli</a></td>';
+            }
             
             $html.='</tr>';
+            $counter++;
         }
         
         return $html;
@@ -672,6 +749,7 @@ class RicettaView extends PrinterView {
     
     
     public function printDettaglioRicetta($ID){
+        global $ADMIN_ID;
         $r = new Ricetta();
         $r = $this->rC->getRicettaByID($ID);
         //print_r($r);
@@ -710,8 +788,10 @@ class RicettaView extends PrinterView {
                         ?> 
                         <?php parent::printInputFileFormField($this->form['r-foto'], $this->label['r-foto']) ?>
                         <?php
-                            $array = array(0 => 'No', 1 => 'Si');
-                            parent::printSelectFormField($this->form['r-approvata'], $this->label['r-approvata'], $array, true, $r->getApprovata());
+                            if(get_current_user_id() == $ADMIN_ID){
+                                $array = array(0 => 'No', 1 => 'Si');
+                                parent::printSelectFormField($this->form['r-approvata'], $this->label['r-approvata'], $array, true, $r->getApprovata());
+                            }
                         ?>
                     </div>
                     <div class="clear"></div>
@@ -811,7 +891,7 @@ class RicettaView extends PrinterView {
      */
     public function printShowPublicRicette($mode=null){
         //mostro le ricette pubblicate dall'amministratore
-        global $ADMIN_ID, $URL_IMG;
+        global $ADMIN_ID, $PR_URL_IMG;
        
         $query = array();
         array_push($query, array(
@@ -844,7 +924,7 @@ class RicettaView extends PrinterView {
             $r = new Ricetta();
             $r = $ricetta;
             
-            $urlFoto = $URL_IMG.'no-image-found.gif';
+            $urlFoto = $PR_URL_IMG.'no-image-found.gif';
             if($r->getFoto() != null && $r->getFoto() != ''){
                 $urlFoto = $r->getFoto();
             }
@@ -871,6 +951,7 @@ class RicettaView extends PrinterView {
     
     
     public function printPublicRicetta($id){
+        global $PR_URL_IMG;
         $ricetta = new Ricetta();
         $ricetta = $this->rC->getRicettaByID($id);
         
@@ -878,6 +959,11 @@ class RicettaView extends PrinterView {
         $dose = "persona";
         if($ricetta->getDose() > 1){
             $dose = "persone";
+        }
+        
+        $urlFoto = $PR_URL_IMG.'no-image-found.gif';
+        if($ricetta->getFoto() != null && $ricetta->getFoto() != ''){
+            $urlFoto = $ricetta->getFoto();
         }
         
     ?>
@@ -899,10 +985,10 @@ class RicettaView extends PrinterView {
                 </div>
                 <div class="clear"></div>
                 <div class="col-sm-6 col-sm-push-6 foto hidden-xs">
-                    <img src="<?php echo $ricetta->getFoto() ?>" />
+                    <img src="<?php echo $urlFoto ?>" />
                 </div>
                 
-                    <img class="col-xs-12 visible-xs" src="<?php echo $ricetta->getFoto() ?>" />
+                    <img class="col-xs-12 visible-xs" src="<?php echo $urlFoto ?>" />
                 
                 <div class="col-sm-6 col-sm-pull-6 ingredienti hidden-xs">
                     <h3>Ingredienti</h3>
