@@ -213,7 +213,7 @@ class TemplateAgendaView extends PrinterView {
                     <?php echo parent::printTextAreaFormField($this->form['descrizione'], $this->label['descrizione'], false, $ta->getDescrizione()) ?>
                     <?php echo parent::printSelectFormField($this->form['idAgenda'], $this->label['idAgenda'], $this->getArrayAgenda(), true, $ta->getIdAgenda()) ?>
                     <?php echo parent::printSelectFormField($this->form['inizio'], $this->label['inizio'], $this->mesi, false, $ta->getInizio()) ?>
-                    <?php echo parent::printSelectFormField($this->form['fine'], $this->label['fine'], $this->mesi, true, $ta->getFine()) ?>
+                    <?php echo parent::printSelectFormField($this->form['fine'], $this->label['fine'], $this->mesi, false, $ta->getFine()) ?>
                 </div>
                 <div class="clear"></div>
                 <?php echo parent::printUpdateDettaglio('ta') ?>

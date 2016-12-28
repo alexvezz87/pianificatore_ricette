@@ -367,20 +367,28 @@ class RicettaController {
     public function deleteRicetta($idRicetta){
         //per eliminare una ricetta, prima devo eliminare la lista di ingredienti associata
         //update--> devo eliminare anche tutte le preferenze su quella ricetta prima di eliminarla
-        $query = array('id_ricetta' => $idRicetta);
-        if($this->irDAO->deleteIngredientiRicette($query) == true){
-            //elimino le preferite sulla ricetta
-            if($this->pDAO->deletePreferite($query) == true){
-                //elimino la ricetta tipologia
-                if($this->rtDAO->deleteRicetteTipologie($query) == true){                
-                    //elimino la ricetta
-                    if($this->rDAO->deleteRicettaByID($idRicetta) == true){
-                        return true;
+        //update 2 --> devo controllare se la ricetta non faccia parte di un template di agenda
+        
+        if($this->isRicettaInAgenda($idRicetta) == false){        
+            $query = array('id_ricetta' => $idRicetta);
+            if($this->irDAO->deleteIngredientiRicette($query) == true){
+                //elimino le preferite sulla ricetta
+                if($this->pDAO->deletePreferite($query) == true){
+                    //elimino la ricetta tipologia
+                    if($this->rtDAO->deleteRicetteTipologie($query) == true){                
+                        //elimino la ricetta
+                        if($this->rDAO->deleteRicettaByID($idRicetta) == true){
+                            return true;
+                        }
                     }
                 }
             }
+            return false;
         }
-        return false;
+        else{
+            return -1;
+        }
+        
     }
     
     /**
@@ -471,4 +479,42 @@ class RicettaController {
         return null;
     }
     
+    /**
+     * La funzione controlla se la ricetta è contenuta in un agenda
+     * @param type $idRicetta
+     * @return boolean
+     */
+    protected function isRicettaInAgenda($idRicetta){
+        $aC = new AgendaController();
+        $taC = new TemplateAgendaController();
+        $tagende = $taC->getTemplateAgenda();
+                
+        foreach($tagende as $tagenda){            
+            $ta = new TemplateAgenda();
+            $ta = $tagenda;
+            $a = new Agenda();
+            $a = $aC->getAgendaById($ta->getIdAgenda());
+            foreach($a->getGiorni() as $giorno){
+                $g = new Giorno();
+                $g = $giorno;
+                foreach($g->getPasti() as $pasto){
+                    $p = new Pasto();
+                    $p = $pasto;
+                    if(count($p->getRicette())>0){
+                        foreach($p->getRicette() as $ricetta){
+                            $r = new Ricetta();
+                            $r = $ricetta;
+                            if($r->getID() == $idRicetta){
+                                //se trovo la ricetta, restituisco true
+                                return true;
+                            }
+                        }
+                        
+                    }
+                }
+            }
+        }        
+        return false;
+       
+    }
 }

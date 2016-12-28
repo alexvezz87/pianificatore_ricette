@@ -26,7 +26,7 @@ require_once 'pages/public/dettaglio-agenda.php';
 
 //NB. bisogna cambiare il senso degli slash quando si passa da locale a web server
 global $PR_DIR_PDF;
-$PR_DIR_PDF = plugin_dir_path(__FILE__).'\\pdf\\';
+$PR_DIR_PDF = plugin_dir_path(__FILE__).'/pdf/';
 
 //indico la cartella dove è contenuto il plugin
 require_once (dirname(__FILE__) . '/pianificatore_ricette.php');

@@ -691,7 +691,7 @@ class RicettaView extends PrinterView {
             if(get_current_user_id() == $ADMIN_ID){
                 //utente
                 $utente = get_userdata($r->getIdUtente());
-                $html.='<td>'.$utente->user_nicename.'</td>';
+                $html.='<td>'.$utente->display_name.'</td>';
             }
             
             //caricamento
@@ -871,8 +871,13 @@ class RicettaView extends PrinterView {
         }
         //2. Cancellazione
         if(isset($_POST['delete-r'])){
-            if($this->rC->deleteRicetta($_POST['id-r'])==false){
+            $delete = $this->rC->deleteRicetta($_POST['id-r']);
+            if($delete === false){
                 parent::printErrorBoxMessage('Errore nella cancellazione');
+                return;
+            }
+            else if($delete === -1){
+                parent::printErrorBoxMessage('Errore nella cancellazione. La ricetta è presente in almeno un template agenda.');
                 return;
             }
             else{
@@ -971,7 +976,7 @@ class RicettaView extends PrinterView {
             <div class="container-ricetta-pubblica">
                 <div class="titolo col-xs-12">
                     <h2><?php echo $ricetta->getNome() ?></h2>
-                    <div class="cuoco">by <?php echo $user_info->user_nicename ?></div>
+                    <div class="cuoco">by <?php echo $user_info->display_name ?></div>
                 </div>
                 <div class="clear"></div>
                 <div class="col-xs-12 col-sm-4 tipologia">
