@@ -781,6 +781,21 @@ and open the template in the editor.
 }
 
 
+.form-group select:not([multiple]),
+.giorno-agenda .lista-ricette .nome-ricetta select{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border:1px solid #ddd;
+    background:#fff url('../images/down-arrow.png') right center;
+    background-size:30px auto;
+    background-repeat: no-repeat;
+    padding:5px;
+    min-width:75px;
+    padding-right:35px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @media (max-width: 767px) {
     
 }

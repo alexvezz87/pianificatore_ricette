@@ -41,6 +41,7 @@ global $LABEL_SUBMIT;
 
 //URL E PATH
 global $PR_URL_PDF, $PR_URL_IMG;
+global $IMG_NOT_FOUND;
 
 //ADMIN
 global $ADMIN_ID;
@@ -151,5 +152,7 @@ $LABEL_SUBMIT = 'Salva';
 $PR_URL_PDF = plugins_url().'/pianificatore_ricette/pdf/';
 $PR_URL_IMG = plugins_url().'/pianificatore_ricette/images/';
 $ADMIN_ID = 1;
+
+$IMG_NOT_FOUND = $PR_URL_IMG.'no-image-found.gif';
 
 ?>

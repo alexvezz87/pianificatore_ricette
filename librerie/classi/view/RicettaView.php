@@ -891,7 +891,7 @@ class RicettaView extends PrinterView {
      */
     public function printShowPublicRicette($mode=null){
         //mostro le ricette pubblicate dall'amministratore
-        global $ADMIN_ID, $PR_URL_IMG;
+        global $ADMIN_ID, $IMG_NOT_FOUND;
        
         $query = array();
         array_push($query, array(
@@ -924,7 +924,7 @@ class RicettaView extends PrinterView {
             $r = new Ricetta();
             $r = $ricetta;
             
-            $urlFoto = $PR_URL_IMG.'no-image-found.gif';
+            $urlFoto = $IMG_NOT_FOUND;
             if($r->getFoto() != null && $r->getFoto() != ''){
                 $urlFoto = $r->getFoto();
             }
@@ -951,7 +951,7 @@ class RicettaView extends PrinterView {
     
     
     public function printPublicRicetta($id){
-        global $PR_URL_IMG;
+        global $IMG_NOT_FOUND;
         $ricetta = new Ricetta();
         $ricetta = $this->rC->getRicettaByID($id);
         
@@ -961,7 +961,7 @@ class RicettaView extends PrinterView {
             $dose = "persone";
         }
         
-        $urlFoto = $PR_URL_IMG.'no-image-found.gif';
+        $urlFoto = $IMG_NOT_FOUND;
         if($ricetta->getFoto() != null && $ricetta->getFoto() != ''){
             $urlFoto = $ricetta->getFoto();
         }

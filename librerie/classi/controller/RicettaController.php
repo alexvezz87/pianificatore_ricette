@@ -416,6 +416,7 @@ class RicettaController {
      * @return array
      */
     public function searchRicette($param, $mode){
+        global $IMG_NOT_FOUND;
         $temp = $this->rDAO->searchRicette($param, $mode);       
         if($temp != null){
             $result = array();
@@ -423,8 +424,12 @@ class RicettaController {
                $r = new Ricetta();
                $r = $this->getRicettaByID($item->ID);
                $temp2['ID'] = $r->getID();
-               $temp2['nome'] = $r->getNome();    
-               $temp2['foto'] = $r->getFoto();
+               $temp2['nome'] = $r->getNome();
+               $urlFoto = $IMG_NOT_FOUND;
+               if($r->getFoto() != null){
+                   $urlFoto = $r->getFoto();
+               }
+               $temp2['foto'] = $urlFoto;
                $tipologie = $this->getTipologieByIdRicetta($r->getID());
                if($tipologie != null){
                    $temp2['tipologie'] = array();

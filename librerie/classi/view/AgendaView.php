@@ -534,7 +534,7 @@ class AgendaView extends PrinterView {
     }
     
     public function printDettaglioAgendaPublic(Agenda $a){
-        
+        global $IMG_NOT_FOUND;
         $ingredienti = $this->aC->createListaIngredienti($a, $a->getDose());
         
         $tps = $this->tpC->getTipologiaPasti();
@@ -626,13 +626,17 @@ class AgendaView extends PrinterView {
                             $idRicetta = $this->rC->getIdRicettaByNome($item);
                             $r = new Ricetta();
                             $r = $this->rC->getRicettaByID($idRicetta);
+                            
+                            $urlFoto = $IMG_NOT_FOUND;
+                            if($r->getFoto() != null && $r->getFoto() != '') {
+                                $urlFoto = $r->getFoto();
+                            }
+                            
                         ?>
-                            <div class="ricetta">
-                                <?php if($r->getFoto() != null && $r->getFoto() != '') { ?>
-                                    <a target="_blank" href="<?php echo home_url() ?>/ricetta?id=<?php echo $idRicetta ?>">
-                                        <img class="img-ricetta" alt="<?php echo $item ?>" title="<?php echo $item ?>" src="<?php echo $r->getFoto() ?>"/>                                                
-                                    </a>
-                                <?php } ?>
+                            <div class="ricetta">                                
+                                <a target="_blank" href="<?php echo home_url() ?>/ricetta?id=<?php echo $idRicetta ?>">
+                                    <img class="img-ricetta" alt="<?php echo $item ?>" title="<?php echo $item ?>" src="<?php echo $urlFoto ?>"/>                                                
+                                </a>                                
                                 <a style="display:block;" target="_blank" href="<?php echo home_url() ?>/ricetta?id=<?php echo $idRicetta ?>">
                                     <?php echo $item ?>
                                 </a>
