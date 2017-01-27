@@ -70,7 +70,8 @@ class AgendaView extends PrinterView {
         }
     ?>
             <div class="clear"></div>
-            <?php parent::printSubmitFormField($this->form['a-submit'], $this->label['submit']) ?>
+            <p>Hai terminato di pianificare tutto quello che desideri?</p>
+            <?php parent::printSubmitFormField($this->form['a-submit'], 'AVANTI') ?>
             
         </form>    
     <?php        
@@ -314,7 +315,7 @@ class AgendaView extends PrinterView {
             $header = array(
                 'ID',
                 'Nome',
-                'Caricata',
+                'Data di pianificazione',
                 'Utente',
                 'PDF',
                 'Azioni'
@@ -324,7 +325,7 @@ class AgendaView extends PrinterView {
             $header = array( 
                 'Agenda',
                 'Nome',
-                'Caricata', 
+                'Data di pianificazione', 
                 'Azioni',
                 ''
             );

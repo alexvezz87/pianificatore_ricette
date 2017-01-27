@@ -236,7 +236,7 @@ class RicettaView extends PrinterView {
                 <div class="col-sm-12">
                     <?php parent::printTextAreaFormField($this->form['r-preparazione'], $this->label['r-preparazione'], true) ?>
                     <?php parent::printNumberFormField($this->form['r-durata'], $this->label['r-durata'], true) ?>
-                    <?php parent::printNumberFormField($this->form['r-dose'], $this->label['r-dose'], true) ?>
+                    <?php parent::printNumberFormField($this->form['r-dose'], 'Per quante persone è questa ricetta?', true) ?>
                     <?php parent::printInputFileFormField($this->form['r-foto'], $this->label['r-foto']) ?>
                 </div>
                 <div class="clear"></div>
@@ -944,6 +944,11 @@ class RicettaView extends PrinterView {
                     <span class="titolo"><?php echo $r->getNome() ?></span>                
                 </div>
             </a>
+            <div class="aggiungi-ricetta-pubblica">
+               <a class="add-recipe">Aggiungi Ricetta</a>
+               <input type="hidden" name="id-r" value="<?php echo $r->getID() ?>">
+               <input type="hidden" name="nome-r" value="<?php echo $r->getNome() ?>">
+            </div>
         </div>
     <?php
         if($count % 3 == 0){
@@ -1113,9 +1118,21 @@ class RicettaView extends PrinterView {
             <div class="nome-ingrediente">
                 <?php parent::printSuggestTextFormField('nome-ingrediente', 'Ingredienti') ?>                  
                 <?php parent::printDisabledTextFormField('lista-ingredienti', '', null) ?>
-                <input type="button" name="cancella-ingredienti" value="RIMUOVI INGREDIENTI"/>
-                
+                <input type="button" name="cancella-ingredienti" value="RIMUOVI INGREDIENTI"/>                
             </div>
+            
+            <div class="clear"></div>
+            <div class="tempo">
+            <?php 
+                $tempo = array(
+                    '15' => 'meno di 15 min',
+                    '30' => 'meno di 30 min',
+                    '60' => 'meno di 60 min'
+                );
+                parent::printRadioFormField('tempo-ricetta', 'Tempo', $tempo);
+            ?>
+            </div>
+            
             <div class="clear"></div>
             <input type="hidden" name="ajax-url" value="<?php echo get_home_url() ?>/wp-admin/admin-ajax.php" />
             <?php parent::printSeachButton('ricerca-ricette', 'Cerca ricette') ?>

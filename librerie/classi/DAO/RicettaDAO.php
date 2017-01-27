@@ -132,7 +132,10 @@ class RicettaDAO extends ObjectDAO {
         global $DB_TABLE_RICETTE, $DB_TABLE_INGREDIENTI_RICETTE, $DB_TABLE_RICETTE_TIPOLOGIE;
         global $ADMIN_ID;
         
+        //SELECT
         $query =  "SELECT DISTINCT r.ID ";
+        
+        //FROM
         $query .= "FROM ".$DB_PREFIX.$DB_TABLE_RICETTE." r ";
         $query .= "INNER JOIN ".$DB_PREFIX.$DB_TABLE_INGREDIENTI_RICETTE." ir ";
         $query .= "ON r.ID = ir.id_ricetta ";        
@@ -193,6 +196,11 @@ class RicettaDAO extends ObjectDAO {
             }
             $query .= ") ";            
             $query .= "GROUP BY r.ID HAVING COUNT(*) = ".count($param['tipologie']).") ";
+        }
+        
+        //tempo
+        if(isset($param['tempo'])){
+            $query.="AND r.durata < ".$param['tempo']." ";
         }
         
         //print_r($query);

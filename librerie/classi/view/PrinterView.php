@@ -98,6 +98,29 @@ class PrinterView {
     <?php  
     }
     
+    protected function printCheckBoxInlineFormField($nameField, $label, $array, $value=null){
+        if($value == null){
+            if(isset($_POST[$nameField])){
+                $value = $_POST[$nameField];
+            }
+        }
+    ?>    
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="<?php echo $nameField ?>" ><?php echo $label ?></label>
+            <div class="col-sm-10"> 
+    <?php
+            foreach($array as $k => $v){
+    ?>
+               <div class="checkbox"><input type="checkbox" value="<?php echo $k ?>"><?php echo $v ?></div>
+    <?php            
+            }
+    ?>
+            </div>
+        </div>
+    <?php    
+    }
+    
+    
     /**
      * Funzione che stampa una input text disabilitata
      * @param type $nameField

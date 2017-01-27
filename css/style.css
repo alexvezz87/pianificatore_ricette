@@ -71,7 +71,7 @@ and open the template in the editor.
 }
 
 .giorno-agenda.dispari{
-     background:rgba(106,206,68, 0.2);
+     background:rgba(255,151,16, 0.2);
 }
 
 .giorno-agenda.pari{
@@ -206,7 +206,7 @@ and open the template in the editor.
     border-right: 1px solid #999;
     border-top:1px solid #999;
     border-bottom:1px solid #999;    
-    background:rgba(106,206,68, 0.4);
+    background:rgba(255,151,16, 0.4);
     color:#000;
 }
 
@@ -241,7 +241,7 @@ and open the template in the editor.
 }
 
 .container-ingredienti .dispari{
-    background:rgba(106,206,68, 0.2);
+    background:rgba(255,151,16, 0.2);
 }
 
 .container-ingredienti .pari:hover{
@@ -249,7 +249,7 @@ and open the template in the editor.
 }
 
 .container-ingredienti .dispari:hover{
-    background:rgba(106,206,68, 0.4);
+    background:rgba(255,151,16, 0.4);
 }
 
 .container-agenda-public .giorno.pari .tp {
@@ -261,11 +261,11 @@ and open the template in the editor.
 }
 
 .container-agenda-public .giorno.dispari .tp {
-    background:rgba(106,206,68, 0.2);
+    background:rgba(255,151,16, 0.2);
 }
 
 .container-agenda-public .giorno.dispari:hover > .tp {
-    background:rgba(106,206,68, 0.4);
+    background:rgba(255,151,16, 0.4);
 }
 
 .container-agenda-public .nome-giorno{
@@ -352,6 +352,7 @@ and open the template in the editor.
     background:#fff;
     position: fixed;
     box-shadow: 7px 7px 15px #888888;
+    z-index: 9999999;
 }
 
 .container-link-dettaglio h2{
@@ -409,13 +410,13 @@ and open the template in the editor.
     text-align: center;
     font-size:22px;
     font-weight: bold;  
-    background:rgba(106,206,68, 0.4);
+    background:rgba(255,151,16, 0.4);
 }
 
 .container-agenda-public-mobile .pasto{
     font-size:18px;
     font-weight: bold;  
-    background:rgba(106,206,68, 0.2);
+    background:rgba(255,151,16, 0.2);
 }
 
 .container-agenda-public-mobile .descrizione-pasto {
@@ -581,7 +582,7 @@ and open the template in the editor.
 }
 
 .ricerca-ricette input[name=cancella-ingredienti]:hover{
-    border: 1px solid rgb(106,206,68);   
+    border: 1px solid rgb(255,151,16);   
 }
 
 .ricerca-ricette .ricerca-ricette, #ricerca-template .carica-template{
@@ -598,17 +599,17 @@ and open the template in the editor.
     padding-right: 5px;
     font-size:16px; 
     text-transform: uppercase;
-    border:2px solid rgb(106,206,68);
+    border:2px solid rgb(255,151,16);
     font-weight: bold;
     margin:auto;
     display: block;
     margin-top:40px;
-    color:rgb(106,206,68);
+    color:rgb(255,151,16);
 }
 
 .ricerca-ricette .ricerca-ricette:hover, #ricerca-template .carica-template:hover{
-    border: 2px solid rgb(68,145,38);
-    color: rgb(68,145,38);
+    border: 2px solid rgb(255,151,16);
+    color: rgb(255,151,16);
 }
 
 .container-risultati thead tr th {
@@ -628,7 +629,7 @@ and open the template in the editor.
 }
 
 .container-risultati-mobile .ricetta {
-    border:1px solid rgb(106,206,68);
+    border:1px solid rgb(255,151,16);
     padding:15px;
     margin-bottom:10px;
 }
@@ -794,6 +795,17 @@ and open the template in the editor.
     padding-right:35px;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.aggiungi-ricetta-pubblica{
+    width:130px;
+    margin:auto;
+    margin-top:10px;
+}
+
+.btn-success, .btn-success:hover{
+    background-color: rgb(255,151,16) !important;
+    border-color: rgb(255,151,16) !important;
 }
 
 @media (max-width: 767px) {

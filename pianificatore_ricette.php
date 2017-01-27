@@ -103,7 +103,7 @@ function add_agenda_premium(){
     }
     else{
         echo '<p>Funzionalità riservata solo agli utenti registrati al sito</p>';
-    }
+    }    
 }
 
 function add_agenda_standard(){    

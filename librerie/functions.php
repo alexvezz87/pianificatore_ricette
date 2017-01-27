@@ -523,6 +523,12 @@ function ricerca_ricette($array){
         }
     }
     
+    //tempo
+    if(isset($array['tempo']) && trim($array['tempo']) != ''){
+        $param['tempo'] = $array['tempo'];
+    }
+    
+    
     //eseguo la query
     $rC = new RicettaController();
     $ricette = $rC->searchRicette($param, $mode);

@@ -163,7 +163,7 @@ jQuery(document).ready(function($){
     
     $('button.ricerca-ricette').click(function(){
         //visualizzo il loader
-        $('.loader-container').show();
+        $('.loader-container').show();        
         
         $.ajax({
             type: 'POST',
@@ -174,7 +174,8 @@ jQuery(document).ready(function($){
                 mode: $('input[name=mode]').val(),
                 nomeRicetta: $('input[name=nome-ricetta]').val(),
                 tipologia: $('select[multiple]').val(),
-                ingredienti: $('input[name=lista-ingredienti]').val()
+                ingredienti: $('input[name=lista-ingredienti]').val(),
+                tempo: $('input[name=tempo-ricetta]:checked').val()
             },
             success: function(data){
                 printTabellaRisultati(data);
@@ -417,8 +418,12 @@ jQuery(document).ready(function($){
     
     //SISTEMO LA LUNGHEZZA DELLE CELLA NELL'AGENDA DETTAGLIO
     if($('.container-agenda-public').size()>0){
+        var cTp = $('.container-tp').size(); 
         var nTp = $('.container-tp .tp').size(); 
-        $('.tp').css('width', 100/nTp+'%');
+        
+        var width = 100/(nTp/cTp);
+        
+        $('.tp').css('width', width+'%');
     }
     
     //SISTEMO L'ALTEZZA DELLE CELLE NELL'AGENDA DETTAGLIO
@@ -511,6 +516,27 @@ jQuery(document).ready(function($){
         $('.view-ricetta').show();
         $('.modifica-ricetta').show();
     });
+    
+    
+    //IMPAGINAZIONE RICETTE RANDOM. ALLINEAMENTO PER IL BASSO
+    if($('.container-ricette').size() > 0){
+        //ottengo il valore massimo
+        var max = 0;
+        $('.container-ricette .ricetta').each(function(){
+            if($(this).height() > max){
+                max = $(this).height();
+            }            
+        });
+               
+        //ciclo per dare il padding
+        //se l'altezza del div è minore del valore max, allora a quel div aggiungo del padding top
+        $('.container-ricette .ricetta').each(function(){
+           if($(this).height() < max){
+               var paddingTop = max - $(this).height();
+               $(this).css('padding-top', paddingTop+'px');
+           } 
+        });
+    }
     
 });
 
