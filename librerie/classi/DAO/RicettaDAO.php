@@ -151,8 +151,15 @@ class RicettaDAO extends ObjectDAO {
         }
         
         //nome ricetta
-        if(isset($param['nome'])){
-            $query .= "AND r.nome LIKE '%".$param['nome']."%' ";
+        $flag_escape = false;
+        if(isset($param['nome'])){            
+            $nome = $param['nome'];
+            if (strpos($nome, "\'") !== false) {
+                $nome = str_replace("\'", "\\\''", $param['nome']);
+                $flag_escape = true;
+            }
+           
+            $query .= "AND r.nome LIKE '%".$nome."%' ";
         }
         
         //ingredienti
@@ -201,6 +208,10 @@ class RicettaDAO extends ObjectDAO {
         //tempo
         if(isset($param['tempo'])){
             $query.="AND r.durata < ".$param['tempo']." ";
+        }
+        
+        if($flag_escape == true){
+            $query.="ESCAPE '|' ";
         }
         
         //print_r($query);

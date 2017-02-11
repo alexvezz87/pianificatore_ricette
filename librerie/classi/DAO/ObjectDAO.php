@@ -79,7 +79,13 @@ class ObjectDAO {
                     $query.=" ".$item['campo']." = ".$item['valore'];
                 }
                 else{
-                    $query.=" ".$item['campo']." = '".$item['valore']."'";
+                    $queryValore = $item['valore'];
+                    //controllo sul carattere di apostrofo "'" 
+                    if ($item['valore'] !== false) {
+                        $queryValore = str_replace("\'", "\\\''", $queryValore);                       
+                    }                   
+                    
+                    $query.=" ".$item['campo']." = '".$queryValore."'";
                 }
                 if($counter == count($where) -1){
                     
@@ -110,7 +116,7 @@ class ObjectDAO {
         if($limit != null){
             $query .= " LIMIT ".$limit;
         }
-        //print_r($query);    
+           
         try{            
              return $this->wpdb->get_results($query);                        
         } catch (Exception $ex) {

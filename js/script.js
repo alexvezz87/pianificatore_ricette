@@ -71,19 +71,27 @@ jQuery(document).ready(function($){
         var id = $(this).siblings('input[name=id-r]').val();
         var nome = $(this).siblings('input[name=nome-r]').val();
         
-        aggiungiRicettaAlSelezionatore(id, nome);
+        var $container = $(this).parent('td').parent('tr').parent('tbody').parent('table').parent('.carosello-risultati').parent('.container-risultati').parent('.mycontainer');
+        
+        if(typeof($container.attr('class')) == 'undefined'){
+           $container = $(this).parent('.aggiungi-ricetta-pubblica').parent('.ricetta').parent('.container-ricette').parent('.mycontainer');
+        }
+                
+        aggiungiRicettaAlSelezionatore(id, nome, $container);
         
         //visualzzo il selezionatore
-        $('#selezionatore-ricette').show();
+        $($container).find('#selezionatore-ricette').show();
         
     });
     
     //RIMUOVI RICETTA DAL SELEZIONATORE
     $(document).on('click', '.remove-recipe', function(){
         
+        var $container = $(this).parent('.ricetta').parent('.lista').parent('#selezionatore-ricette').parent('.mycontainer');
+        
         //tolgo la ricetta dall'agenda
         var id = $(this).siblings('input[name=id-r]').val();
-        $('form.agenda-container .lista-ricette .nome-ricetta select option.recipe-'+id).remove();
+        $container.find('form.agenda-container .lista-ricette .nome-ricetta select option.recipe-'+id).remove();
         
         //la tolgo dal selezionatore
         $(this).parent('.ricetta').remove();
@@ -99,14 +107,14 @@ jQuery(document).ready(function($){
     
     //AGGIUNGI CAMPI AI PASTI DELL'AGENDA
     $('#selezionatore-ricette .prosegui-agenda').click(function(){
-        
-        if($('#selezionatore-ricette .lista .ricetta').size() > 0){
+        var $container = $(this).parent('.azioni').parent('#selezionatore-ricette').parent('.mycontainer');
+        if($container.find('#selezionatore-ricette .lista .ricetta').size() > 0){
            //visualizzo il pianificatore
-           $('.pianificatore-ricette').show();
+           $container.find('.pianificatore-ricette').show();
            
            //scrollo fino al punto
            $('html,body').animate({
-                scrollTop: $("#pianificatore-ricette").offset().top - 120},
+                scrollTop: $container.find("#pianificatore-ricette").offset().top - 120},
                 'slow');
            
         }
@@ -323,6 +331,7 @@ jQuery(document).ready(function($){
     //ASCOLTATORE CARICA TEMPLATE
     $('#ricerca-template .carica-template').click(function(){        
         var idTemplate = $(this).parent('div').parent('#ricerca-template').find('select').val();
+        var $container = $(this).parent('div').parent('#ricerca-template').parent('.mycontainer');
         if(idTemplate != ''){
             //visualizzo il loader
             $('.loader-container').show();
@@ -347,7 +356,7 @@ jQuery(document).ready(function($){
                 
                 //popolo il selezionatore
                 for(var key in data.ricette){
-                     aggiungiRicettaAlSelezionatore(key, data.ricette[key]);
+                     aggiungiRicettaAlSelezionatore(key, data.ricette[key], $container);
                 }
                
                 //attribuisco un valore ad ogni select
@@ -396,22 +405,22 @@ jQuery(document).ready(function($){
         return html;
     }
     
-    function aggiungiRicettaAlSelezionatore(id, nome){
+    function aggiungiRicettaAlSelezionatore(id, nome, $container){
         var html = printRigaSelezionatore(id, nome);
         
         //controllo se esiste già la ricetta in questione nel selezionatore
         var trovato = false;
-        $('#selezionatore-ricette .lista .ricetta').each(function(){
+        $container.find('#selezionatore-ricette .lista .ricetta').each(function(){
             if($(this).find('input[name=id-r]').val() == id){
                 trovato = true;
             }
         });
         
         if(trovato == false){
-            $(html).appendTo($('#selezionatore-ricette .lista'));
+            $(html).appendTo($container.find('#selezionatore-ricette .lista'));
             //aggiungo direttamente i valori anche all'agenda
             var recipe = '<option class="recipe-'+id+'" value="'+id+'">'+nome+'</option>';
-            $(recipe).appendTo($('form.agenda-container .lista-ricette .nome-ricetta select'));
+            $(recipe).appendTo($container.find('form.agenda-container .lista-ricette .nome-ricetta select'));
             
         }        
     }
@@ -480,11 +489,13 @@ jQuery(document).ready(function($){
     //open e close del box selezionatore ricette
     $('.oc-button').click(function(){
         //prendo la misura del box
-        var widthBox = $('#selezionatore-ricette').width()+21+25;
+        var $container = $(this).parent('#selezionatore-ricette');
+        
+        var widthBox = $container.width()+21+25;
         
         if($(this).hasClass('open')){
            //chiudiamo
-           $('#selezionatore-ricette').animate({
+           $container.animate({
                marginRight: '-='+widthBox+'px'
            }, 500);
            
@@ -493,7 +504,7 @@ jQuery(document).ready(function($){
         }
         else if($(this).hasClass('close')){
            //apriamo
-           $('#selezionatore-ricette').animate({
+           $container.animate({
                marginRight: '+='+widthBox+'px'
            }, 500);
             $(this).removeClass('close');

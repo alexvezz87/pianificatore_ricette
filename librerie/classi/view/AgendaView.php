@@ -49,8 +49,8 @@ class AgendaView extends PrinterView {
     public function printFormAgenda(){
         //ottengo la data di oggi
         date_default_timezone_set('Europe/Rome');        
-        $now = date('Y-m-d H:i:s', strtotime("now + 1 day"));        
-        $week = date('W', strtotime("now + 1 day"));         
+        $now = date('Y-m-d H:i:s', strtotime("now + 3 day"));        
+        $week = date('W', strtotime("now + 3 day"));         
         
         
     ?>       
@@ -623,7 +623,7 @@ class AgendaView extends PrinterView {
                 <?php
                     echo '<div class="container-elemento">';
                     foreach($valueG[$pasto] as $item){
-                        if($pasto != 'Preparazione'){
+                        if($pasto != 'Preparazione'){  
                             $idRicetta = $this->rC->getIdRicettaByNome($item);
                             $r = new Ricetta();
                             $r = $this->rC->getRicettaByID($idRicetta);

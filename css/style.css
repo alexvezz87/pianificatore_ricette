@@ -120,7 +120,7 @@ and open the template in the editor.
     top:0;
     margin-top:15%;
     margin-right:25px;
-    background: #fff;
+    background: #eee;
     display: none;
     z-index:99999;
     width:75%;
@@ -132,7 +132,7 @@ and open the template in the editor.
     width:40px;
     height: 40px;
     border:1px solid #ddd;
-    border-right: 1px solid #fff;
+    border-right: 1px solid #eee;
     margin-left:-50px;
     margin-top:-11px;
     cursor: pointer;
@@ -146,16 +146,28 @@ and open the template in the editor.
 }
 
 #selezionatore-ricette .oc-button.open{
-    background: #fff url('../images/right-arrow.png');
+    background: #eee url('../images/right-arrow.png');
 }
 
 #selezionatore-ricette .oc-button.close{
-    background: #fff url('../images/left-arrow.png');
+    background: #eee url('../images/left-arrow.png');
+}
+
+#selezionatore-ricette .lista{
+    height: 250px;
+    overflow: scroll;
+    overflow-x: hidden;
+    margin-bottom: 20px;
 }
 
 #selezionatore-ricette .lista p{
     float:left;
     margin:0;padding:0;
+    width: 90%;
+}
+
+#selezionatore-ricette .azioni p{
+    font-weight: bold;
 }
 
 .container-ricerca{

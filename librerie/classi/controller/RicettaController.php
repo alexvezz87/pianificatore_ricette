@@ -187,8 +187,8 @@ class RicettaController {
                 'valore'    => addslashes(trim($nome)),
                 'formato'   => null
             )
-        );
-        
+        );        
+               
         $temp = $this->getRicette($query);
         if($temp != null){
             $r = new Ricetta();
