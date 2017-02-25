@@ -43,7 +43,7 @@ function install_pianificatore_ricette(){
 register_deactivation_hook( __FILE__, 'remove_pianificatore_ricette');
 function remove_pianificatore_ricette(){
     //rimuovo il database
-    pianificatore_ricette\dropPianificatore();
+    //pianificatore_ricette\dropPianificatore();
 }
 
 //Aggiungo il menu di Plugin

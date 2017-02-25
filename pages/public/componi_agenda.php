@@ -22,6 +22,13 @@ function printPaginaAgenda($mode=null){
         <div class="loader-container">
             <div class="loader"></div>
         </div>
+        
+        <!-- VIDEO -->
+        <div class="accordian fusion-accordian"><div class="panel-group" id="accordion-997-1"><div class="fusion-panel panel-default fusion-toggle-no-divider"><div class="panel-heading"><h4 class="panel-title toggle" data-fontsize="20" data-lineheight="30"><a data-toggle="collapse" data-parent="#accordion-997-1" data-target="#e4f43845c18854f66" href="#e4f43845c18854f66" class="collapsed"><div class="fusion-toggle-icon-wrapper"><i class="fa-fusion-box"></i></div><div class="fusion-toggle-heading">PIANIFICATORE: Guida Video</div></a></h4></div><div id="e4f43845c18854f66" class="panel-collapse collapse" style="height: 0px;"><div class="panel-body toggle-content"><br>
+<div class="fusion-video fusion-youtube" style="max-width:600px;max-height:360px;"><div class="video-shortcode"><div class="fluid-width-video-wrapper" style="padding-top: 60%;"><iframe title="YouTube video player" src="http://www.youtube.com/embed/yt6oIlxiZz8?wmode=transparent&amp;autoplay=0&amp;rel=0&amp;; modestbranding=1" allowfullscreen="" name="fitvid0"></iframe></div></div></div><p></p>
+<p></p></div></div></div></div></div>
+        <!-- FINE VIDEO -->
+        
         <!-- Link -->
         <?php if($mode==null){ ?>
             <div class="fusion-button-wrapper">

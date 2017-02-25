@@ -786,11 +786,23 @@ class AgendaView extends PrinterView {
                 $ta = $item;
                 
                 $start = date('Y-m-d', strtotime($ta->getInizio().'/01/'.$currentYear));
-                $end = date('Y-m-d', strtotime($ta->getFine().'/01/'.$currentYear));
+                
+                $monthEnd = '31';
+                if($ta->getFine() == '11' || $ta->getFine() == '04' || $ta->getFine() == '06' || $ta->getFine() == '09'){
+                    $monthEnd = '30';
+                }
+                else if($ta->getFine() == '02'){
+                    $monthEnd = '28';
+                }
+                
+                
+                $end = date('Y-m-d', strtotime($ta->getFine().'/'.$monthEnd.'/'.$currentYear));
                 if($ta->getFine() < $ta->getInizio()){
                     //ho passato l'anno
-                    $end = date('Y-m-d', strtotime($ta->getFine().'/01/'.($currentYear+1)));
+                    $end = date('Y-m-d', strtotime($ta->getFine().'/'.$monthEnd.'/'.($currentYear+1)));
                 }
+                
+                //print_r($now.';'.$start.';'.$end.'<br>');
                 
                 if($ta->getInizio() == 0 && $ta->getFine() == 0){
                     $result[$ta->getID()] = $ta->getNome();
