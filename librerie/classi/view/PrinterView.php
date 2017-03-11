@@ -309,6 +309,45 @@ class PrinterView {
     <?php      
     }
     
+    /**
+     * Funzione che stampa secondo canoni bootstrap una select box
+     * @param type $nameField
+     * @param type $label
+     * @param type $array
+     */
+    protected function printSelectFormFieldNoKey($nameField, $label, $array, $required=false, $value=null){
+        $optRequired = "";
+        if($required == true){
+            $optRequired = "required";
+        }
+        if($value == null){
+            if(isset($_POST[$nameField])){
+                $value = $_POST[$nameField];
+            }
+        }
+    ?>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="<?php echo $nameField ?>" ><?php echo $label ?></label>
+            <div class="col-sm-10">
+                <select name="<?php echo $nameField ?>" id="<?php echo $nameField ?>" <?php echo $optRequired ?> >
+                <!-- campo vuoto -->
+                <option value=""></option>
+                <?php
+                    foreach($array as $item){
+                        if($value == $item){
+                            echo '<option value="'.$item.'" selected >'.$item.'</option>';
+                        }
+                        else{
+                            echo '<option value="'.$item.'">'.$item.'</option>';
+                        }                        
+                    }
+                ?>
+                </select>
+            </div>
+        </div>
+    <?php      
+    }
+    
     
     protected function printMultiSelectFormField($nameField, $label, $array, $required=false, $value=null){
         $optRequired = "";

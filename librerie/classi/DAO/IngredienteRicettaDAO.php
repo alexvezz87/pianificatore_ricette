@@ -56,4 +56,30 @@ class IngredienteRicettaDAO extends ObjectDAO {
         return parent::deleteObject($array);
     }
 
+    /**
+     * La funzione restituisce tutti le unità di misura inserite nel database
+     * @global type $wpdb
+     * @return type
+     */
+    public function getUnitaMisura(){
+        global $DB_TABLE_INGREDIENTI_RICETTE;
+        global $wpdb;
+        $wpdb->prefix = 'pr_';
+        $table = $wpdb->prefix.$DB_TABLE_INGREDIENTI_RICETTE;
+        $result = array();
+        $query = 'SELECT DISTINCT unita_misura FROM '.$table.' ORDER BY unita_misura ASC';
+        try{
+            $temp = $wpdb->get_col($query); 
+            foreach($temp as $item){
+                if($item != null){
+                    array_push($result, $item);
+                }
+            }
+            return $result;            
+        } catch (Exception $ex) {
+            _e($ex);
+            return null;
+        }
+        
+    }
 }

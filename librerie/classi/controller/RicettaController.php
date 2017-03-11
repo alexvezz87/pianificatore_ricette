@@ -517,4 +517,12 @@ class RicettaController {
         return false;
        
     }
+    
+    /**
+     * Restituisce le unità di misura
+     * @return type
+     */
+    public function getUnitaMisura(){
+        return $this->irDAO->getUnitaMisura();
+    }
 }

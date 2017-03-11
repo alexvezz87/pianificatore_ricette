@@ -565,21 +565,24 @@ jQuery(document).ready(function($){
         //cambio il nome dell'input
         $element.find('.qt input').attr('name', nameQt);
         $element.find('.um input').attr('name', nameUm);
+        $element.find('.um select').attr('name', nameUm);
         $element.find('.nome-ingrediente input').attr('name', nameIng);
         
         //cambio l'id dell'input
         $element.find('.qt input').attr('id', nameQt);
         $element.find('.um input').attr('id', nameUm);
+        $element.find('.um select').attr('id', nameUm);
         $element.find('.nome-ingrediente input').attr('id', nameIng);
         
         //cambio il for della label
         $element.find('.qt label').attr('for', nameQt);
-        $element.find('.um label').attr('for', nameUm);
+        $element.find('.um label').attr('for', nameUm);       
         $element.find('.nome-ingrediente label').attr('for', nameIng);
         
         //pulisco i valori
         $element.find('.qt input').val('');
         $element.find('.um input').val('');
+        $element.find('.um select').val('');
         $element.find('.nome-ingrediente input').val('');
         
         $element.appendTo('.lista-ingredienti');

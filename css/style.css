@@ -745,6 +745,10 @@ and open the template in the editor.
     min-height: 150px;
 }
 
+.insert-ricetta-public .um select{
+    min-height: 0;
+}
+
 .post-content .insert-ricetta-public h4 {
     font-size:24px;
 }

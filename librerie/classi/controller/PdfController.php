@@ -49,6 +49,8 @@ class PdfController extends FPDF {
         
         $this->Ln();
         $count = 1;
+        
+        //print_r($ingredienti);
         foreach($ingredienti as $key => $value){  
             
             $string = "";
@@ -66,6 +68,11 @@ class PdfController extends FPDF {
             if($key != ''){
                 $string.= $key;
             } 
+            
+            //devo eliminare il nome dell'unità di misura delimintata da [].
+            $pos = strpos($string, '[');
+            $string = substr($string, 0, $pos);
+            
             $this->Cell(round(($this->GetPageWidth()-20)/2), 8, utf8_decode('- '.$string), 0, 0);
             if($count == 2){
                 $this->Ln();

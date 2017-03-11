@@ -754,6 +754,13 @@ class AgendaView extends PrinterView {
                 }            
     ?>
             <div class="col-xs-12 col-sm-6 ingrediente <?php echo $classe ?>">
+                
+                <?php 
+                    //devo eliminare il nome dell'unità di misura delimintata da [].
+                    $pos = strpos($string, '[');
+                    $string = substr($string, 0, $pos);
+                ?>
+                
                 <?php echo $string ?>
             </div>
     <?php

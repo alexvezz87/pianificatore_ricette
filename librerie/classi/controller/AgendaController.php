@@ -640,21 +640,26 @@ class AgendaController {
         //faccio le somme dividendo l'ingrediente per la dose indicata dalla ricetta e moltiplicando per la dose indicata dall'utente
         $result = array();
         
-        
+        //print_r($ingredienti);
         foreach($ingredienti as $ing){
             $ia = new IngredienteAgenda();
             $ia = $ing;
-            if(isset($result[$ia->getNome()])){
-                $result[$ia->getNome()]['qt']+= ((float) $ia->getQt() / (float) $ia->getDose()) * (float) $dose ;                
+            //inserisco la voce 'nome ingrediente [unità di misura]' in quanto uno stesso ingrediente può essere espresso in unità di misura differenti
+            //facendo così, le quantità vengono gestite separatamente ed in modo corretto (prima questo non era possibile)
+            if(isset($result[$ia->getNome().'['.$ia->getUm().']'])){
+                $result[$ia->getNome().'('.$ia->getUm().']']['qt']+= ((float) $ia->getQt() / (float) $ia->getDose()) * (float) $dose ;                
             }
             else{
-                $result[$ia->getNome()] = array();
-                $result[$ia->getNome()]['qt'] = ((float) $ia->getQt() / (float) $ia->getDose()) * (float) $dose ;
-                $result[$ia->getNome()]['um'] = $ia->getUm();
+                $result[$ia->getNome().'['.$ia->getUm().']'] = array();
+                $result[$ia->getNome().'['.$ia->getUm().']']['qt'] = ((float) $ia->getQt() / (float) $ia->getDose()) * (float) $dose ;
+                $result[$ia->getNome().'['.$ia->getUm().']']['um'] = $ia->getUm();
             }
         }
         
         //print_r($result);
+        
+        //faccio un ordinamento alfabetico sulla chiave dell'array
+        ksort($result);
         
         //vado ad arrontodare
         foreach($result as $key => $value){

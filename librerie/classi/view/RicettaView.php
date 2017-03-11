@@ -294,13 +294,22 @@ class RicettaView extends PrinterView {
      * @param type $counter
      */
     protected function printFormIngrediente($counter){
+        global $ADMIN_ID;
     ?>
         <div class="ingrediente" data-num="<?php echo $counter ?>">                        
             <div class="qt">
                 <?php parent::printNumberFormField($this->form['r-qt-ingrediente'].'-'.$counter, $this->label['r-qt-ingrediente']) ?>
             </div>
             <div class="um">
-                <?php parent::printTextFormField($this->form['r-um-ingrediente'].'-'.$counter, $this->label['r-um-ingrediente']) ?>
+                <?php 
+                    if(get_current_user_id() == $ADMIN_ID){
+                        parent::printTextFormField($this->form['r-um-ingrediente'].'-'.$counter, $this->label['r-um-ingrediente']);
+                    }
+                    else{
+                        $arrayUM = $this->rC->getUnitaMisura();
+                        parent::printSelectFormFieldNoKey($this->form['r-um-ingrediente'].'-'.$counter, $this->label['r-um-ingrediente'], $arrayUM);
+                    }                            
+                ?>
             </div>
             <div class="nome-ingrediente ui-widget">
                 <?php parent::printTextFormField($this->form['r-ingrediente'].'-'.$counter, $this->label['r-ingrediente'], true) ?>               
