@@ -647,7 +647,7 @@ class AgendaController {
             //inserisco la voce 'nome ingrediente [unità di misura]' in quanto uno stesso ingrediente può essere espresso in unità di misura differenti
             //facendo così, le quantità vengono gestite separatamente ed in modo corretto (prima questo non era possibile)
             if(isset($result[$ia->getNome().'['.$ia->getUm().']'])){
-                $result[$ia->getNome().'('.$ia->getUm().']']['qt']+= ((float) $ia->getQt() / (float) $ia->getDose()) * (float) $dose ;                
+                $result[$ia->getNome().'['.$ia->getUm().']']['qt']+= ((float) $ia->getQt() / (float) $ia->getDose()) * (float) $dose ;                
             }
             else{
                 $result[$ia->getNome().'['.$ia->getUm().']'] = array();
