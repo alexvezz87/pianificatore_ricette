@@ -747,11 +747,14 @@ class AgendaController {
             foreach($g->getPasti() as $pasto){
                 $p = new Pasto();
                 $p = $pasto;
-                foreach($p->getRicette() as $ricetta){
-                    $r = new Ricetta();
-                    $r = $ricetta;
-                    
-                    $ricette[$r->getID()] = $r->getNome();
+                //var_dump($p->getRicette());
+                if($p->getRicette() != NULL){
+                    foreach($p->getRicette() as $ricetta){
+                        $r = new Ricetta();
+                        $r = $ricetta;
+
+                        $ricette[$r->getID()] = $r->getNome();
+                    }
                 }
             }
         }
@@ -780,10 +783,12 @@ class AgendaController {
                 $p = new Pasto();
                 $p = $pasto;
                 $temp2['pasto'] = $p->getIdTipologiaPasto();
-                foreach($p->getRicette() as $ricetta){
-                    $r = new Ricetta();
-                    $r = $ricetta;
-                    $temp2['ricetta'] = $r->getID();
+                if($p->getRicette() != NULL){
+                    foreach($p->getRicette() as $ricetta){
+                        $r = new Ricetta();
+                        $r = $ricetta;
+                        $temp2['ricetta'] = $r->getID();
+                    }
                 }
                 
                 array_push($temp['pasti'], $temp2);
